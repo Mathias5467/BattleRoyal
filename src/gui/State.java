@@ -1,10 +1,13 @@
 package gui;
 
-import input.KeyType;
 import main.GameState;
 import main.Picture;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
+
 import java.util.HashMap;
 
 
@@ -18,7 +21,7 @@ public class State {
                 put(GameState.PLAY, new int[] {465, 340});
                 put(GameState.OPTIONS, new int[] {440, 410});
                 put(GameState.EXIT, new int[] {465, 480});
-        }};
+            }};
 
     }
 
