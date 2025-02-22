@@ -11,7 +11,7 @@ public class Picture {
     private int y;
     private int width;
     private int height;
-    public Picture(int  x, int y, int width, int height, String picturePath){
+    public Picture(int  x, int y, int width, int height, String picturePath) {
         this.picturePath = picturePath;
         this.x = x;
         this.y = y;
@@ -31,7 +31,7 @@ public class Picture {
     }
 
     public void draw(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(this.picture.getImage() ,this.x, this.y, this.width, this.height,null);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.drawImage(this.picture.getImage() , this.x, this.y, this.width, this.height, null);
     }
 }

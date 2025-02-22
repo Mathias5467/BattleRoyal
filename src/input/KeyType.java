@@ -15,6 +15,6 @@ public enum KeyType {
 
 
     public String getShorthand() {
-        return shorthand;
+        return this.shorthand;
     }
 }

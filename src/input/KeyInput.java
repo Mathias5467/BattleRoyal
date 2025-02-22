@@ -1,5 +1,7 @@
 package input;
 
+import main.Game;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -9,38 +11,50 @@ public class KeyInput implements KeyListener {
 
     public KeyInput() {
         this.keys = new HashMap<>() {{
-            put(KeyType.DOWN, false);
-            put(KeyType.UP, false);
-            put(KeyType.LEFT, false);
-            put(KeyType.M, false);
-            put(KeyType.ESC, false);
-            put(KeyType.RIGHT, false);
-        }};
+                put(KeyType.DOWN, false);
+                put(KeyType.UP, false);
+                put(KeyType.LEFT, false);
+                put(KeyType.M, false);
+                put(KeyType.ESC, false);
+                put(KeyType.RIGHT, false);
+            }};
     }
 
 
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_UP -> {this.keys.put(KeyType.UP, true);}
-            case KeyEvent.VK_DOWN -> {this.keys.put(KeyType.DOWN, true);}
-            case KeyEvent.VK_LEFT -> {this.keys.put(KeyType.LEFT, true);}
-            case KeyEvent.VK_RIGHT -> {this.keys.put(KeyType.RIGHT, true);}
-            case KeyEvent.VK_ESCAPE -> {this.keys.put(KeyType.ESC, true);}
-            case KeyEvent.VK_M -> {this.keys.put(KeyType.M, true);}
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP -> {
+                this.keys.put(KeyType.UP, true); }
+            case KeyEvent.VK_DOWN -> {
+                this.keys.put(KeyType.DOWN, true); }
+            case KeyEvent.VK_LEFT -> {
+                this.keys.put(KeyType.LEFT, true); }
+            case KeyEvent.VK_RIGHT -> {
+                this.keys.put(KeyType.RIGHT, true); }
+            case KeyEvent.VK_ESCAPE -> {
+                this.keys.put(KeyType.ESC, true); }
+            case KeyEvent.VK_M -> {
+                this.keys.put(KeyType.M, true); }
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_UP -> {this.keys.put(KeyType.UP, false);}
-            case KeyEvent.VK_DOWN -> {this.keys.put(KeyType.DOWN, false);}
-            case KeyEvent.VK_LEFT -> {this.keys.put(KeyType.LEFT, false);}
-            case KeyEvent.VK_RIGHT -> {this.keys.put(KeyType.RIGHT, false);}
-            case KeyEvent.VK_ESCAPE -> {this.keys.put(KeyType.ESC, false);}
-            case KeyEvent.VK_M -> {this.keys.put(KeyType.M, false);}
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP -> {
+                this.keys.put(KeyType.UP, false); }
+            case KeyEvent.VK_DOWN -> {
+                this.keys.put(KeyType.DOWN, false); }
+            case KeyEvent.VK_LEFT -> {
+                this.keys.put(KeyType.LEFT, false); }
+            case KeyEvent.VK_RIGHT -> {
+                this.keys.put(KeyType.RIGHT, false); }
+            case KeyEvent.VK_ESCAPE -> {
+                this.keys.put(KeyType.ESC, false); }
+            case KeyEvent.VK_M -> {
+                this.keys.put(KeyType.M, false); }
         }
     }
 
@@ -50,6 +64,16 @@ public class KeyInput implements KeyListener {
 
 
     public HashMap<KeyType, Boolean> getKeys() {
-        return keys;
+        return this.keys;
+    }
+
+    public HashMap<KeyType, Boolean> handleInput(HashMap<KeyType, Boolean> keysPressed) {
+        for (KeyType keyValue : keysPressed.keySet()) {
+            if (!keysPressed.get(keyValue) && this.keys.get(keyValue)) {
+                System.out.println(keyValue.getShorthand());
+                keysPressed.put(keyValue, this.keys.get(keyValue));
+            }
+        }
+        return keysPressed;
     }
 }
