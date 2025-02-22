@@ -3,8 +3,9 @@ package main;
 import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Font;
+import java.util.HashMap;
+import input.KeyInput;
+import input.KeyType;
 
 public class Game extends JPanel implements Runnable {
     private static final int WIDTH = 1000;
@@ -13,7 +14,7 @@ public class Game extends JPanel implements Runnable {
     private Thread gameThread;
     private KeyInput keyInput;
     private boolean running;
-
+    private HashMap<KeyType, Boolean> keysPressed;
     private final int fps = 60;
     private int frameCount = 0;
     private int seconds = 0;
@@ -26,6 +27,7 @@ public class Game extends JPanel implements Runnable {
         this.addKeyListener(this.keyInput);
         this.gameState = GameState.MENU;
         this.running = false;
+        this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
     }
 
     public void start() {
@@ -54,9 +56,11 @@ public class Game extends JPanel implements Runnable {
                 this.frameCount++;
                 if (this.frameCount >= fps) {
                     this.seconds++;
-                    System.out.println("Seconds elapsed: " + this.seconds);
                     this.frameCount = 0;
                 }
+
+                this.handleInput();
+                this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
                 this.update();
                 this.repaint();
                 lastFrame = now;
@@ -64,12 +68,19 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    private void handleInput() {
+        for (KeyType keyValue : this.keysPressed.keySet()) {
+            if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
+                System.out.println(keyValue.getShorthand());
+                this.keysPressed.put(keyValue, this.keyInput.getKeys().get(keyValue));
+            }
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 30));
-        g.drawString("Time: " + seconds, 20, 40);
+        //Graphical output
     }
 
     private void update() {
