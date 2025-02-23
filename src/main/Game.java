@@ -7,7 +7,7 @@ import java.util.HashMap;
 import input.KeyInput;
 import input.KeyType;
 import java.awt.Color;
-import gui.State;
+import gui.Menu;
 
 public class Game extends JPanel implements Runnable {
     private static final int WIDTH = 1000;
@@ -19,7 +19,7 @@ public class Game extends JPanel implements Runnable {
     private HashMap<KeyType, Boolean> keysPressed;
     private final int fps = 60;
     private int frameCount = 0;
-    private State state;
+    private Menu menu;
 
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -28,14 +28,14 @@ public class Game extends JPanel implements Runnable {
         this.setBackground(new Color(43, 43, 43));
         this.keyInput = new KeyInput();
         this.addKeyListener(this.keyInput);
-        this.state = new State();
+        this.menu = new Menu();
         this.gameState = GameState.MENU;
         this.running = false;
         this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
     }
 
     public void start() {
-        this.gameState = GameState.STATE;
+        this.gameState = GameState.MENU;
         this.running = true;
         this.frameCount = 0;
         this.gameThread = new Thread(this);
@@ -43,7 +43,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void stop() {
-        this.gameState = GameState.STATE;
+        this.gameState = GameState.MENU;
         this.running = false;
     }
 
@@ -73,13 +73,13 @@ public class Game extends JPanel implements Runnable {
     public void handleInput() {
         for (KeyType keyValue : this.keysPressed.keySet()) {
             if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
-                if (this.gameState == GameState.STATE) {
+                if (this.gameState == GameState.MENU) {
                     if (this.keyInput.getKeys().get(KeyType.UP)) {
-                        this.state.goUp();
+                        this.menu.goUp();
                     } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                        this.state.goDown();
+                        this.menu.goDown();
                     } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                        this.gameState = this.state.getChosenGameState();
+                        this.gameState = this.menu.getChosenGameState();
                     }
                 }
 
@@ -100,8 +100,8 @@ public class Game extends JPanel implements Runnable {
             case GameState.EXIT -> {
                 System.exit(0);
             }
-            case GameState.STATE -> {
-                this.state.draw(g);
+            case GameState.MENU -> {
+                this.menu.draw(g);
             }
         }
 
