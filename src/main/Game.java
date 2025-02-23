@@ -39,7 +39,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void start() {
-        this.gameState = GameState.OPTIONS;
+        this.gameState = GameState.MENU;
         this.running = true;
         this.frameCount = 0;
         this.gameThread = new Thread(this);
@@ -84,11 +84,8 @@ public class Game extends JPanel implements Runnable {
                         this.menu.selectOption(1);
                     } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                         this.gameState = this.menu.getChosenGameState();
-                    }  else if (this.keyInput.getKeys().get(KeyType.M)) {
-                        System.out.println(this.knightColor.getColor());
                     }
-                }
-                if (this.gameState == GameState.OPTIONS) {
+                } else if (this.gameState == GameState.OPTIONS) {
                     if (this.keyInput.getKeys().get(KeyType.LEFT)) {
                         this.options.changeColor(-1);
                     } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
@@ -96,7 +93,7 @@ public class Game extends JPanel implements Runnable {
                     } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                         this.gameState = GameState.MENU;
                     }  else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-//                        this.gameState = GameState.MENU;
+                        this.gameState = GameState.MENU;
                         this.knightColor = this.options.getKnightColor();
                     }
                 }
