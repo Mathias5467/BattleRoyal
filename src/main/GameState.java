@@ -5,7 +5,8 @@ public enum GameState {
     PAUSE("Pause"),
     PLAY("Play"),
     EXIT("Exit"),
-    OPTIONS("Options");
+    OPTIONS("Options"),
+    DIALOG("Dialog");
 
     private String name;
 

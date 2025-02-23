@@ -15,51 +15,42 @@ import java.util.HashMap;
 public class Menu {
     private Picture background;
     private HashMap<GameState, int[]> options;
+    private GameState[] optionsLogic;
     private GameState chosenGameState;
     public Menu() {
-        this.background = new Picture(0, 0, 1192, 670, "res/state.png");
+        this.background = new Picture(0, 0, 1192, 670, "res/menu.png");
         this.chosenGameState = GameState.PLAY;
         this.options = new HashMap<GameState, int[]>() {{
                 put(GameState.PLAY, new int[] {448, 340}); // - 17
                 put(GameState.OPTIONS, new int[] {440, 410});
                 put(GameState.EXIT, new int[] {465, 480});
             }};
-
+        this.optionsLogic = new GameState[] {GameState.PLAY, GameState.OPTIONS, GameState.EXIT};
     }
 
-    public void goUp() {
+
+    public void selectOption(int direction) {
         switch (this.chosenGameState) {
             case GameState.PLAY -> {
-                this.chosenGameState = GameState.EXIT;
+                if (direction < 0) {
+                    this.chosenGameState = this.optionsLogic[2];
+                } else {
+                    this.chosenGameState = this.optionsLogic[direction];
+                }
             }
             case GameState.OPTIONS -> {
-                this.chosenGameState = GameState.PLAY;
+                this.chosenGameState = this.optionsLogic[1 + direction];
             }
             case GameState.EXIT -> {
-                this.chosenGameState = GameState.OPTIONS;
+                if (2 + direction > 2) {
+                    this.chosenGameState = this.optionsLogic[0];
+                } else {
+                    this.chosenGameState = this.optionsLogic[2 + direction];
+                }
             }
         }
         this.choseText();
     }
-
-
-    //TODO: Refactor this methods changing text in game state
-    public void goDown() {
-        switch (this.chosenGameState) {
-            case GameState.PLAY -> {
-                this.chosenGameState = GameState.OPTIONS;
-            }
-            case GameState.OPTIONS -> {
-                this.chosenGameState = GameState.EXIT;
-            }
-            case GameState.EXIT -> {
-                this.chosenGameState = GameState.PLAY;
-            }
-        }
-        this.choseText();
-    }
-
-
 
     public void choseText() {
         switch (this.chosenGameState) {
@@ -87,11 +78,9 @@ public class Menu {
         this.background.draw(g);
         g2.setColor(new Color(255, 255, 255, 140));
         g2.fillRoundRect(350, 250, 300, 300, 30, 30);
-
         g2.setColor(new Color(1, 11, 64));
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 80));
         g2.drawString("Battle Royal", 265, 150);
-        g2.setColor(new Color(1, 11, 64));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));
         for (GameState key : this.options.keySet()) {
             if (key == this.chosenGameState) {

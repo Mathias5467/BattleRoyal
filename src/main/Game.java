@@ -8,6 +8,7 @@ import input.KeyInput;
 import input.KeyType;
 import java.awt.Color;
 import gui.Menu;
+import gui.Options;
 
 public class Game extends JPanel implements Runnable {
     private static final int WIDTH = 1000;
@@ -20,6 +21,7 @@ public class Game extends JPanel implements Runnable {
     private final int fps = 60;
     private int frameCount = 0;
     private Menu menu;
+    private Options options;
 
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -29,6 +31,7 @@ public class Game extends JPanel implements Runnable {
         this.keyInput = new KeyInput();
         this.addKeyListener(this.keyInput);
         this.menu = new Menu();
+        this.options = new Options();
         this.gameState = GameState.MENU;
         this.running = false;
         this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
@@ -75,12 +78,24 @@ public class Game extends JPanel implements Runnable {
             if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
                 if (this.gameState == GameState.MENU) {
                     if (this.keyInput.getKeys().get(KeyType.UP)) {
-                        this.menu.goUp();
+                        this.menu.selectOption(-1);
                     } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                        this.menu.goDown();
+                        this.menu.selectOption(1);
                     } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                         this.gameState = this.menu.getChosenGameState();
                     }
+                }
+                if (this.gameState == GameState.OPTIONS) {
+                    System.out.println("Options");
+                }
+                if (this.gameState == GameState.PLAY) {
+                    System.out.println("Play");
+                }
+                if (this.gameState == GameState.PAUSE) {
+                    System.out.println("Pause");
+                }
+                if (this.gameState == GameState.DIALOG) {
+                    System.out.println("Dialog");
                 }
 
             }
@@ -95,7 +110,7 @@ public class Game extends JPanel implements Runnable {
 
             }
             case GameState.OPTIONS -> {
-
+                this.options.draw(g);
             }
             case GameState.EXIT -> {
                 System.exit(0);
