@@ -2,7 +2,6 @@ package gui;
 
 
 import entity.KnightColor;
-import main.GameState;
 import main.Picture;
 
 import java.awt.Graphics;
@@ -20,6 +19,7 @@ public class Options {
     private KnightColor knightColor;
     private final int tile = 3;
     private KnightColor[] colors;
+    private String[] knightNames;
     public Options() {
         this.knightColor = KnightColor.BLUE;
         this.knightPicture = new Picture(600, 200, 300, 320, this.getPathToImage());
@@ -28,7 +28,7 @@ public class Options {
                 put(KnightColor.GREEN, new int[] {95, 50, 40});
                 put(KnightColor.BLUE, new int[] {45, 50, 85});
                 }};
-
+        this.knightNames = new String[] {"Thorne", "Alaric", "Rhogar"};
         this.colors = new KnightColor[] {KnightColor.RED, KnightColor.GREEN, KnightColor.BLUE};
     }
 
@@ -79,7 +79,7 @@ public class Options {
         g2.drawString("Defend", 100, 410);
         g2.setFont(new Font("Courier New", Font.BOLD, 20));
         g2.drawString("Press ENTER to save changes", 110, 520);
-        g2.drawString("Press ESC to get back to menu", 100, 560);
+        g2.drawString("& get back to menu", 160, 560);
         g2.setColor(new Color(17, 72, 7));
         g2.fillRect(100, 190, this.knightStatistic.get(this.knightColor)[0] * this.tile, 30);
         g2.setColor(new Color(142, 37, 29));
@@ -95,8 +95,10 @@ public class Options {
         g2.drawString(String.format("%d/%d", this.knightStatistic.get(this.knightColor)[1], 100), 420, 330);
         g2.drawRect(100, 430, 300, 30);
         g2.drawString(String.format("%d/%d", this.knightStatistic.get(this.knightColor)[2], 100), 420, 450);
-        g2.setFont(new Font("Segoe Print", Font.BOLD, 90));
         g2.setColor(new Color(43, 43, 43));
+        g2.setFont(new Font("Consolas", Font.BOLD, 30));
+        g2.drawString(this.knightNames[this.knightColor.ordinal()], 700, 570);
+        g2.setFont(new Font("Segoe Print", Font.BOLD, 90));
         g2.drawString("<", 560, 380);
         g2.drawString(">", 890, 380);
 

@@ -90,9 +90,7 @@ public class Game extends JPanel implements Runnable {
                         this.options.changeColor(-1);
                     } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
                         this.options.changeColor(1);
-                    } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
-                        this.gameState = GameState.MENU;
-                    }  else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                    } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                         this.gameState = GameState.MENU;
                         this.knightColor = this.options.getKnightColor();
                     }
