@@ -6,7 +6,8 @@ public enum KeyType {
     LEFT("left"),
     RIGHT("right"),
     M("m"),
-    ESC("esc");
+    ESC("esc"),
+    ENTER("enter");
 
     private final String shorthand;
     KeyType(String shorthand) {

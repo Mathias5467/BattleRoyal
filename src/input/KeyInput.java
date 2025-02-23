@@ -1,6 +1,5 @@
 package input;
 
-import main.Game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,6 +16,7 @@ public class KeyInput implements KeyListener {
                 put(KeyType.M, false);
                 put(KeyType.ESC, false);
                 put(KeyType.RIGHT, false);
+                put(KeyType.ENTER, false);
             }};
     }
 
@@ -37,6 +37,8 @@ public class KeyInput implements KeyListener {
                 this.keys.put(KeyType.ESC, true); }
             case KeyEvent.VK_M -> {
                 this.keys.put(KeyType.M, true); }
+            case KeyEvent.VK_ENTER -> {
+                this.keys.put(KeyType.ENTER, true); }
         }
     }
 
@@ -55,6 +57,8 @@ public class KeyInput implements KeyListener {
                 this.keys.put(KeyType.ESC, false); }
             case KeyEvent.VK_M -> {
                 this.keys.put(KeyType.M, false); }
+            case KeyEvent.VK_ENTER -> {
+                this.keys.put(KeyType.ENTER, false); }
         }
     }
 
@@ -67,13 +71,5 @@ public class KeyInput implements KeyListener {
         return this.keys;
     }
 
-    public HashMap<KeyType, Boolean> handleInput(HashMap<KeyType, Boolean> keysPressed) {
-        for (KeyType keyValue : keysPressed.keySet()) {
-            if (!keysPressed.get(keyValue) && this.keys.get(keyValue)) {
-                System.out.println(keyValue.getShorthand());
-                keysPressed.put(keyValue, this.keys.get(keyValue));
-            }
-        }
-        return keysPressed;
-    }
+
 }

@@ -35,7 +35,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void start() {
-        this.gameState = GameState.PLAY;
+        this.gameState = GameState.STATE;
         this.running = true;
         this.frameCount = 0;
         this.gameThread = new Thread(this);
@@ -61,11 +61,28 @@ public class Game extends JPanel implements Runnable {
                     this.frameCount = 0;
                 }
 
-                this.keysPressed = this.keyInput.handleInput(this.keysPressed);
-                this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
+                this.handleInput();
                 this.update();
                 this.repaint();
+                this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
                 lastFrame = now;
+            }
+        }
+    }
+
+    public void handleInput() {
+        for (KeyType keyValue : this.keysPressed.keySet()) {
+            if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
+                if (this.gameState == GameState.STATE) {
+                    if (this.keyInput.getKeys().get(KeyType.UP)) {
+                        this.state.goUp();
+                    } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+                        this.state.goDown();
+                    } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                        this.gameState = this.state.getChosenGameState();
+                    }
+                }
+
             }
         }
     }
@@ -73,10 +90,24 @@ public class Game extends JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.state.draw(g);
+        switch (this.gameState) {
+            case GameState.PLAY -> {
+
+            }
+            case GameState.OPTIONS -> {
+
+            }
+            case GameState.EXIT -> {
+                System.exit(0);
+            }
+            case GameState.STATE -> {
+                this.state.draw(g);
+            }
+        }
+
     }
 
     private void update() {
-        // Add any other game update logic here
+
     }
 }

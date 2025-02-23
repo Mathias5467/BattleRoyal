@@ -16,4 +16,8 @@ public enum GameState {
     public String getName() {
         return this.name;
     }
+
+    public String getChosenName() {
+        return String.format(">%s<", this.name);
+    }
 }
