@@ -1,12 +1,12 @@
 package main;
 
 import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.HashMap;
+
+import entity.KnightColor;
 import input.KeyInput;
 import input.KeyType;
-import java.awt.Color;
 import gui.Menu;
 import gui.Options;
 
@@ -22,7 +22,7 @@ public class Game extends JPanel implements Runnable {
     private int frameCount = 0;
     private Menu menu;
     private Options options;
-
+    private KnightColor knightColor;
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setDoubleBuffered(true);
@@ -35,10 +35,11 @@ public class Game extends JPanel implements Runnable {
         this.gameState = GameState.MENU;
         this.running = false;
         this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
+        this.knightColor = this.options.getKnightColor();
     }
 
     public void start() {
-        this.gameState = GameState.MENU;
+        this.gameState = GameState.OPTIONS;
         this.running = true;
         this.frameCount = 0;
         this.gameThread = new Thread(this);
@@ -83,10 +84,21 @@ public class Game extends JPanel implements Runnable {
                         this.menu.selectOption(1);
                     } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                         this.gameState = this.menu.getChosenGameState();
+                    }  else if (this.keyInput.getKeys().get(KeyType.M)) {
+                        System.out.println(this.knightColor.getColor());
                     }
                 }
                 if (this.gameState == GameState.OPTIONS) {
-                    System.out.println("Options");
+                    if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                        this.options.changeColor(-1);
+                    } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                        this.options.changeColor(1);
+                    } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+                        this.gameState = GameState.MENU;
+                    }  else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+//                        this.gameState = GameState.MENU;
+                        this.knightColor = this.options.getKnightColor();
+                    }
                 }
                 if (this.gameState == GameState.PLAY) {
                     System.out.println("Play");
