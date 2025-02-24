@@ -5,8 +5,7 @@ public enum GameState {
     PAUSE("Pause"),
     PLAY("Play"),
     EXIT("Exit"),
-    OPTIONS("Options"),
-    DIALOG("Dialog");
+    OPTIONS("Options");
 
     private String name;
 
@@ -16,9 +15,5 @@ public enum GameState {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getChosenName() {
-        return String.format(">%s<", this.name);
     }
 }

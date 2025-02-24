@@ -21,7 +21,7 @@ public class Options {
     private KnightColor[] colors;
     private String[] knightNames;
     public Options() {
-        this.knightColor = KnightColor.BLUE;
+        this.knightColor = KnightColor.RED;
         this.knightPicture = new Picture(600, 200, 300, 320, this.getPathToImage());
         this.knightStatistic = new HashMap<KnightColor, int[]>() {{
                 put(KnightColor.RED, new int[] {50, 90, 70});
@@ -79,7 +79,7 @@ public class Options {
         g2.drawString("Defend", 100, 410);
         g2.setFont(new Font("Courier New", Font.BOLD, 20));
         g2.drawString("Press ENTER to save changes", 110, 520);
-        g2.drawString("& get back to menu", 160, 560);
+        g2.drawString("Press ESC to get back to menu", 95, 560);
         g2.setColor(new Color(17, 72, 7));
         g2.fillRect(100, 190, this.knightStatistic.get(this.knightColor)[0] * this.tile, 30);
         g2.setColor(new Color(142, 37, 29));

@@ -1,14 +1,15 @@
 package main;
 
 import javax.swing.JPanel;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.HashMap;
 
 import entity.KnightColor;
+import gui.*;
 import input.KeyInput;
 import input.KeyType;
-import gui.Menu;
-import gui.Options;
 
 public class Game extends JPanel implements Runnable {
     private static final int WIDTH = 1000;
@@ -22,6 +23,8 @@ public class Game extends JPanel implements Runnable {
     private int frameCount = 0;
     private Menu menu;
     private Options options;
+    private Pause pause;
+    private Dialog dialog;
     private KnightColor knightColor;
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -36,6 +39,8 @@ public class Game extends JPanel implements Runnable {
         this.running = false;
         this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
         this.knightColor = this.options.getKnightColor();
+        this.pause = new Pause();
+        this.dialog = new Dialog(this.gameState);
     }
 
     public void start() {
@@ -77,33 +82,42 @@ public class Game extends JPanel implements Runnable {
     public void handleInput() {
         for (KeyType keyValue : this.keysPressed.keySet()) {
             if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
-                if (this.gameState == GameState.MENU) {
-                    if (this.keyInput.getKeys().get(KeyType.UP)) {
-                        this.menu.selectOption(-1);
-                    } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                        this.menu.selectOption(1);
-                    } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                        this.gameState = this.menu.getChosenGameState();
+                if (!this.dialog.isVisible()) {
+                    if (this.gameState == GameState.MENU) {
+                        if (this.keyInput.getKeys().get(KeyType.UP)) {
+                            this.menu.selectOption(-1);
+                        } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+                            this.menu.selectOption(1);
+                        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                            this.gameState = this.menu.getChosenGameState();
+                        }
+                    } else if (this.gameState == GameState.OPTIONS) {
+                        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                            this.options.changeColor(-1);
+                        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                            this.options.changeColor(1);
+                        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                            this.gameState = GameState.MENU;
+                            this.knightColor = this.options.getKnightColor();
+                        } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+                            this.dialog.setVisible();
+                        }
                     }
-                } else if (this.gameState == GameState.OPTIONS) {
+                    if (this.gameState == GameState.PLAY) {
+                        System.out.println("Play");
+                    }
+                } else {
                     if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                        this.options.changeColor(-1);
+                        this.dialog.changeOption(0);
                     } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                        this.options.changeColor(1);
-                    } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                        this.gameState = GameState.MENU;
-                        this.knightColor = this.options.getKnightColor();
+                        this.dialog.changeOption(1);
+                    } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+                        this.dialog.hide();
+                    }  else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                        this.dialog.setConfirmed(true);
                     }
                 }
-                if (this.gameState == GameState.PLAY) {
-                    System.out.println("Play");
-                }
-                if (this.gameState == GameState.PAUSE) {
-                    System.out.println("Pause");
-                }
-                if (this.gameState == GameState.DIALOG) {
-                    System.out.println("Dialog");
-                }
+
 
             }
         }
@@ -116,17 +130,31 @@ public class Game extends JPanel implements Runnable {
             case GameState.PLAY -> {
 
             }
-            case GameState.OPTIONS -> {
-                this.options.draw(g);
-            }
             case GameState.EXIT -> {
                 System.exit(0);
+            }
+            case GameState.OPTIONS -> {
+                if (this.dialog.isVisible()) {
+                    if (this.dialog.isConfirmed() && this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                        this.gameState = GameState.MENU;
+                        this.dialog.hide();
+                    } else if (this.dialog.isConfirmed() && this.dialog.getChosenOption() == ConfirmDialog.NO) {
+                        this.dialog.hide();
+                    }
+                    this.dialog.setConfirmed(false);
+                }
+                this.options.draw(g);
             }
             case GameState.MENU -> {
                 this.menu.draw(g);
             }
+            case GameState.PAUSE -> {
+                this.dialog.draw(g);
+            }
         }
-
+        if (this.dialog.isVisible()) {
+            this.dialog.draw(g);
+        }
     }
 
     private void update() {
