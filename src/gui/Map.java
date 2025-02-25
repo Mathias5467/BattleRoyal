@@ -14,7 +14,7 @@ public class Map {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
         this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
-        this.ground = new Picture(0, 590, 2177, 114, "res/background/ground.png");
+        this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
     }
 
     public void draw(Graphics g) {
@@ -29,7 +29,7 @@ public class Map {
         if (this.background3.getX() < -1100) {
             this.background3.changeCords(0, this.background3.getY());
         }
-        if (this.ground.getX() < -1000) {
+        if (this.ground.getX() < -1100) {
             this.ground.changeCords(0, this.ground.getY());
         }
         this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
