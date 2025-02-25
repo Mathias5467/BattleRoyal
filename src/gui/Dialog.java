@@ -30,29 +30,29 @@ public class Dialog {
         Graphics2D g2 = (Graphics2D)g;
         g2.setStroke(new BasicStroke(5));
         g2.setColor(new Color(255, 255, 255));
-        g2.drawRoundRect(350, 250, 300, 200, 15, 15);
+        g2.drawRoundRect(400, 250, 300, 200, 15, 15);
         g2.setColor(new Color(255, 255, 255, 140));
-        g2.fillRoundRect(350, 250, 300, 200, 15, 15);
+        g2.fillRoundRect(400, 250, 300, 200, 15, 15);
         if (this.chosenOption == ConfirmDialog.YES) {
             g2.setColor(new Color(1, 11, 64));
             g2.setStroke(new BasicStroke(5));
-            g2.drawRoundRect(400, 360, 80, 50, 15, 15);
+            g2.drawRoundRect(450, 360, 80, 50, 15, 15);
             g2.setStroke(new BasicStroke(2));
             g2.setColor(new Color(255, 255, 255));
-            g2.drawRoundRect(520, 360, 80, 50, 15, 15);
+            g2.drawRoundRect(570, 360, 80, 50, 15, 15);
         } else {
             g2.setStroke(new BasicStroke(2));
             g2.setColor(new Color(255, 255, 255));
-            g2.drawRoundRect(400, 360, 80, 50, 15, 15);
+            g2.drawRoundRect(450, 360, 80, 50, 15, 15);
             g2.setStroke(new BasicStroke(5));
             g2.setColor(new Color(1, 11, 64));
-            g2.drawRoundRect(520, 360, 80, 50, 15, 15);
+            g2.drawRoundRect(570, 360, 80, 50, 15, 15);
         }
         g2.setColor(new Color(1, 11, 64));
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
-        g2.drawString("Do you want to EXIT?", 390, 300);
-        g2.drawString(ConfirmDialog.YES.toString(), 423, 390);
-        g2.drawString(ConfirmDialog.NO.toString(), 548, 390);
+        g2.drawString("Do you want to EXIT?", 440, 300);
+        g2.drawString(ConfirmDialog.YES.toString(), 473, 390);
+        g2.drawString(ConfirmDialog.NO.toString(), 598, 390);
 
     }
 

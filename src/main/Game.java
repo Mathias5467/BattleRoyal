@@ -8,11 +8,12 @@ import java.util.HashMap;
 
 import entity.KnightColor;
 import gui.*;
+
 import input.KeyInput;
 import input.KeyType;
 
 public class Game extends JPanel implements Runnable {
-    private static final int WIDTH = 1000;
+    private static final int WIDTH = 1100;
     private static final int HEIGHT = 700;
     private GameState gameState;
     private Thread gameThread;
@@ -26,6 +27,7 @@ public class Game extends JPanel implements Runnable {
     private Pause pause;
     private Dialog dialog;
     private KnightColor knightColor;
+    private Map map;
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setDoubleBuffered(true);
@@ -40,6 +42,7 @@ public class Game extends JPanel implements Runnable {
         this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
         this.knightColor = this.options.getKnightColor();
         this.pause = new Pause();
+        this.map = new Map();
         this.dialog = new Dialog(this.gameState);
     }
 
@@ -73,7 +76,9 @@ public class Game extends JPanel implements Runnable {
                 this.handleInput();
                 this.update();
                 this.repaint();
-                this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
+                if (this.gameState != GameState.PLAY) {
+                    this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
+                }
                 lastFrame = now;
             }
         }
@@ -104,7 +109,11 @@ public class Game extends JPanel implements Runnable {
                         }
                     }
                     if (this.gameState == GameState.PLAY) {
-                        System.out.println("Play");
+                        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                            this.map.moveLeft();
+                        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                            this.map.moveRight();
+                        }
                     }
                 } else {
                     if (this.keyInput.getKeys().get(KeyType.LEFT)) {
@@ -128,17 +137,17 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         switch (this.gameState) {
             case GameState.PLAY -> {
-
+                this.map.draw(g);
             }
             case GameState.EXIT -> {
                 System.exit(0);
             }
             case GameState.OPTIONS -> {
                 if (this.dialog.isVisible()) {
-                    if (this.dialog.isConfirmed() && this.dialog.getChosenOption() == ConfirmDialog.YES) {
-                        this.gameState = GameState.MENU;
-                        this.dialog.hide();
-                    } else if (this.dialog.isConfirmed() && this.dialog.getChosenOption() == ConfirmDialog.NO) {
+                    if (this.dialog.isConfirmed()) {
+                        if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                            this.gameState = GameState.MENU;
+                        }
                         this.dialog.hide();
                     }
                     this.dialog.setConfirmed(false);

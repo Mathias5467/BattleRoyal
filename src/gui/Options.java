@@ -22,7 +22,7 @@ public class Options {
     private String[] knightNames;
     public Options() {
         this.knightColor = KnightColor.RED;
-        this.knightPicture = new Picture(600, 200, 300, 320, this.getPathToImage());
+        this.knightPicture = new Picture(650, 200, 300, 320, this.getPathToImage());
         this.knightStatistic = new HashMap<KnightColor, int[]>() {{
                 put(KnightColor.RED, new int[] {50, 90, 70});
                 put(KnightColor.GREEN, new int[] {95, 50, 40});
@@ -67,7 +67,7 @@ public class Options {
         Graphics2D g2 = (Graphics2D)g;
 
         g2.setColor(new Color(255, 255, 255, 80));
-        g2.fillRoundRect(550, 100, 400, 500, 30, 30);
+        g2.fillRoundRect(600, 100, 400, 500, 30, 30);
         this.knightPicture.draw(g);
 
 //        g2.setFont(new Font("Consolas", Font.BOLD, 50));
@@ -97,10 +97,10 @@ public class Options {
         g2.drawString(String.format("%d/%d", this.knightStatistic.get(this.knightColor)[2], 100), 420, 450);
         g2.setColor(new Color(43, 43, 43));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));
-        g2.drawString(this.knightNames[this.knightColor.ordinal()], 700, 570);
+        g2.drawString(this.knightNames[this.knightColor.ordinal()], 750, 570);
         g2.setFont(new Font("Segoe Print", Font.BOLD, 90));
-        g2.drawString("<", 560, 380);
-        g2.drawString(">", 890, 380);
+        g2.drawString("<", 610, 380);
+        g2.drawString(">", 940, 380);
 
     }
 

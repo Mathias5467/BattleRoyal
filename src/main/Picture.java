@@ -30,6 +30,14 @@ public class Picture {
         this.picture = new ImageIcon(this.picturePath);
     }
 
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.drawImage(this.picture.getImage() , this.x, this.y, this.width, this.height, null);
