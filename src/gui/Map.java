@@ -29,6 +29,10 @@ public class Map {
         this.player.getHpBar().draw(g);
     }
 
+    public Player getPlayer() {
+        return this.player;
+    }
+
     public void moveRight() {
 //        if (this.background3.getX() < -1100) {
 //            this.background3.changeCords(0, this.background3.getY());

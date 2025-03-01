@@ -15,7 +15,7 @@ public class HPBar {
     private final int width;
     private final int height;
     private final int tileSize;
-    private final String name;
+    private String name;
     private final int textX;
     private final int textY;
     public HPBar(int x, int y, int maximalHP, int textX, int textY, String name) {
@@ -45,6 +45,10 @@ public class HPBar {
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         g2.setColor(Color.WHITE);
         g2.drawString(this.name, this.textX, this.textY);
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void reduceHP(int downHP) {

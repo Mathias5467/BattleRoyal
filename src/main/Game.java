@@ -32,6 +32,7 @@ public class Game extends JPanel implements Runnable {
     private Pause pause;
     private Dialog dialog;
     private KnightColor knightColor;
+    private String knightName;
     private Map map;
     private boolean nonKeyTyped;
     public Game() {
@@ -51,6 +52,7 @@ public class Game extends JPanel implements Runnable {
         this.map = new Map();
         this.dialog = new Dialog(this.gameState);
         this.nonKeyTyped = false;
+        this.knightName = "Thorne";
     }
 
     public void start() {
@@ -112,6 +114,8 @@ public class Game extends JPanel implements Runnable {
                         } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                             this.gameState = GameState.MENU;
                             this.knightColor = this.options.getKnightColor();
+                            this.knightName = this.options.getKnightName();
+                            this.map.getPlayer().setColor(this.knightColor, this.knightName);
                         } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                             this.dialog.setVisible();
                         }

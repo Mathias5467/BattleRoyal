@@ -20,6 +20,7 @@ public class Options {
     private final int tile = 3;
     private KnightColor[] colors;
     private String[] knightNames;
+    private String knightName;
     public Options() {
         this.knightColor = KnightColor.RED;
         this.knightPicture = new Picture(650, 200, 300, 320, this.getPathToImage());
@@ -30,6 +31,7 @@ public class Options {
                 }};
         this.knightNames = new String[] {"Thorne", "Alaric", "Rhogar"};
         this.colors = new KnightColor[] {KnightColor.RED, KnightColor.GREEN, KnightColor.BLUE};
+        this.knightName = this.knightNames[0];
     }
 
     public String getPathToImage() {
@@ -40,23 +42,32 @@ public class Options {
         return this.knightColor;
     }
 
+    public String getKnightName() {
+        return this.knightName;
+    }
+
     public void changeColor(int direction) {
         switch (this.knightColor) {
             case RED -> {
                 if (direction < 0) {
                     this.knightColor = this.colors[2];
+                    this.knightName = this.knightNames[2];
                 } else {
                     this.knightColor = this.colors[direction];
+                    this.knightName = this.knightNames[direction];
                 }
             }
             case GREEN -> {
                 this.knightColor = this.colors[1 + direction];
+                this.knightName = this.knightNames[1 + direction];
             }
             case BLUE -> {
                 if (2 + direction > 2) {
                     this.knightColor = this.colors[0];
+                    this.knightName = this.knightNames[0];
                 } else {
                     this.knightColor = this.colors[2 + direction];
+                    this.knightName = this.knightNames[2 + direction];
                 }
             }
         }
