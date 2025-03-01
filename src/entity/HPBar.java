@@ -12,6 +12,8 @@ public class HPBar {
     private final int y;
     private int actualHP;
     private final int maximalHP;
+    private final int width;
+    private final int height;
     private final int tileSize;
     private final String name;
     private final int textX;
@@ -19,12 +21,14 @@ public class HPBar {
     public HPBar(int x, int y, int maximalHP, int textX, int textY, String name) {
         this.maximalHP = maximalHP;
         this.actualHP = this.maximalHP;
-        this.tileSize = 2;
+        this.tileSize = 3;
         this.name = name;
         this.x = x;
         this.y = y;
         this.textX = textX;
         this.textY = textY;
+        this.width = this.actualHP * this.tileSize;
+        this.height = 30;
     }
 
     public int getActualHP() {
@@ -35,10 +39,10 @@ public class HPBar {
         Graphics2D g2 = (Graphics2D)g;
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.RED);
-        g2.fillRect(this.x, this.y, this.tileSize * this.actualHP, 20);
+        g2.fillRect(this.x, this.y, this.width, this.height);
         g2.setColor(Color.WHITE);
-        g2.drawRect(this.x, this.y, this.tileSize * this.maximalHP, 20);
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        g2.drawRect(this.x, this.y, this.width, this.height);
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
         g2.setColor(Color.WHITE);
         g2.drawString(this.name, this.textX, this.textY);
     }

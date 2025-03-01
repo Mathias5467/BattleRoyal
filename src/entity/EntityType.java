@@ -1,11 +1,13 @@
 package entity;
 
-public enum Direction {
-    RIGHT("R"),
-    LEFT("L");
+public enum EntityType {
+    SKELETON("skeleton"),
+    VIKING("viking"),
+    KNIGHT("knight");
 
     private String name;
-    Direction(String name) {
+
+    EntityType(String name) {
         this.name = name;
     }
 

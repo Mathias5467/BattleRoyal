@@ -7,7 +7,12 @@ import java.awt.Graphics;
 import java.util.HashMap;
 
 import entity.KnightColor;
-import gui.*;
+import gui.Dialog;
+import gui.Options;
+import gui.Pause;
+import gui.Map;
+import gui.Menu;
+import gui.ConfirmDialog;
 
 import input.KeyInput;
 import input.KeyType;
@@ -28,6 +33,7 @@ public class Game extends JPanel implements Runnable {
     private Dialog dialog;
     private KnightColor knightColor;
     private Map map;
+    private boolean nonKeyTyped;
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setDoubleBuffered(true);
@@ -44,6 +50,7 @@ public class Game extends JPanel implements Runnable {
         this.pause = new Pause();
         this.map = new Map();
         this.dialog = new Dialog(this.gameState);
+        this.nonKeyTyped = false;
     }
 
     public void start() {
@@ -76,7 +83,7 @@ public class Game extends JPanel implements Runnable {
                 this.handleInput();
                 this.update();
                 this.repaint();
-                if (this.gameState != GameState.PLAY) {
+                if (this.gameState != GameState.PLAY || this.dialog.isVisible()) {
                     this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
                 }
                 lastFrame = now;
@@ -87,6 +94,7 @@ public class Game extends JPanel implements Runnable {
     public void handleInput() {
         for (KeyType keyValue : this.keysPressed.keySet()) {
             if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
+                this.nonKeyTyped = true;
                 if (!this.dialog.isVisible()) {
                     if (this.gameState == GameState.MENU) {
                         if (this.keyInput.getKeys().get(KeyType.UP)) {
@@ -109,10 +117,17 @@ public class Game extends JPanel implements Runnable {
                         }
                     }
                     if (this.gameState == GameState.PLAY) {
-                        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                            this.map.moveLeft();
-                        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                            this.map.moveRight();
+                        if (!this.dialog.isVisible()) {
+                            if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                                this.map.moveLeft();
+                            } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                                this.map.moveRight();
+                            } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+                                this.dialog.setVisible();
+                            } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+                                this.map.defend();
+                            }
+
                         }
                     }
                 } else {
@@ -126,10 +141,12 @@ public class Game extends JPanel implements Runnable {
                         this.dialog.setConfirmed(true);
                     }
                 }
-
-
             }
         }
+        if (!this.nonKeyTyped && this.gameState == GameState.PLAY) {
+            this.map.stop();
+        }
+        this.nonKeyTyped = false;
     }
 
     @Override
@@ -137,6 +154,15 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         switch (this.gameState) {
             case GameState.PLAY -> {
+                if (this.dialog.isVisible()) {
+                    if (this.dialog.isConfirmed()) {
+                        if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                            this.gameState = GameState.MENU;
+                        }
+                        this.dialog.hide();
+                    }
+                    this.dialog.setConfirmed(false);
+                }
                 this.map.draw(g);
             }
             case GameState.EXIT -> {
