@@ -1,7 +1,7 @@
 package gui;
 
 
-import entity.KnightColor;
+import entity.KnightType;
 import main.Picture;
 
 import java.awt.Graphics;
@@ -9,69 +9,40 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.BasicStroke;
-import java.util.HashMap;
 
 
 public class Options {
 
     private Picture knightPicture;
-    private HashMap<KnightColor, int[]> knightStatistic;
-    private KnightColor knightColor;
+    private KnightType knightType;
     private final int tile = 3;
-    private KnightColor[] colors;
-    private String[] knightNames;
-    private String knightName;
+    private KnightType[] colors;
+    private int counter;
     public Options() {
-        this.knightColor = KnightColor.RED;
+        this.knightType = KnightType.RED;
         this.knightPicture = new Picture(650, 200, 300, 320, this.getPathToImage());
-        this.knightStatistic = new HashMap<KnightColor, int[]>() {{
-                put(KnightColor.RED, new int[] {50, 90, 70});
-                put(KnightColor.GREEN, new int[] {95, 50, 40});
-                put(KnightColor.BLUE, new int[] {45, 50, 85});
-                }};
-        this.knightNames = new String[] {"Thorne", "Alaric", "Rhogar"};
-        this.colors = new KnightColor[] {KnightColor.RED, KnightColor.GREEN, KnightColor.BLUE};
-        this.knightName = this.knightNames[0];
+        this.colors = new KnightType[] {KnightType.RED, KnightType.GREEN, KnightType.BLUE};
+        this.counter = 0;
     }
 
     public String getPathToImage() {
-        return String.format("res/knight/%s/stayL.png", this.knightColor.getColor());
+        return String.format("res/knight/%s/stayL.png", this.knightType.getColor());
     }
 
-    public KnightColor getKnightColor() {
-        return this.knightColor;
-    }
-
-    public String getKnightName() {
-        return this.knightName;
+    public KnightType getKnightType() {
+        return this.knightType;
     }
 
     public void changeColor(int direction) {
-        switch (this.knightColor) {
-            case RED -> {
-                if (direction < 0) {
-                    this.knightColor = this.colors[2];
-                    this.knightName = this.knightNames[2];
-                } else {
-                    this.knightColor = this.colors[direction];
-                    this.knightName = this.knightNames[direction];
-                }
-            }
-            case GREEN -> {
-                this.knightColor = this.colors[1 + direction];
-                this.knightName = this.knightNames[1 + direction];
-            }
-            case BLUE -> {
-                if (2 + direction > 2) {
-                    this.knightColor = this.colors[0];
-                    this.knightName = this.knightNames[0];
-                } else {
-                    this.knightColor = this.colors[2 + direction];
-                    this.knightName = this.knightNames[2 + direction];
-                }
-            }
-        }
+        this.counter += direction;
+        this.counter = this.mod(this.counter, 3);
+        KnightType[] values = KnightType.values();
+        this.knightType = values[this.counter % 3];
         this.knightPicture.changeImage(this.getPathToImage());
+    }
+
+    public int mod(int a, int b) {
+        return (a % b < 0) ? (a % b) + Math.abs(b) : (a % b);
     }
 
     public void draw(Graphics g) {
@@ -92,23 +63,23 @@ public class Options {
         g2.drawString("Press ENTER to save changes", 110, 520);
         g2.drawString("Press ESC to get back to menu", 95, 560);
         g2.setColor(new Color(17, 72, 7));
-        g2.fillRect(100, 190, this.knightStatistic.get(this.knightColor)[0] * this.tile, 30);
+        g2.fillRect(100, 190, this.knightType.getHp() * this.tile, 30);
         g2.setColor(new Color(142, 37, 29));
-        g2.fillRect(100, 310, this.knightStatistic.get(this.knightColor)[1] * this.tile, 30);
+        g2.fillRect(100, 310, this.knightType.getAttack() * this.tile, 30);
         g2.setColor(new Color(1, 48, 94));
-        g2.fillRect(100, 430, this.knightStatistic.get(this.knightColor)[2] * this.tile, 30);
+        g2.fillRect(100, 430, this.knightType.getDefend() * this.tile, 30);
 //        g2.setColor(new Color(255, 255, 255));
         g2.setColor(new Color(255, 255, 255, 80));
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
         g2.drawRect(100, 190, 300, 30);
-        g2.drawString(String.format("%d/%d", this.knightStatistic.get(this.knightColor)[0], 100), 420, 210);
+        g2.drawString(String.format("%d/%d", this.knightType.getHp(), 100), 420, 210);
         g2.drawRect(100, 310, 300, 30);
-        g2.drawString(String.format("%d/%d", this.knightStatistic.get(this.knightColor)[1], 100), 420, 330);
+        g2.drawString(String.format("%d/%d", this.knightType.getAttack(), 100), 420, 330);
         g2.drawRect(100, 430, 300, 30);
-        g2.drawString(String.format("%d/%d", this.knightStatistic.get(this.knightColor)[2], 100), 420, 450);
+        g2.drawString(String.format("%d/%d", this.knightType.getDefend(), 100), 420, 450);
         g2.setColor(new Color(43, 43, 43));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));
-        g2.drawString(this.knightNames[this.knightColor.ordinal()], 750, 570);
+        g2.drawString(this.knightType.getName(), 750, 570);
         g2.setFont(new Font("Segoe Print", Font.BOLD, 90));
         g2.drawString("<", 610, 380);
         g2.drawString(">", 940, 380);

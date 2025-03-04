@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
 
-import entity.KnightColor;
+import entity.KnightType;
 import gui.Dialog;
 import gui.Options;
 import gui.Pause;
@@ -31,8 +31,7 @@ public class Game extends JPanel implements Runnable {
     private Options options;
     private Pause pause;
     private Dialog dialog;
-    private KnightColor knightColor;
-    private String knightName;
+    private KnightType knightType;
     private Map map;
     private boolean nonKeyTyped;
     public Game() {
@@ -47,12 +46,11 @@ public class Game extends JPanel implements Runnable {
         this.gameState = GameState.MENU;
         this.running = false;
         this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
-        this.knightColor = this.options.getKnightColor();
+        this.knightType = this.options.getKnightType();
         this.pause = new Pause();
         this.map = new Map();
         this.dialog = new Dialog(this.gameState);
         this.nonKeyTyped = false;
-        this.knightName = "Thorne";
     }
 
     public void start() {
@@ -113,9 +111,9 @@ public class Game extends JPanel implements Runnable {
                             this.options.changeColor(1);
                         } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                             this.gameState = GameState.MENU;
-                            this.knightColor = this.options.getKnightColor();
-                            this.knightName = this.options.getKnightName();
-                            //set color to player
+                            this.knightType = this.options.getKnightType();
+                            this.map.getPlayer().setKnight(this.knightType);
+                            this.map.getPlayer().setStartPosition();
                         } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                             this.dialog.setVisible();
                         }

@@ -11,8 +11,8 @@ public class HPBar {
     private final int x;
     private final int y;
     private int actualHP;
-    private final int maximalHP;
-    private final int width;
+    private int maximalHP;
+    private int width;
     private final int height;
     private final int tileSize;
     private String name;
@@ -49,6 +49,11 @@ public class HPBar {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setHP(int hp) {
+        this.maximalHP = hp;
+        this.width = this.tileSize * this.maximalHP;
     }
 
     public void reduceHP(int downHP) {

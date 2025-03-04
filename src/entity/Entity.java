@@ -35,6 +35,7 @@ public class Entity {
         return null;
     }
 
+
     public void changePicture() {
         this.pictureName = this.getPictureName();
         this.picture.changeImage(this.pictureName);
@@ -96,6 +97,22 @@ public class Entity {
         this.changePicture();
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
     public String getNumberOfAnimation() {
         return this.numberOfAnimation;
     }
@@ -129,11 +146,11 @@ public class Entity {
     }
 
     public Movement getMovementType() {
-        return movementType;
+        return this.movementType;
     }
 
     public Direction getDirection() {
-        return direction;
+        return this.direction;
     }
 
     public void setDirection(Direction direction) {
