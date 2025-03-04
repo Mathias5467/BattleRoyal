@@ -94,10 +94,10 @@ public class Entity {
         }
     }
 
-    public void defend() {
-        this.movementType = Movement.DEFEND;
-        this.numberOfAnimation = "";
-        this.changePicture();
+
+
+    public void hit(int damage) {
+
     }
 
     public void attack() {
@@ -135,6 +135,10 @@ public class Entity {
 
     public HPBar getHpBar() {
         return this.hpBar;
+    }
+
+    public void setMovementType(Movement type) {
+        this.movementType = type;
     }
 
     public void setColor(KnightColor color, String name) {

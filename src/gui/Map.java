@@ -44,9 +44,11 @@ public class Map {
 //        this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
 //        this.ground.changeCords(this.ground.getX() - 2, this.ground.getY());
         this.player.moveRight();
+        this.player.setDefending(false);
     }
 
     public void defend() {
+        this.player.setDefending(true);
         this.player.defend();
     }
 
@@ -60,9 +62,11 @@ public class Map {
 //        this.background3.changeCords(this.background3.getX() + 1, this.background3.getY());
 //        this.ground.changeCords(this.ground.getX() + 2, this.ground.getY());
         this.player.moveLeft();
+        this.player.setDefending(false);
     }
 
     public void stop() {
+        this.player.setDefending(false);
         this.player.stop();
     }
 }
