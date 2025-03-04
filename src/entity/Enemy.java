@@ -16,7 +16,9 @@ public class Enemy extends Entity {
                 new Picture(50, 480, 150, 170, "res/knight/red/stayR.png"),
                 "knight/red/stayL.png",
                 Direction.RIGHT,
-                new HPBar(50, 80, 100, 50, 70, "Thorne"));
+                new HPBar(50, 80, 100, 50, 70, "Thorne"),
+                4
+        );
         this.pictureName = super.getPictureName();
     }
 
@@ -34,12 +36,5 @@ public class Enemy extends Entity {
         }
     }
 
-    public Picture getPicture() {
-        return super.getPicture();
-    }
-
-//    public HPBar getHpBar() {
-//        return super.getHpBar();
-//    }
 
 }

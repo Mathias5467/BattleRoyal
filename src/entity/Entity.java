@@ -16,7 +16,7 @@ public class Entity {
     private final int movementSpeed;
     private KnightColor color;
     private String name;
-    public Entity(int x, int y, EntityType entityType, KnightColor color, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar) {
+    public Entity(int x, int y, EntityType entityType, KnightColor color, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
         this.picture = picture;
@@ -26,7 +26,7 @@ public class Entity {
         this.hpBar = hpBar;
         this.numberOfAnimation = "";
         this.actualAnimationNumber = 0;
-        this.movementSpeed = 4;
+        this.movementSpeed = speed;
         this.maxAnimationNumber = 10;
         this.entityType = entityType;
         this.color = color;
@@ -136,18 +136,15 @@ public class Entity {
     public HPBar getHpBar() {
         return this.hpBar;
     }
-    public Direction getDirection() {
-        return this.direction;
-    }
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
 
     public void setColor(KnightColor color, String name) {
-        this.color = color;
-        this.name = name;
-        this.hpBar.setName(this.name);
-        this.changePicture();
+        if (this.color != null) {
+            this.color = color;
+            this.name = name;
+            this.hpBar.setName(this.name);
+            this.changePicture();
+        }
+
     }
 
 }

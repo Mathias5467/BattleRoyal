@@ -3,20 +3,19 @@ package entity;
 import main.Picture;
 
 public class Player extends Entity {
-    private String pictureName;
-    public Player() {
-
+    public Player(EntityType entityType, int maxHP) {
         super(
                 50,
                 480,
-                EntityType.KNIGHT,
+                entityType,
                 KnightColor.RED,
                 "Thorne",
                 new Picture(50, 480, 150, 170, "res/knight/red/stayR.png"),
                 "knight/red/stayL.png",
                 Direction.RIGHT,
-                new HPBar(50, 80, 100, 50, 70, "Thorne"));
-        this.pictureName = super.getPictureName();
+                new HPBar(50, 80, maxHP, 50, 70, "Thorne"),
+                4
+        );
     }
 
 
@@ -32,13 +31,5 @@ public class Player extends Entity {
             animation();
         }
     }
-
-    public Picture getPicture() {
-        return super.getPicture();
-    }
-
-//    public HPBar getHpBar() {
-//        return super.getHpBar();
-//    }
 
 }
