@@ -11,7 +11,6 @@ public class Enemy extends Entity {
                 50,
                 480,
                 EntityType.KNIGHT,
-                KnightColor.RED,
                 "Thorne",
                 new Picture(50, 480, 150, 170, "res/knight/red/stayR.png"),
                 "knight/red/stayL.png",

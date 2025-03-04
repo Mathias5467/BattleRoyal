@@ -115,7 +115,7 @@ public class Game extends JPanel implements Runnable {
                             this.gameState = GameState.MENU;
                             this.knightColor = this.options.getKnightColor();
                             this.knightName = this.options.getKnightName();
-                            this.map.getPlayer().setColor(this.knightColor, this.knightName);
+                            //set color to player
                         } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                             this.dialog.setVisible();
                         }

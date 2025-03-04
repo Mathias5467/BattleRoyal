@@ -14,9 +14,8 @@ public class Entity {
     private final int maxAnimationNumber;
     private int actualAnimationNumber;
     private final int movementSpeed;
-    private KnightColor color;
     private String name;
-    public Entity(int x, int y, EntityType entityType, KnightColor color, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
+    public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
         this.picture = picture;
@@ -29,24 +28,11 @@ public class Entity {
         this.movementSpeed = speed;
         this.maxAnimationNumber = 10;
         this.entityType = entityType;
-        this.color = color;
         this.name = name;
     }
 
     public String getPictureName() {
-        if (this.color != null) {
-            return String.format("res/%s/%s/%s%s%s.png",
-                    this.entityType.toString(),
-                    this.color,
-                    this.movementType.getSymbol(),
-                    this.direction,
-                    this.numberOfAnimation);
-        }
-        return String.format("res/%s/%s%s%s.png",
-                this.entityType.toString(),
-                this.movementType.getSymbol(),
-                this.direction,
-                this.numberOfAnimation);
+        return null;
     }
 
     public void changePicture() {
@@ -59,9 +45,6 @@ public class Entity {
         currentAnimationNum = (currentAnimationNum % 6) + 1;
         this.numberOfAnimation = String.valueOf(currentAnimationNum);
         this.changePicture();
-//        if (Integer.parseInt(this.numberOfAnimation) == 6) {
-//            this.stop();
-//        }
     }
 
     public void moveRight() {
@@ -141,14 +124,19 @@ public class Entity {
         this.movementType = type;
     }
 
-    public void setColor(KnightColor color, String name) {
-        if (this.color != null) {
-            this.color = color;
-            this.name = name;
-            this.hpBar.setName(this.name);
-            this.changePicture();
-        }
-
+    public EntityType getEntity() {
+        return this.entityType;
     }
 
+    public Movement getMovementType() {
+        return movementType;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 }
