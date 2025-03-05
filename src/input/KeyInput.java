@@ -14,6 +14,9 @@ public class KeyInput implements KeyListener {
                 put(KeyType.UP, false);
                 put(KeyType.LEFT, false);
                 put(KeyType.M, false);
+                put(KeyType.A, false);
+                put(KeyType.S, false);
+                put(KeyType.D, false);
                 put(KeyType.ESC, false);
                 put(KeyType.RIGHT, false);
                 put(KeyType.ENTER, false);
@@ -37,6 +40,12 @@ public class KeyInput implements KeyListener {
                 this.keys.put(KeyType.ESC, true); }
             case KeyEvent.VK_M -> {
                 this.keys.put(KeyType.M, true); }
+            case KeyEvent.VK_A -> {
+                this.keys.put(KeyType.A, true); }
+            case KeyEvent.VK_S -> {
+                this.keys.put(KeyType.S, true); }
+            case KeyEvent.VK_D -> {
+                this.keys.put(KeyType.D, true); }
             case KeyEvent.VK_ENTER -> {
                 this.keys.put(KeyType.ENTER, true); }
         }
@@ -57,6 +66,12 @@ public class KeyInput implements KeyListener {
                 this.keys.put(KeyType.ESC, false); }
             case KeyEvent.VK_M -> {
                 this.keys.put(KeyType.M, false); }
+            case KeyEvent.VK_A -> {
+                this.keys.put(KeyType.A, false); }
+            case KeyEvent.VK_S -> {
+                this.keys.put(KeyType.S, false); }
+            case KeyEvent.VK_D -> {
+                this.keys.put(KeyType.D, false); }
             case KeyEvent.VK_ENTER -> {
                 this.keys.put(KeyType.ENTER, false); }
         }

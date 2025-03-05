@@ -61,7 +61,6 @@ public class Entity {
                 this.animation();
             }
         }
-        this.hit(1);
     }
 
     public void moveLeft() {
@@ -85,7 +84,7 @@ public class Entity {
 
     }
 
-    public void attack() {
+    public void attack(Movement movementType) {
     }
 
     public Picture getPicture() {

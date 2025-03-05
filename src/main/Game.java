@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.util.HashMap;
 
 import entity.KnightType;
+import entity.Movement;
 import gui.Dialog;
 import gui.Options;
 import gui.Pause;
@@ -92,55 +93,65 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void handleInput() {
+        var numberOfPressedKeys = 0;
         for (KeyType keyValue : this.keysPressed.keySet()) {
-            if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
-                this.nonKeyTyped = true;
-                if (!this.dialog.isVisible()) {
-                    if (this.gameState == GameState.MENU) {
-                        if (this.keyInput.getKeys().get(KeyType.UP)) {
-                            this.menu.selectOption(-1);
-                        } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                            this.menu.selectOption(1);
-                        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                            this.gameState = this.menu.getChosenGameState();
-                        }
-                    } else if (this.gameState == GameState.OPTIONS) {
-                        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                            this.options.changeColor(-1);
-                        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                            this.options.changeColor(1);
-                        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                            this.gameState = GameState.MENU;
-                            this.knightType = this.options.getKnightType();
-                            this.map.getPlayer().setKnight(this.knightType);
-                            this.map.getPlayer().setStartPosition();// improve this and restart the level when added
-                        } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
-                            this.dialog.setVisible();
-                        }
-                    }
-                    if (this.gameState == GameState.PLAY) {
-                        if (!this.dialog.isVisible()) {
+            if (numberOfPressedKeys < 1) {
+                if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
+                    numberOfPressedKeys++;
+                    this.nonKeyTyped = true;
+                    if (!this.dialog.isVisible()) {
+                        if (this.gameState == GameState.MENU) {
+                            if (this.keyInput.getKeys().get(KeyType.UP)) {
+                                this.menu.selectOption(-1);
+                            } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+                                this.menu.selectOption(1);
+                            } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                                this.gameState = this.menu.getChosenGameState();
+                            }
+                        } else if (this.gameState == GameState.OPTIONS) {
                             if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                                this.map.moveLeft();
+                                this.options.changeColor(-1);
                             } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                                this.map.moveRight();
+                                this.options.changeColor(1);
+                            } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                                this.gameState = GameState.MENU;
+                                this.knightType = this.options.getKnightType();
+                                this.map.getPlayer().setKnight(this.knightType);
+                                this.map.getPlayer().setStartPosition();// improve this and restart the level when added
                             } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                                 this.dialog.setVisible();
-                            } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                                this.map.defend();
                             }
-
                         }
-                    }
-                } else {
-                    if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                        this.dialog.changeOption(0);
-                    } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                        this.dialog.changeOption(1);
-                    } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
-                        this.dialog.hide();
-                    }  else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                        this.dialog.setConfirmed(true);
+                        if (this.gameState == GameState.PLAY) {
+                            if (!this.dialog.isVisible()) {
+                                if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                                    this.map.moveLeft();
+                                } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                                    this.map.moveRight();
+                                } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+                                    this.dialog.setVisible();
+                                } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+                                    this.map.defend();
+                                } else if (this.keyInput.getKeys().get(KeyType.A)) {
+                                    this.map.getPlayer().attack(Movement.ATTACK1);
+                                } else if (this.keyInput.getKeys().get(KeyType.S)) {
+                                    this.map.getPlayer().attack(Movement.ATTACK2);
+                                } else if (this.keyInput.getKeys().get(KeyType.D)) {
+                                    this.map.getPlayer().attack(Movement.ATTACK3);
+                                }
+
+                            }
+                        }
+                    } else {
+                        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                            this.dialog.changeOption(0);
+                        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                            this.dialog.changeOption(1);
+                        } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+                            this.dialog.hide();
+                        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+                            this.dialog.setConfirmed(true);
+                        }
                     }
                 }
             }

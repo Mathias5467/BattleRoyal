@@ -20,7 +20,7 @@ public class Player extends Entity {
         this.knightType = knightType;
         this.isDefending = false;
     }
-
+    //TODO: changing knightType will maxHp have to change too
     public void setStartPosition() {
         super.setX(50);
         super.setY(480);
@@ -45,10 +45,12 @@ public class Player extends Entity {
     }
 
     @Override
-    public void attack() {
-        int actualAnimationNumber = super.getActualAnimationNumber();
-        super.setActualAnimationNumber(actualAnimationNumber++);
-        if (actualAnimationNumber >= super.getMaxAnimationNumber()) {
+    public void attack(Movement movementType) {
+        super.setMovementType(movementType);
+        int number = super.getActualAnimationNumber();
+        number++;
+        super.setActualAnimationNumber(number);
+        if (super.getActualAnimationNumber() >= super.getMaxAnimationNumber()) {
             super.setActualAnimationNumber(0);
             if (super.getNumberOfAnimation().equals("")) {
                 super.setNumberOfAnimation("0");

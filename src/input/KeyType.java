@@ -6,6 +6,9 @@ public enum KeyType {
     LEFT("left"),
     RIGHT("right"),
     M("m"),
+    A("a"),
+    S("s"),
+    D("d"),
     ESC("esc"),
     ENTER("enter");
 
