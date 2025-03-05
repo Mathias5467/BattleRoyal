@@ -113,7 +113,7 @@ public class Game extends JPanel implements Runnable {
                             this.gameState = GameState.MENU;
                             this.knightType = this.options.getKnightType();
                             this.map.getPlayer().setKnight(this.knightType);
-                            this.map.getPlayer().setStartPosition();
+                            this.map.getPlayer().setStartPosition();// improve this and restart the level when added
                         } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                             this.dialog.setVisible();
                         }
@@ -156,30 +156,28 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         switch (this.gameState) {
             case GameState.PLAY -> {
-                if (this.dialog.isVisible()) {
-                    if (this.dialog.isConfirmed()) {
-                        if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
-                            this.gameState = GameState.MENU;
-                        }
-                        this.dialog.hide();
+                if (this.dialog.isConfirmed()) {
+                    if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                        this.gameState = GameState.MENU;
                     }
-                    this.dialog.setConfirmed(false);
+                    this.dialog.hide();
                 }
+                this.dialog.setConfirmed(false);
+
                 this.map.draw(g);
             }
             case GameState.EXIT -> {
                 System.exit(0);
             }
             case GameState.OPTIONS -> {
-                if (this.dialog.isVisible()) {
-                    if (this.dialog.isConfirmed()) {
-                        if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
-                            this.gameState = GameState.MENU;
-                        }
-                        this.dialog.hide();
+                if (this.dialog.isConfirmed()) {
+                    if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                        this.gameState = GameState.MENU;
                     }
-                    this.dialog.setConfirmed(false);
+                    this.dialog.hide();
                 }
+                this.dialog.setConfirmed(false);
+
                 this.options.draw(g);
             }
             case GameState.MENU -> {

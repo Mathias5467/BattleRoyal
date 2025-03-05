@@ -13,6 +13,7 @@ public class HPBar {
     private int actualHP;
     private int maximalHP;
     private int width;
+    private int maxWidth;
     private final int height;
     private final int tileSize;
     private String name;
@@ -28,6 +29,7 @@ public class HPBar {
         this.textX = textX;
         this.textY = textY;
         this.width = this.actualHP * this.tileSize;
+        this.maxWidth = this.maximalHP * this.tileSize;
         this.height = 30;
     }
 
@@ -41,7 +43,7 @@ public class HPBar {
         g2.setColor(Color.RED);
         g2.fillRect(this.x, this.y, this.width, this.height);
         g2.setColor(Color.WHITE);
-        g2.drawRect(this.x, this.y, this.width, this.height);
+        g2.drawRect(this.x, this.y, this.maxWidth, this.height);
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         g2.setColor(Color.WHITE);
         g2.drawString(this.name, this.textX, this.textY);
@@ -62,6 +64,7 @@ public class HPBar {
         } else {
             this.actualHP = 0;
         }
+        this.width = this.actualHP * this.tileSize;
     }
 
     public void resetHP() {

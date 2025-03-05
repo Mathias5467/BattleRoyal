@@ -61,6 +61,7 @@ public class Entity {
                 this.animation();
             }
         }
+        this.hit(1);
     }
 
     public void moveLeft() {
