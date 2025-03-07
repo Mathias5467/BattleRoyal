@@ -6,6 +6,8 @@ import entity.KnightType;
 import main.Picture;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.List;
+
 import entity.Player;
 
 public class Map {
@@ -14,6 +16,7 @@ public class Map {
     private Picture background3;
     private Picture ground;
     private Player player;
+    private List<Enemy> enemies;
     private Enemy skeleton;
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");

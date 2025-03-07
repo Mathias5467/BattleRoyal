@@ -5,6 +5,10 @@ import main.Picture;
 public class Player extends Entity {
     private boolean isDefending;
     private KnightType knightType;
+    private boolean isAttacking;
+    private Movement currentAttack;
+    private int attackAnimationCounter;
+
     public Player(EntityType entityType, KnightType knightType) {
         super(
                 50,
@@ -12,15 +16,18 @@ public class Player extends Entity {
                 entityType,
                 knightType.getName(),
                 new Picture(50, 480, 150, 170, "res/knight/red/stayR.png"),
-                "knight/red/stayL.png",
+                "Knight/red/stayL.png",
                 Direction.RIGHT,
                 new HPBar(50, 80, knightType.getHp(), 50, 70, knightType.getName()),
                 4
         );
         this.knightType = knightType;
         this.isDefending = false;
+        this.isAttacking = false;
+        this.attackAnimationCounter = 0;
     }
-    //TODO: changing knightType will maxHp have to change too
+
+    // Existing methods...
     public void setStartPosition() {
         super.setX(50);
         super.setY(480);
@@ -32,6 +39,7 @@ public class Player extends Entity {
         this.knightType = knightType;
         super.getHpBar().setName(this.knightType.getName());
         super.getHpBar().setHP(this.knightType.getHp());
+        super.getHpBar().setMaxHP(this.knightType.getHp());
     }
 
     @Override
@@ -44,29 +52,60 @@ public class Player extends Entity {
                 super.getNumberOfAnimation());
     }
 
+    // Modified attack method to start the animation sequence
     @Override
     public void attack(Movement movementType) {
-        super.setMovementType(movementType);
-        int number = super.getActualAnimationNumber();
-        number++;
-        super.setActualAnimationNumber(number);
-        if (super.getActualAnimationNumber() >= super.getMaxAnimationNumber()) {
+        if (!this.isAttacking) {
+            this.currentAttack = movementType;
+            super.setMovementType(movementType);
             super.setActualAnimationNumber(0);
-            if (super.getNumberOfAnimation().equals("")) {
-                super.setNumberOfAnimation("0");
-            }
-            super.animation();
+            super.setNumberOfAnimation("0");
+            this.isAttacking = true;
+            this.attackAnimationCounter = 0;
         }
     }
 
+    // New method to continue the attack animation
+    public void updateAttackAnimation() {
+        if (this.isAttacking) {
+            this.attackAnimationCounter++;
+
+            // Change frame every few game ticks (adjust timing as needed)
+            if (this.attackAnimationCounter >= 8) { // Change 5 to adjust animation speed
+                this.attackAnimationCounter = 0;
+
+                int nextFrame = super.getActualAnimationNumber() + 1;
+                super.setActualAnimationNumber(nextFrame);
+
+                if (nextFrame >= super.getMaxAnimationNumber()) {
+                    // End of animation
+                    super.setActualAnimationNumber(0);
+                    this.isAttacking = false;
+                    // Return to idle state
+                    super.setMovementType(Movement.STAY);
+                    super.setNumberOfAnimation("");
+                } else {
+                    // Continue to next frame
+                    super.animation();
+                }
+            }
+        }
+    }
+
+
+
     public void setDefending(boolean defending) {
-        this.isDefending = defending;
+        if (!this.isAttacking) {
+            this.isDefending = defending;
+        }
     }
 
     public void defend() {
-        super.setMovementType(Movement.DEFEND);
-        super.setNumberOfAnimation("");
-        super.changePicture();
+        if (!this.isAttacking) {
+            super.setMovementType(Movement.DEFEND);
+            super.setNumberOfAnimation("");
+            super.changePicture();
+        }
     }
 
     @Override
@@ -78,4 +117,25 @@ public class Player extends Entity {
         }
     }
 
+    // Modified movement methods to prevent movement during attack
+    @Override
+    public void moveRight() {
+        if (!this.isAttacking) {
+            super.moveRight();
+        }
+    }
+
+    @Override
+    public void moveLeft() {
+        if (!this.isAttacking) {
+            super.moveLeft();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (!this.isAttacking) {
+            super.stop();
+        }
+    }
 }

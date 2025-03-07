@@ -58,6 +58,11 @@ public class HPBar {
         this.width = this.tileSize * this.maximalHP;
     }
 
+    public void setMaxHP(int hp) {
+        this.maximalHP = hp;
+        this.maxWidth = this.tileSize * this.maximalHP;
+    }
+
     public void reduceHP(int downHP) {
         if (this.actualHP - downHP > 0) {
             this.actualHP -= downHP;

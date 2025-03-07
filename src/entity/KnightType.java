@@ -1,9 +1,9 @@
 package entity;
 
 public enum KnightType {
-    RED("red", "Thorne", 70, 90, 70),
-    GREEN("green", "Alaric", 95, 50, 40),
-    BLUE("blue", "Rhogar", 80, 50, 85);
+    RED("red", "Thorne", 100, 90, 70),
+    GREEN("green", "Alaric", 100, 50, 40),
+    BLUE("blue", "Rhogar", 100, 50, 85);
 
     private String color;
     private String name;

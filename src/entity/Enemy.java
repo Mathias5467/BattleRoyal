@@ -15,7 +15,7 @@ public class Enemy extends Entity {
                 new Picture(820, 450, 200, 220, String.format("res/%s/stayL.png", entityType.toString())),
                 String.format("res/%s/stayL.png", entityType.toString()),
                 Direction.LEFT,
-                new HPBar(730, 80, 100, 800, 70, entityType.toString()),
+                new HPBar(750, 80, 100, 925, 70, entityType.toString()),
                 2
         );
         this.pictureName = super.getPictureName();

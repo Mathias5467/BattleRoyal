@@ -1,9 +1,9 @@
 package entity;
 
 public enum EntityType {
-    SKELETON("skeleton"),
-    VIKING("viking"),
-    KNIGHT("knight");
+    SKELETON("Skeleton"),
+    VIKING("Viking"),
+    KNIGHT("Knight");
 
     private String name;
 
