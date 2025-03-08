@@ -15,7 +15,9 @@ public class Entity {
     private int actualAnimationNumber;
     private final int movementSpeed;
     private boolean isAttacking;
-    private int attackAnimationCounter;
+    private boolean isDying;
+    private boolean isDead;
+    private int continualAnimationCounter;
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
@@ -30,7 +32,9 @@ public class Entity {
         this.maxAnimationNumber = 8;
         this.entityType = entityType;
         this.isAttacking = false;
-        this.attackAnimationCounter = 0;
+        this.continualAnimationCounter = 0;
+        this.isDying = false;
+        this.isDead = false;
     }
 
     public String getPictureName() {
@@ -88,9 +92,7 @@ public class Entity {
         }
     }
 
-    public void death() {
 
-    }
 
     public void hit(int damage) {
         if (this.hpBar.getActualHP() == 0) {
@@ -107,27 +109,43 @@ public class Entity {
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
             this.isAttacking = true;
-            this.attackAnimationCounter = 0;
+            this.continualAnimationCounter = 0;
+        }
+    }
+
+    public void death() {
+        if (!this.isDying) {
+            this.movementType = Movement.DEATH;
+            this.actualAnimationNumber = 0;
+            this.numberOfAnimation = "0";
+            this.isDying = true;
+            this.continualAnimationCounter = 0;
         }
     }
 
     // New method to continue the attack animation
-    public void updateAttackAnimation() {
-        if (this.isAttacking) {
-            this.attackAnimationCounter++;
+    public void update() {
+        if ((this.isAttacking || this.isDying) && !this.isDead) {
+            this.continualAnimationCounter++;
 
             // Change frame every few game ticks (adjust timing as needed)
-            if (this.attackAnimationCounter >= 8) { // Change 5 to adjust animation speed
-                this.attackAnimationCounter = 0;
+            if (this.continualAnimationCounter >= 8) { // Change 5 to adjust animation speed
+                this.continualAnimationCounter = 0;
 
                 this.actualAnimationNumber++;
 
-                if (this.actualAnimationNumber >= this.maxAnimationNumber) {
+                if (this.actualAnimationNumber >= this.maxAnimationNumber - 1) {
                     // End of animation
                     this.actualAnimationNumber = 0;
-                    this.isAttacking = false;
+                    if (this.isDying) {
+                        this.isDying = false;
+                        this.isDead = true;
+                    } else {
+                        this.isAttacking = false;
+                        this.movementType = Movement.STAY;
+                    }
                     // Return to idle state
-                    this.movementType = Movement.STAY;
+
                     this.numberOfAnimation = "0";
                 } else {
                     // Continue to next frame

@@ -53,9 +53,6 @@ public class Player extends Entity {
     }
 
 
-
-
-
     public void setDefending(boolean defending) {
         if (!super.isAttacking()) {
             this.isDefending = defending;

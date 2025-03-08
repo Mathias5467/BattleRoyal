@@ -45,6 +45,7 @@ public class Map {
     }
 
     public void moveRight() {
+
 //        if (this.background3.getX() < -1100) {
 //            this.background3.changeCords(0, this.background3.getY());
 //        }
@@ -103,7 +104,7 @@ public class Map {
         if (this.player.getX() + 150 > this.skeleton.getX()) {
             if (this.player.isAttacking() && !this.hit1Registered) {
                 // Register hit and apply damage only once
-                this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.05));
+                this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                 this.hit1Registered = true;
             }
             if (this.skeleton.isAttacking() && !this.hit2Registered) {

@@ -207,8 +207,8 @@ public class Game extends JPanel implements Runnable {
         // Update player's attack animation if it's playing
         if (this.gameState == GameState.PLAY) {
             this.map.update();
+            this.map.getPlayer().update();
             this.map.getEnemy().update();
-            this.map.getPlayer().updateAttackAnimation();
             // You can also add other game updates here
             // Such as enemy AI, collision detection, etc.
         }
