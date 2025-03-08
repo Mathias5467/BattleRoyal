@@ -14,7 +14,6 @@ public class Entity {
     private final int maxAnimationNumber;
     private int actualAnimationNumber;
     private final int movementSpeed;
-    private String name;
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
@@ -26,9 +25,8 @@ public class Entity {
         this.numberOfAnimation = "";
         this.actualAnimationNumber = 0;
         this.movementSpeed = speed;
-        this.maxAnimationNumber = 10;
+        this.maxAnimationNumber = 8;
         this.entityType = entityType;
-        this.name = name;
     }
 
     public String getPictureName() {
@@ -47,6 +45,7 @@ public class Entity {
         this.numberOfAnimation = String.valueOf(currentAnimationNum);
         this.changePicture();
     }
+
 
     public void moveRight() {
         this.movementType = Movement.WALK;
@@ -78,10 +77,15 @@ public class Entity {
         }
     }
 
+    public void death() {
 
+    }
 
     public void hit(int damage) {
-
+        if (this.hpBar.getActualHP() == 0) {
+            this.death();
+        }
+        this.hpBar.reduceHP(damage);
     }
 
     public void attack(Movement movementType) {

@@ -1,14 +1,10 @@
 package gui;
 
-import entity.Enemy;
-import entity.EntityType;
-import entity.KnightType;
+import entity.*;
 import main.Picture;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.List;
-
-import entity.Player;
 
 public class Map {
     private Picture background1;
@@ -18,6 +14,10 @@ public class Map {
     private Player player;
     private List<Enemy> enemies;
     private Enemy skeleton;
+    private int skeletonAttack;
+    private boolean hit1Registered; // Track if hit has been registered for current attack
+    private boolean hit2Registered; // Track if hit has been registered for current attack
+
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -25,6 +25,9 @@ public class Map {
         this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
         this.skeleton = new Enemy(EntityType.SKELETON);
+        this.hit1Registered = false;
+        this.hit2Registered = false;
+        this.skeletonAttack = 0;
     }
 
     public void draw(Graphics g) {
@@ -77,5 +80,44 @@ public class Map {
     public void stop() {
         this.player.setDefending(false);
         this.player.stop();
+    }
+
+    public Enemy getEnemy() {
+        return this.skeleton;
+    }
+
+    public void update() {
+        if (this.skeletonAttack == 150) {
+            this.skeleton.attack(Movement.ATTACK1);
+            this.skeletonAttack = 0;
+        }
+        this.skeletonAttack++;
+        // If player is not attacking, reset the hit registration
+        if (!this.player.isAttacking()) {
+            this.hit1Registered = false;
+            if (!this.skeleton.isAttacking()) {
+                this.hit2Registered = false;
+                return;
+            }
+            return;
+        }
+
+
+
+
+        // Check if we're close enough to the skeleton and on the correct frame
+        if (this.player.getX() + 150 > this.skeleton.getX()) {
+            if (this.player.isAttacking() && !this.hit1Registered) {
+                // Register hit and apply damage only once
+                this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.5));
+                this.hit1Registered = true;
+            }
+            if (this.skeleton.isAttacking() && !this.hit2Registered) {
+                // Register hit and apply damage only once
+                this.player.hit(6);
+                this.hit2Registered = true;
+            }
+        }
+
     }
 }
