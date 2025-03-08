@@ -14,7 +14,6 @@ public class Map {
     private Player player;
     private List<Enemy> enemies;
     private Enemy skeleton;
-    private int skeletonAttack;
     private boolean hit1Registered; // Track if hit has been registered for current attack
     private boolean hit2Registered; // Track if hit has been registered for current attack
 
@@ -27,7 +26,6 @@ public class Map {
         this.skeleton = new Enemy(EntityType.SKELETON);
         this.hit1Registered = false;
         this.hit2Registered = false;
-        this.skeletonAttack = 0;
     }
 
     public void draw(Graphics g) {
@@ -87,11 +85,7 @@ public class Map {
     }
 
     public void update() {
-        if (this.skeletonAttack == 150) {
-            this.skeleton.attack(Movement.ATTACK1);
-            this.skeletonAttack = 0;
-        }
-        this.skeletonAttack++;
+
         // If player is not attacking, reset the hit registration
         if (!this.player.isAttacking()) {
             this.hit1Registered = false;
@@ -109,7 +103,7 @@ public class Map {
         if (this.player.getX() + 150 > this.skeleton.getX()) {
             if (this.player.isAttacking() && !this.hit1Registered) {
                 // Register hit and apply damage only once
-                this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.5));
+                this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.05));
                 this.hit1Registered = true;
             }
             if (this.skeleton.isAttacking() && !this.hit2Registered) {

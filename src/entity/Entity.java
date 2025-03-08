@@ -14,6 +14,8 @@ public class Entity {
     private final int maxAnimationNumber;
     private int actualAnimationNumber;
     private final int movementSpeed;
+    private boolean isAttacking;
+    private int attackAnimationCounter;
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
@@ -27,12 +29,21 @@ public class Entity {
         this.movementSpeed = speed;
         this.maxAnimationNumber = 8;
         this.entityType = entityType;
+        this.isAttacking = false;
+        this.attackAnimationCounter = 0;
     }
 
     public String getPictureName() {
         return null;
     }
 
+    public boolean isAttacking() {
+        return this.isAttacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.isAttacking = attacking;
+    }
 
     public void changePicture() {
         this.pictureName = this.getPictureName();
@@ -88,7 +99,42 @@ public class Entity {
         this.hpBar.reduceHP(damage);
     }
 
+    // Modified attack method to start the animation sequence
+
     public void attack(Movement movementType) {
+        if (!this.isAttacking) {
+            this.movementType = movementType;
+            this.actualAnimationNumber = 0;
+            this.numberOfAnimation = "0";
+            this.isAttacking = true;
+            this.attackAnimationCounter = 0;
+        }
+    }
+
+    // New method to continue the attack animation
+    public void updateAttackAnimation() {
+        if (this.isAttacking) {
+            this.attackAnimationCounter++;
+
+            // Change frame every few game ticks (adjust timing as needed)
+            if (this.attackAnimationCounter >= 8) { // Change 5 to adjust animation speed
+                this.attackAnimationCounter = 0;
+
+                this.actualAnimationNumber++;
+
+                if (this.actualAnimationNumber >= this.maxAnimationNumber) {
+                    // End of animation
+                    this.actualAnimationNumber = 0;
+                    this.isAttacking = false;
+                    // Return to idle state
+                    this.movementType = Movement.STAY;
+                    this.numberOfAnimation = "0";
+                } else {
+                    // Continue to next frame
+                    this.animation();
+                }
+            }
+        }
     }
 
     public Picture getPicture() {
