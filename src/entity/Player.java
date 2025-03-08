@@ -52,6 +52,14 @@ public class Player extends Entity {
                 super.getNumberOfAnimation());
     }
 
+    public boolean isAttacking() {
+        return this.isAttacking;
+    }
+
+    public KnightType getKnightType() {
+        return this.knightType;
+    }
+
     // Modified attack method to start the animation sequence
     @Override
     public void attack(Movement movementType) {
