@@ -14,7 +14,7 @@ public class Enemy extends Entity {
                 String.format("res/%s/stayL.png", entityType.toString()),
                 Direction.LEFT,
                 new HPBar(750, 80, 100, 925, 70, entityType.toString()),
-                2
+                1
         );
     }
 
@@ -27,4 +27,20 @@ public class Enemy extends Entity {
                 super.getNumberOfAnimation());
     }
 
+
+    public void enemyAI(Player player) {
+        if (!player.isDead()) {
+            if (player.getX() + 80 > super.getX() && player.getX() < super.getX() + 80) {
+                super.attack(Movement.ATTACK1);
+            } else if (Math.abs(player.getX() - super.getX()) > 0 && player.getX() > super.getX()) {
+                super.moveRight();
+            } else if (Math.abs(player.getX() - super.getX()) > 0 && player.getX() < super.getX()) {
+                super.moveLeft();
+            }
+        } else {
+            super.setMovementType(Movement.STAY);
+            super.setNumberOfAnimation("");
+            super.changePicture();
+        }
+    }
 }

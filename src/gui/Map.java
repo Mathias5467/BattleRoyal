@@ -5,7 +5,6 @@ import entity.Enemy;
 import entity.Entity;
 import entity.EntityType;
 import entity.KnightType;
-import entity.Movement;
 import main.Picture;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,8 +19,6 @@ public class Map {
     private Player player;
     private List<Entity> entities;
     private Enemy skeleton;
-    private int skeletonCounter;
-
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -32,7 +29,6 @@ public class Map {
         this.entities = new ArrayList<Entity>();
         this.entities.add(this.player);
         this.entities.add(this.skeleton);
-        this.skeletonCounter = 0;
     }
 
     public void draw(Graphics g) {
@@ -94,14 +90,11 @@ public class Map {
 
     public void update() {
 
-        this.player.update();
-        this.skeleton.update();
-
-        if (this.skeletonCounter == 150) {
-            this.skeleton.attack(Movement.ATTACK1);
-            this.skeletonCounter = 0;
+        for (Entity entity : this.entities) {
+            entity.update();
         }
-        this.skeletonCounter++;
+
+
         for (Entity entity : this.entities) {
             if (!entity.isAttacking()) {
                 entity.setHitRegistered(false);
@@ -121,6 +114,7 @@ public class Map {
                 }
             }
         }
+        this.skeleton.enemyAI(this.player);
 
     }
 }
