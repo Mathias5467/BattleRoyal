@@ -1,6 +1,11 @@
 package gui;
 
-import entity.*;
+import entity.Player;
+import entity.Enemy;
+import entity.Entity;
+import entity.EntityType;
+import entity.KnightType;
+import entity.Movement;
 import main.Picture;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

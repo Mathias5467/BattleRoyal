@@ -73,7 +73,7 @@ public class Entity {
 
 
     public void moveRight() {
-        if (!this.isDead) {
+        if (!this.isDead && !this.isDying) {
             this.movementType = Movement.WALK;
             this.direction = Direction.RIGHT;
             if (this.x + this.movementSpeed < 980) {
@@ -90,7 +90,7 @@ public class Entity {
     }
 
     public void moveLeft() {
-        if (!this.isDead) {
+        if (!this.isDead && !this.isDying) {
             this.movementType = Movement.WALK;
             this.direction = Direction.LEFT;
             if (this.x > -30) {
