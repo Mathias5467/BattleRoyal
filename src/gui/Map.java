@@ -94,6 +94,9 @@ public class Map {
 
     public void update() {
 
+        this.player.update();
+        this.skeleton.update();
+
         if (this.skeletonCounter == 150) {
             this.skeleton.attack(Movement.ATTACK1);
             this.skeletonCounter = 0;
@@ -106,7 +109,7 @@ public class Map {
         }
 
         // Check if we're close enough to the skeleton and on the correct frame
-        if (this.player.getX() + 150 > this.skeleton.getX()) {
+        if (this.player.getX() + 80 > this.skeleton.getX()) {
             for (Entity entity : this.entities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
                     if (entity instanceof  Player) {

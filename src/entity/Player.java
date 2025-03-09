@@ -60,7 +60,7 @@ public class Player extends Entity {
     }
 
     public void defend() {
-        if (!super.isAttacking()) {
+        if (!super.isAttacking() && !super.isDead() && !super.isDying()) {
             super.setMovementType(Movement.DEFEND);
             super.setNumberOfAnimation("");
             super.changePicture();
