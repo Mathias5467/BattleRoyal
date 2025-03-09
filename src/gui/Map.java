@@ -107,7 +107,7 @@ public class Map {
                     if (entity instanceof  Player) {
                         this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                     } else {
-                        this.player.hit(6);
+                        this.player.hit(30);
                     }
                     entity.setHitRegistered(true);
                 }

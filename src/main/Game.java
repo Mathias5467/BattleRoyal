@@ -156,7 +156,7 @@ public class Game extends JPanel implements Runnable {
                 }
             }
         }
-        if (!this.nonKeyTyped && !this.map.getPlayer().isAttacking() && this.gameState == GameState.PLAY) {
+        if (!this.nonKeyTyped && !this.map.getPlayer().isDying() && !this.map.getPlayer().isDead() && !this.map.getPlayer().isAttacking() && this.gameState == GameState.PLAY) {
             this.map.stop();
         }
         this.nonKeyTyped = false;

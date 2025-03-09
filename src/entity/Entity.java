@@ -47,6 +47,14 @@ public class Entity {
         return this.isAttacking;
     }
 
+    public boolean isDead() {
+        return this.isDead;
+    }
+
+    public boolean isDying() {
+        return this.isDying;
+    }
+
     public void setAttacking(boolean attacking) {
         this.isAttacking = attacking;
     }
@@ -122,6 +130,7 @@ public class Entity {
     public void death() {
         if (!this.isDying) {
             this.movementType = Movement.DEATH;
+            this.isAttacking = false;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
             this.isDying = true;
