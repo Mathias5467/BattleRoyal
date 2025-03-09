@@ -7,10 +7,10 @@ public class Enemy extends Entity {
 
         super(
                 800,
-                480,
+                460,
                 entityType,
                 entityType.toString(),
-                new Picture(820, 450, 200, 220, String.format("res/%s/stayL.png", entityType.toString())),
+                new Picture(820, 460, 200, 220, String.format("res/%s/stayL.png", entityType.toString())),
                 String.format("res/%s/stayL.png", entityType.toString()),
                 Direction.LEFT,
                 new HPBar(750, 80, 100, 925, 70, entityType.toString()),

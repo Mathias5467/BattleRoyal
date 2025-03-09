@@ -18,17 +18,17 @@ public class Map {
     private Picture ground;
     private Player player;
     private List<Entity> entities;
-    private Enemy skeleton;
+    private Enemy viking;
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
         this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
         this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
-        this.skeleton = new Enemy(EntityType.SKELETON);
+        this.viking = new Enemy(EntityType.VIKING);
         this.entities = new ArrayList<Entity>();
         this.entities.add(this.player);
-        this.entities.add(this.skeleton);
+        this.entities.add(this.viking);
     }
 
     public void draw(Graphics g) {
@@ -39,8 +39,8 @@ public class Map {
         this.ground.draw(g);
         this.player.getPicture().draw(g);
         this.player.getHpBar().draw(g);
-        this.skeleton.getPicture().draw(g);
-        this.skeleton.getHpBar().draw(g);
+        this.viking.getPicture().draw(g);
+        this.viking.getHpBar().draw(g);
     }
 
     public Player getPlayer() {
@@ -85,7 +85,7 @@ public class Map {
     }
 
     public Enemy getEnemy() {
-        return this.skeleton;
+        return this.viking;
     }
 
     public void update() {
@@ -102,19 +102,19 @@ public class Map {
         }
 
         // Check if we're close enough to the skeleton and on the correct frame
-        if (this.player.getX() + 80 > this.skeleton.getX()) {
+        if (this.player.getX() + 80 > this.viking.getX()) {
             for (Entity entity : this.entities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
                     if (entity instanceof  Player) {
-                        this.skeleton.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+                        this.viking.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                     } else {
-                        this.player.hit(30);
+                        this.player.hit(5);
                     }
                     entity.setHitRegistered(true);
                 }
             }
         }
-        this.skeleton.enemyAI(this.player);
+        this.viking.enemyAI(this.player);
 
     }
 }
