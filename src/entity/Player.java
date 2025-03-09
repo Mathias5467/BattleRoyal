@@ -22,7 +22,7 @@ public class Player extends Entity {
         this.isDefending = false;
     }
 
-    // Existing methods...
+
     public void setStartPosition() {
         super.setX(50);
         super.setY(480);
@@ -73,6 +73,9 @@ public class Player extends Entity {
             super.getHpBar().reduceHP((int)(damage / 3));
         } else {
             super.getHpBar().reduceHP(damage);
+        }
+        if (super.getHpBar().getActualHP() == 0) {
+            super.death();
         }
     }
 

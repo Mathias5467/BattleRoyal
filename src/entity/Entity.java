@@ -17,6 +17,7 @@ public class Entity {
     private boolean isAttacking;
     private boolean isDying;
     private boolean isDead;
+    private boolean hitRegistered;
     private int continualAnimationCounter;
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
@@ -35,6 +36,7 @@ public class Entity {
         this.continualAnimationCounter = 0;
         this.isDying = false;
         this.isDead = false;
+        this.hitRegistered = false;
     }
 
     public String getPictureName() {
@@ -63,31 +65,35 @@ public class Entity {
 
 
     public void moveRight() {
-        this.movementType = Movement.WALK;
-        this.direction = Direction.RIGHT;
-        if (this.x + this.movementSpeed < 980) {
-            this.x += this.movementSpeed;
-            this.picture.changeCords(this.x, this.y);
-            this.actualAnimationNumber++;
-            if (this.actualAnimationNumber >= this.maxAnimationNumber) {
-                this.actualAnimationNumber = 0;
-                this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
-                this.animation();
+        if (!this.isDead) {
+            this.movementType = Movement.WALK;
+            this.direction = Direction.RIGHT;
+            if (this.x + this.movementSpeed < 980) {
+                this.x += this.movementSpeed;
+                this.picture.changeCords(this.x, this.y);
+                this.actualAnimationNumber++;
+                if (this.actualAnimationNumber >= this.maxAnimationNumber) {
+                    this.actualAnimationNumber = 0;
+                    this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
+                    this.animation();
+                }
             }
         }
     }
 
     public void moveLeft() {
-        this.movementType = Movement.WALK;
-        this.direction = Direction.LEFT;
-        if (this.x > -30) {
-            this.x -= this.movementSpeed;
-            this.picture.changeCords(this.x, this.y);
-            this.actualAnimationNumber++;
-            if (this.actualAnimationNumber >= this.maxAnimationNumber) {
-                this.actualAnimationNumber = 0;
-                this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
-                this.animation();
+        if (!this.isDead) {
+            this.movementType = Movement.WALK;
+            this.direction = Direction.LEFT;
+            if (this.x > -30) {
+                this.x -= this.movementSpeed;
+                this.picture.changeCords(this.x, this.y);
+                this.actualAnimationNumber++;
+                if (this.actualAnimationNumber >= this.maxAnimationNumber) {
+                    this.actualAnimationNumber = 0;
+                    this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
+                    this.animation();
+                }
             }
         }
     }
@@ -104,7 +110,7 @@ public class Entity {
     // Modified attack method to start the animation sequence
 
     public void attack(Movement movementType) {
-        if (!this.isAttacking) {
+        if (!this.isAttacking && !this.isDead) {
             this.movementType = movementType;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
@@ -144,11 +150,8 @@ public class Entity {
                         this.isAttacking = false;
                         this.movementType = Movement.STAY;
                     }
-                    // Return to idle state
-
                     this.numberOfAnimation = "0";
                 } else {
-                    // Continue to next frame
                     this.animation();
                 }
             }
@@ -223,5 +226,13 @@ public class Entity {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public boolean isHitRegistered() {
+        return this.hitRegistered;
+    }
+
+    public void setHitRegistered(boolean hitRegistered) {
+        this.hitRegistered = hitRegistered;
     }
 }
