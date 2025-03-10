@@ -28,7 +28,7 @@ public class HPBar {
         this.y = y;
         this.textX = textX;
         this.textY = textY;
-        this.width = this.actualHP * this.tileSize;
+        this.resetWidth();
         this.maxWidth = this.maximalHP * this.tileSize;
         this.height = 30;
     }
@@ -55,12 +55,12 @@ public class HPBar {
 
     public void setHP(int hp) {
         this.maximalHP = hp;
-        this.width = this.tileSize * this.maximalHP;
+        this.resetWidth();
     }
 
     public void setMaxHP(int hp) {
         this.maximalHP = hp;
-        this.maxWidth = this.tileSize * this.maximalHP;
+        this.resetWidth();
     }
 
     public void reduceHP(int downHP) {
@@ -69,11 +69,16 @@ public class HPBar {
         } else {
             this.actualHP = 0;
         }
+        this.resetWidth();
+    }
+
+    public void resetWidth() {
         this.width = this.actualHP * this.tileSize;
     }
 
     public void resetHP() {
         this.actualHP = this.maximalHP;
+        this.resetWidth();
     }
 
 }

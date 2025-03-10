@@ -22,6 +22,7 @@ public class Map {
     private Enemy soldier;
     private Enemy viking;
     private Enemy skeleton;
+
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -37,6 +38,13 @@ public class Map {
         this.entities.add(this.viking);
         this.entities.add(this.skeleton);
         this.currentEnemy = this.skeleton;
+    }
+
+    public void reset() {
+        this.player.setStartPosition();
+        this.player.getHpBar().resetHP();
+        this.currentEnemy.setStartPosition();
+        this.currentEnemy.getHpBar().resetHP();
     }
 
     public void draw(Graphics g) {

@@ -8,12 +8,7 @@ import java.util.HashMap;
 
 import entity.KnightType;
 import entity.Movement;
-import gui.Dialog;
-import gui.Options;
-import gui.Pause;
-import gui.Map;
-import gui.Menu;
-import gui.ConfirmDialog;
+import gui.*;
 
 import input.KeyInput;
 import input.KeyType;
@@ -107,6 +102,9 @@ public class Game extends JPanel implements Runnable {
                                 this.menu.selectOption(1);
                             } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                                 this.gameState = this.menu.getChosenGameState();
+                                if (this.gameState == GameState.PLAY) {
+                                    this.map.reset();
+                                }
                             }
                         } else if (this.gameState == GameState.OPTIONS) {
                             if (this.keyInput.getKeys().get(KeyType.LEFT)) {
@@ -168,7 +166,7 @@ public class Game extends JPanel implements Runnable {
         switch (this.gameState) {
             case GameState.PLAY -> {
                 if (this.dialog.isConfirmed()) {
-                    if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                    if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
                         this.gameState = GameState.MENU;
                     }
                     this.dialog.hide();
@@ -182,7 +180,7 @@ public class Game extends JPanel implements Runnable {
             }
             case GameState.OPTIONS -> {
                 if (this.dialog.isConfirmed()) {
-                    if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
+                    if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
                         this.gameState = GameState.MENU;
                     }
                     this.dialog.hide();
@@ -205,7 +203,7 @@ public class Game extends JPanel implements Runnable {
 
     private void update() {
         // Update player's attack animation if it's playing
-        if (this.gameState == GameState.PLAY) {
+        if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
         }
     }
