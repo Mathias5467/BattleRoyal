@@ -24,27 +24,27 @@ public class Player extends Entity {
 
 
     public void setStartPosition() {
-        super.setX(50);
-        super.setY(480);
-        super.setDirection(Direction.RIGHT);
-        super.getPicture().changeCords(super.getX(), super.getY());
+        this.setX(50);
+        this.setY(480);
+        this.setDirection(Direction.RIGHT);
+        this.getPicture().changeCords(this.getX(), this.getY());
     }
 
     public void setKnight(KnightType knightType) {
         this.knightType = knightType;
-        super.getHpBar().setName(this.knightType.getName());
-        super.getHpBar().setHP(this.knightType.getHp());
-        super.getHpBar().setMaxHP(this.knightType.getHp());
+        this.getHpBar().setName(this.knightType.getName());
+        this.getHpBar().setHP(this.knightType.getHp());
+        this.getHpBar().setMaxHP(this.knightType.getHp());
     }
 
     @Override
     public String getPictureName() {
         return String.format("res/%s/%s/%s%s%s.png",
-                super.getEntity().toString(),
+                this.getEntity().toString(),
                 this.knightType.getColor(),
-                super.getMovementType().getSymbol(),
-                super.getDirection(),
-                super.getNumberOfAnimation());
+                this.getMovementType().getSymbol(),
+                this.getDirection(),
+                this.getNumberOfAnimation());
     }
 
 
@@ -54,28 +54,28 @@ public class Player extends Entity {
 
 
     public void setDefending(boolean defending) {
-        if (!super.isAttacking()) {
+        if (!this.isAttacking()) {
             this.isDefending = defending;
         }
     }
 
     public void defend() {
-        if (!super.isAttacking() && !super.isDead() && !super.isDying()) {
-            super.setMovementType(Movement.DEFEND);
-            super.setNumberOfAnimation("");
-            super.changePicture();
+        if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
+            this.setMovementType(Movement.DEFEND);
+            this.setNumberOfAnimation("");
+            this.changePicture();
         }
     }
 
     @Override
     public void hit(int damage) {
         if (this.isDefending) {
-            super.getHpBar().reduceHP((int)(damage / 3));
+            this.getHpBar().reduceHP((int)(damage / 3));
         } else {
-            super.getHpBar().reduceHP(damage);
+            this.getHpBar().reduceHP(damage);
         }
-        if (super.getHpBar().getActualHP() == 0) {
-            super.death();
+        if (this.getHpBar().getActualHP() == 0) {
+            this.death();
         }
     }
 

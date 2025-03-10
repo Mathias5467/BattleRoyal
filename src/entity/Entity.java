@@ -38,11 +38,27 @@ public class Entity {
         this.isDying = false;
         this.isDead = false;
         this.hitRegistered = false;
-
     }
 
     public String getPictureName() {
         return null;
+    }
+
+    public void moveWithoutAnimation() {
+        this.x -= 2;
+        this.picture.changeCords(this.x, this.y);
+    }
+
+    public void onlyAnimate() {
+        this.movementType = Movement.WALK;
+        this.direction = Direction.RIGHT;
+        this.actualAnimationNumber++;
+        if (this.actualAnimationNumber >= this.maxAnimationNumber) {
+            this.actualAnimationNumber = 0;
+            this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
+            this.animation();
+        }
+
     }
 
     public boolean isAttacking() {
@@ -55,10 +71,6 @@ public class Entity {
 
     public boolean isDying() {
         return this.isDying;
-    }
-
-    public void setAttacking(boolean attacking) {
-        this.isAttacking = attacking;
     }
 
     public void changePicture() {
