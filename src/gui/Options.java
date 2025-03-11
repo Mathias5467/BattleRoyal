@@ -10,7 +10,11 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.BasicStroke;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Scanner;
 
 
 public class Options {
@@ -21,15 +25,23 @@ public class Options {
     private final int tile = 3;
     private int counter;
     private int numberOfCoins;
-    private HashMap<KnightType, Boolean> options;
-    public Options() {
+    private HashMap<KnightType, Boolean> knightsBought;
+    public Options() throws FileNotFoundException {
         this.knightType = KnightType.RED;
         this.knightPicture = new Picture(650, 200, 300, 320, this.getPathToImage());
-        this.options = new HashMap<KnightType, Boolean>() {{
-                put(KnightType.RED, true);
-                put(KnightType.BLUE, false);
-                put(KnightType.GREEN, false);
-            }};
+        this.knightsBought = new HashMap<KnightType, Boolean>();
+        File file = new File("res/data/knightsBought.txt");
+        Scanner input = new Scanner(file);
+        while (input.hasNextLine()) {
+            String[] data = input.nextLine().split(" ");
+            if (Integer.parseInt(data[1]) == 1) {
+                this.knightsBought.put(this.knightType.getBasedColor(data[0]), true);
+            } else {
+                this.knightsBought.put(this.knightType.getBasedColor(data[0]), false);
+            }
+
+        }
+        input.close();
         this.counter = 0;
         this.numberOfCoins = 0;
         this.coinPicture = new Picture(95, 490, 40, 40, "res/coin.png");
@@ -37,15 +49,30 @@ public class Options {
 
     public boolean tryBuy() {
         if (this.knightType.getPrice() <= this.numberOfCoins) {
-            this.knightType.setBought();
+            this.knightsBought.put(this.knightType, true);
             this.numberOfCoins -= this.knightType.getPrice();
+            this.knightPicture.changeImage(this.getPathToImage());
             return true;
         }
         return false;
     }
 
+    public void writeIntoFile() throws FileNotFoundException {
+        File file = new File("res/data/knightsBought.txt");
+        PrintWriter input = new PrintWriter(file);
+        for (KnightType type : this.knightsBought.keySet()) {
+            if (this.knightsBought.get(type)) {
+                input.println(String.format("%s 1", type.getColor()));
+            } else {
+                input.println(String.format("%s 0", type.getColor()));
+            }
+
+        }
+        input.close();
+    }
+
     public boolean tryChoose() {
-        if (!this.knightType.isBought()) {
+        if (!this.knightsBought.get(this.knightType)) {
             return this.tryBuy();
         }
         return true;
@@ -72,7 +99,7 @@ public class Options {
         this.counter = this.mod(this.counter, 3);
         KnightType[] values = KnightType.values();
         this.knightType = values[this.counter % 3];
-        if (!this.knightType.isBought()) {
+        if (!this.knightsBought.get(this.knightType)) {
             this.knightPicture.changeImage("res/lock.png");
         } else {
             this.knightPicture.changeImage(this.getPathToImage());
@@ -122,7 +149,7 @@ public class Options {
         g2.setFont(new Font("Consolas", Font.BOLD, 50));
         g2.drawString(this.knightType.getName(), 720, 170);
         g2.setColor(new Color(217, 174, 4));
-        if (!this.knightType.isBought()) {
+        if (!this.knightsBought.get(this.knightType)) {
             g2.setFont(new Font("Courier New", Font.BOLD, 35));
             g2.drawString(String.format("%d$", this.knightType.getPrice()), 775, 570);
         }

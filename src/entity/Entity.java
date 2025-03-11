@@ -1,4 +1,5 @@
 package entity;
+import gui.Dialog;
 import main.Picture;
 
 public class Entity {
@@ -49,9 +50,9 @@ public class Entity {
         this.picture.changeCords(this.x, this.y);
     }
 
-    public void onlyAnimate() {
+    public void onlyAnimate(Direction direction) {
         this.movementType = Movement.WALK;
-        this.direction = Direction.RIGHT;
+        this.direction = direction;
         this.actualAnimationNumber++;
         if (this.actualAnimationNumber >= this.maxAnimationNumber) {
             this.actualAnimationNumber = 0;

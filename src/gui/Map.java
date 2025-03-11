@@ -1,10 +1,6 @@
 package gui;
 
-import entity.Player;
-import entity.Enemy;
-import entity.Entity;
-import entity.EntityType;
-import entity.KnightType;
+import entity.*;
 import main.Picture;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -75,8 +71,11 @@ public class Map {
             }
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
             this.ground.changeCords(this.ground.getX() - 2, this.ground.getY());
-            this.player.onlyAnimate();
+            this.player.onlyAnimate(Direction.RIGHT);
             this.currentEnemy.moveWithoutAnimation();
+            if (this.player.getX() > 50) {
+                this.player.moveWithoutAnimation();
+            }
         } else {
             this.player.moveRight();
             this.player.setDefending(false);
@@ -91,18 +90,11 @@ public class Map {
 
     public void moveLeft() {
         if (this.currentEnemy.isDead()) {
-            if (this.background3.getX() > 0) {
-                this.background3.changeCords(-1100, this.background3.getY());
-            }
-            if (this.ground.getX() > 0) {
-                this.ground.changeCords( -1100, this.ground.getY());
-            }
-            this.background3.changeCords(this.background3.getX() + 1, this.background3.getY());
-            this.ground.changeCords(this.ground.getX() + 2, this.ground.getY());
+            this.player.onlyAnimate(Direction.LEFT);
+        } else {
+            this.player.moveLeft();
+            this.player.setDefending(false);
         }
-
-        this.player.moveLeft();
-        this.player.setDefending(false);
     }
 
     public void stop() {
@@ -143,7 +135,8 @@ public class Map {
             for (Entity entity : this.entities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
                     if (entity instanceof  Player) {
-                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+//                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+                        this.currentEnemy.hit(50);
                     } else {
                         this.player.hit(5);
                     }

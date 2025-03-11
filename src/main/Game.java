@@ -33,7 +33,7 @@ public class Game extends JPanel implements Runnable {
     private Map map;
     private boolean nonKeyTyped;
     private int numberOfCoins;
-    public Game() {
+    public Game() throws FileNotFoundException {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setDoubleBuffered(true);
         this.setFocusable(true);
@@ -122,6 +122,7 @@ public class Game extends JPanel implements Runnable {
                                     PrintWriter input = new PrintWriter(coinFile);
                                     input.println(this.numberOfCoins); // This will correctly write the number as text
                                     input.close();
+                                    this.options.writeIntoFile();
                                 }
                             }
                         } else if (this.gameState == GameState.OPTIONS) {
