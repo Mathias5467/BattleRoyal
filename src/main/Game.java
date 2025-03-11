@@ -140,7 +140,6 @@ public class Game extends JPanel implements Runnable {
                                     this.map.getPlayer().setKnight(this.knightType);
                                     this.map.getPlayer().setStartPosition();
                                 }
-                                this.numberOfCoins = this.options.getNumberOfCoins();
                             } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                                 this.dialog.setVisible();
                             }
@@ -215,6 +214,7 @@ public class Game extends JPanel implements Runnable {
                 this.options.draw(g);
             }
             case GameState.MENU -> {
+                this.dialog.setPlayState(PlayState.TIE);
                 this.menu.draw(g);
             }
             case GameState.PAUSE -> {
