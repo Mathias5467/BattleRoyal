@@ -70,7 +70,7 @@ public class Player extends Entity {
     @Override
     public void hit(int damage) {
         if (this.isDefending) {
-            this.getHpBar().reduceHP((int)(damage / 3));
+            this.getHpBar().reduceHP((int)Math.ceil(((double)(100 - this.knightType.getDefend()) / 100) * damage));
         } else {
             this.getHpBar().reduceHP(damage);
         }
