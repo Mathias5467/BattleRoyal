@@ -22,7 +22,7 @@ public class Map {
     private Enemy soldier;
     private Enemy viking;
     private Enemy skeleton;
-
+    private boolean addCoin;
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -38,6 +38,7 @@ public class Map {
         this.entities.add(this.viking);
         this.entities.add(this.skeleton);
         this.currentEnemy = this.skeleton;
+        this.addCoin = false;
     }
 
     public void reset() {
@@ -110,14 +111,18 @@ public class Map {
     }
 
 
+    public boolean isAddCoin() {
+        return this.addCoin;
+    }
 
     public void update() {
-
+        this.addCoin = false;
         this.player.update();
         this.currentEnemy.update();
 
 
         if (this.currentEnemy.getX() < -150) {
+            this.addCoin = true;
             for (Entity entity : this.entities) {
                 if (!entity.isDead() && entity instanceof Enemy) {
                     this.currentEnemy = (Enemy)entity;

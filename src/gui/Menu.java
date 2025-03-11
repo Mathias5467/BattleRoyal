@@ -18,7 +18,7 @@ public class Menu {
     private int[] rectangleChosenCords;
     private int chosenOptionNumber;
     public Menu() {
-        this.background = new Picture(0, 0, 1245, 700, "res/menu.png");
+        this.background = new Picture(0, 0, 1245, 700, "res/background/menu.png");
         this.chosenGameState = GameState.PLAY;
         this.options = new GameState[] {GameState.PLAY, GameState.OPTIONS, GameState.EXIT};
         this.rectangleChosenCords = new int[] {478, 305}; //   305  375  445

@@ -10,15 +10,13 @@ import java.awt.Font;
 
 public class Dialog {
     private boolean visible;
-    private MessageType type;
     private String[] options;
     private String chosenOption;
     private boolean confirmed;
     public Dialog(GameState gameState) {
-        this.type = MessageType.EXIT;
         this.visible = false;
-        this.options = new String[] {this.type.getOk(), this.type.getCancel()};
-        this.chosenOption = this.type.getOk();
+        this.options = new String[] {"Yes", "No"};
+        this.chosenOption = "Yes";
         this.confirmed = false;
     }
 
@@ -26,9 +24,6 @@ public class Dialog {
         this.chosenOption = this.options[direction];
     }
 
-    public void setType(MessageType type) {
-        this.type = type;
-    }
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
@@ -37,7 +32,7 @@ public class Dialog {
         g2.drawRoundRect(400, 250, 300, 200, 15, 15);
         g2.setColor(new Color(255, 255, 255, 140));
         g2.fillRoundRect(400, 250, 300, 200, 15, 15);
-        if (this.chosenOption.equals(this.type.getOk())) {
+        if (this.chosenOption.equals("Yes")) {
             g2.setColor(new Color(1, 11, 64));
             g2.setStroke(new BasicStroke(5));
             g2.drawRoundRect(450, 360, 80, 50, 15, 15);
@@ -54,9 +49,9 @@ public class Dialog {
         }
         g2.setColor(new Color(1, 11, 64));
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
-        g2.drawString(this.type.getMessage(), 440, 300);
-        g2.drawString(this.type.getOk(), 473, 390);
-        g2.drawString(this.type.getCancel(), 598, 390);
+        g2.drawString("Do you want to exit?", 440, 300);
+        g2.drawString("Yes", 473, 390);
+        g2.drawString("No", 598, 390);
 
     }
 

@@ -4,7 +4,9 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.*;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import entity.KnightType;
 import entity.Movement;
@@ -30,6 +32,7 @@ public class Game extends JPanel implements Runnable {
     private KnightType knightType;
     private Map map;
     private boolean nonKeyTyped;
+    private int numberOfCoins;
     public Game() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setDoubleBuffered(true);
@@ -47,14 +50,20 @@ public class Game extends JPanel implements Runnable {
         this.map = new Map();
         this.dialog = new Dialog(this.gameState);
         this.nonKeyTyped = false;
+        this.numberOfCoins = 0;
     }
 
-    public void start() {
+    public void start() throws FileNotFoundException {
         this.gameState = GameState.MENU;
         this.running = true;
         this.frameCount = 0;
         this.gameThread = new Thread(this);
         this.gameThread.start();
+        File coinsFile = new File("res/data/coins.txt");
+        Scanner input = new Scanner(coinsFile);
+        this.numberOfCoins = input.nextInt();
+        input.close();
+        this.options.setNumberOfCoins(this.numberOfCoins);
     }
 
     public void stop() {
@@ -76,7 +85,11 @@ public class Game extends JPanel implements Runnable {
                     this.frameCount = 0;
                 }
 
-                this.handleInput();
+                try {
+                    this.handleInput();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 this.update();
                 this.repaint();
                 if (this.gameState != GameState.PLAY || this.dialog.isVisible()) {
@@ -87,7 +100,7 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    public void handleInput() {
+    public void handleInput() throws IOException {
         var numberOfPressedKeys = 0;
         for (KeyType keyValue : this.keysPressed.keySet()) {
             if (numberOfPressedKeys < 1) {
@@ -104,6 +117,11 @@ public class Game extends JPanel implements Runnable {
                                 this.gameState = this.menu.getChosenGameState();
                                 if (this.gameState == GameState.PLAY) {
                                     this.map.reset();
+                                } else if (this.gameState == GameState.EXIT) {
+                                    File coinFile = new File("res/data/coins.txt");
+                                    PrintWriter input = new PrintWriter(coinFile);
+                                    input.println(this.numberOfCoins); // This will correctly write the number as text
+                                    input.close();
                                 }
                             }
                         } else if (this.gameState == GameState.OPTIONS) {
@@ -112,10 +130,13 @@ public class Game extends JPanel implements Runnable {
                             } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
                                 this.options.changeColor(1);
                             } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                                this.gameState = GameState.MENU;
-                                this.knightType = this.options.getKnightType();
-                                this.map.getPlayer().setKnight(this.knightType);
-                                this.map.getPlayer().setStartPosition();// improve this and restart the level when added
+                                if (this.options.tryChoose()) {
+                                    this.gameState = GameState.MENU;
+                                    this.knightType = this.options.getKnightType();
+                                    this.map.getPlayer().setKnight(this.knightType);
+                                    this.map.getPlayer().setStartPosition();
+                                }
+                                this.numberOfCoins = this.options.getNumberOfCoins();
                             } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
                                 this.dialog.setVisible();
                             }
@@ -205,6 +226,10 @@ public class Game extends JPanel implements Runnable {
         // Update player's attack animation if it's playing
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
+            if (this.map.isAddCoin()) {
+                this.numberOfCoins++;
+                this.options.setNumberOfCoins(this.numberOfCoins);
+            }
         }
     }
 }
