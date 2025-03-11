@@ -259,4 +259,8 @@ public class Entity {
     public void setHitRegistered(boolean hitRegistered) {
         this.hitRegistered = hitRegistered;
     }
+
+    public void setDead(boolean b) {
+        this.isDead = b;
+    }
 }

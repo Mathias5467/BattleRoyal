@@ -19,7 +19,6 @@ public class Map {
     private Enemy viking;
     private Enemy skeleton;
     private Enemy monster;
-    private boolean addCoin;
     public Map() {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -37,7 +36,6 @@ public class Map {
         this.entities.add(this.skeleton);
         this.entities.add(this.monster);
         this.currentEnemy = this.skeleton;
-        this.addCoin = false;
     }
 
     public void reset() {
@@ -45,6 +43,10 @@ public class Map {
         this.player.getHpBar().resetHP();
         this.currentEnemy.setStartPosition();
         this.currentEnemy.getHpBar().resetHP();
+        for (Entity entity : this.entities) {
+            entity.setDead(false);
+        }
+        this.anotherEnemy();
     }
 
     public void draw(Graphics g) {
@@ -106,9 +108,6 @@ public class Map {
     }
 
 
-    public boolean isAddCoin() {
-        return this.addCoin;
-    }
 
     public boolean anotherEnemy() {
         for (Entity entity : this.entities) {
@@ -120,12 +119,12 @@ public class Map {
     }
 
     public void update() {
-        this.addCoin = false;
         this.player.update();
         this.currentEnemy.update();
 
 
         if (this.currentEnemy.getX() < -150) {
+            this.currentEnemy.setStartPosition();
             for (Entity entity : this.entities) {
                 if (!entity.isDead() && entity instanceof Enemy) {
                     this.currentEnemy = (Enemy)entity;
@@ -147,7 +146,7 @@ public class Map {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
                     if (entity instanceof  Player) {
 //                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
-                        this.currentEnemy.hit(50);
+                        this.currentEnemy.hit(100);
                     } else {
                         this.player.hit(5);
                     }
@@ -157,5 +156,9 @@ public class Map {
         }
         this.currentEnemy.enemyAI(this.player);
 
+    }
+
+    public Enemy getCurrentEnemy() {
+        return this.currentEnemy;
     }
 }

@@ -30,6 +30,8 @@ public class Enemy extends Entity {
     public void setStartPosition() {
         this.setX(800);
         this.setY(460);
+        this.getHpBar().resetHP();
+        this.getHpBar().resetWidth();
         this.setDirection(Direction.RIGHT);
         this.getPicture().changeCords(this.getX(), this.getY());
     }

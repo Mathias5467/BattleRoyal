@@ -2,8 +2,8 @@ package gui;
 
 public enum MessageType {
     EXIT("Do you want to exit?", "Yes", "No"),
-    WIN("You won!", "Ok", "Exit"),
-    LOST("You lost!", "Ok", "Exit");
+    WIN("You won!\nDo you want to exit?", "Yes", "No"),
+    LOST("You lost!\nDo you want to exit?", "Yes", "No");
 
     private String message;
     private String ok;

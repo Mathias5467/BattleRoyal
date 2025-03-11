@@ -33,6 +33,7 @@ public class Game extends JPanel implements Runnable {
     private Map map;
     private boolean nonKeyTyped;
     private int numberOfCoins;
+    private boolean coinAdded;
     public Game() throws FileNotFoundException {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setDoubleBuffered(true);
@@ -51,6 +52,7 @@ public class Game extends JPanel implements Runnable {
         this.dialog = new Dialog(this.gameState);
         this.nonKeyTyped = false;
         this.numberOfCoins = 0;
+        this.coinAdded = true;
     }
 
     public void start() throws FileNotFoundException {
@@ -117,6 +119,7 @@ public class Game extends JPanel implements Runnable {
                                 this.gameState = this.menu.getChosenGameState();
                                 if (this.gameState == GameState.PLAY) {
                                     this.map.reset();
+                                    this.dialog.setPlayState(PlayState.TIE);
                                 } else if (this.gameState == GameState.EXIT) {
                                     File coinFile = new File("res/data/coins.txt");
                                     PrintWriter input = new PrintWriter(coinFile);
@@ -227,11 +230,20 @@ public class Game extends JPanel implements Runnable {
         // Update player's attack animation if it's playing
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
-            if (this.map.isAddCoin()) {
+            if (this.map.getCurrentEnemy().isDead() && !this.coinAdded) {
                 this.numberOfCoins++;
                 this.options.setNumberOfCoins(this.numberOfCoins);
+                this.coinAdded = true;
+            }
+            // Reset the coinAdded flag when moving to a new enemy
+            if (!this.map.getCurrentEnemy().isDead() && this.coinAdded) {
+                this.coinAdded = false;
             }
             if (!this.map.anotherEnemy()) {
+                this.dialog.setPlayState(PlayState.WIN);
+                this.dialog.setVisible();
+            } else if (this.map.getPlayer().isDead()) {
+                this.dialog.setPlayState(PlayState.LOST);
                 this.dialog.setVisible();
             }
         }
