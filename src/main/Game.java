@@ -231,6 +231,9 @@ public class Game extends JPanel implements Runnable {
                 this.numberOfCoins++;
                 this.options.setNumberOfCoins(this.numberOfCoins);
             }
+            if (!this.map.anotherEnemy()) {
+                this.dialog.setVisible();
+            }
         }
     }
 }
