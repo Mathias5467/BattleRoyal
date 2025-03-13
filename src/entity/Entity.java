@@ -51,6 +51,10 @@ public class Entity {
         this.picture.changeCords(this.x, this.y);
     }
 
+    /**
+     * Maybe make this inside walkRight with boolean parameter
+     * @param direction
+     */
     public void onlyAnimate(Direction direction) {
         this.movementType = Movement.WALK;
         this.direction = direction;

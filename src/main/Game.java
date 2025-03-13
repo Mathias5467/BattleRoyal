@@ -163,6 +163,11 @@ public class Game extends JPanel implements Runnable {
                             this.dialog.hide();
                         } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                             this.dialog.setConfirmed(true);
+                            if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
+                                this.gameState = GameState.MENU;
+                                this.dialog.setPlayState(PlayState.TIE);
+                            }
+                            this.dialog.hide();
                         }
                     }
                 }
@@ -179,32 +184,15 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         switch (this.gameState) {
             case GameState.PLAY -> {
-                if (this.dialog.isConfirmed()) {
-                    if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
-                        this.gameState = GameState.MENU;
-                    }
-                    this.dialog.hide();
-                }
-                this.dialog.setConfirmed(false);
-
                 this.map.draw(g);
             }
             case GameState.EXIT -> {
                 System.exit(0);
             }
             case GameState.OPTIONS -> {
-                if (this.dialog.isConfirmed()) {
-                    if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
-                        this.gameState = GameState.MENU;
-                    }
-                    this.dialog.hide();
-                }
-                this.dialog.setConfirmed(false);
-
                 this.options.draw(g);
             }
             case GameState.MENU -> {
-                this.dialog.setPlayState(PlayState.TIE);
                 this.menu.draw(g);
             }
         }
@@ -214,7 +202,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void update() {
-        // Update player's attack animation if it's playing
+
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
             if (this.map.getCurrentEnemy().isDead() && !this.coinAdded) {
@@ -222,7 +210,7 @@ public class Game extends JPanel implements Runnable {
                 this.options.setNumberOfCoins(this.numberOfCoins);
                 this.coinAdded = true;
             }
-            // Reset the coinAdded flag when moving to a new enemy
+
             if (!this.map.getCurrentEnemy().isDead() && this.coinAdded) {
                 this.coinAdded = false;
             }

@@ -71,8 +71,6 @@ public class Map {
         if (this.currentEnemy.isDead()) {
             if (this.background3.getX() < -1100) {
                 this.background3.changeCords(0, this.background3.getY());
-            }
-            if (this.ground.getX() < -1100) {
                 this.ground.changeCords(0, this.ground.getY());
             }
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
