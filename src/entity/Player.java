@@ -22,6 +22,10 @@ public class Player extends Entity {
         this.isDefending = false;
     }
 
+    public void moveWithoutAnimation() {
+        this.setX(this.getX() - 2);
+        this.getPicture().changeCords(this.getX(), this.getY());
+    }
 
     public void setStartPosition() {
         this.setX(50);

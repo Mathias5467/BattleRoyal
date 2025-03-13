@@ -46,10 +46,7 @@ public class Entity {
         return null;
     }
 
-    public void moveWithoutAnimation() {
-        this.x -= 2;
-        this.picture.changeCords(this.x, this.y);
-    }
+
 
     /**
      * Maybe make this inside walkRight with boolean parameter

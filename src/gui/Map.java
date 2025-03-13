@@ -71,13 +71,15 @@ public class Map {
         if (this.currentEnemy.isDead()) {
             if (this.background3.getX() < -1100) {
                 this.background3.changeCords(0, this.background3.getY());
+
+            }
+            if (this.ground.getX() < -1100) {
                 this.ground.changeCords(0, this.ground.getY());
             }
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
             this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
             this.player.onlyAnimate(Direction.RIGHT);
-            this.currentEnemy.moveWithoutAnimation();
-            if (this.player.getX() > 80) {
+            if (this.player.getX() > 99) {
                 this.player.moveWithoutAnimation();
             }
         } else {
@@ -122,7 +124,7 @@ public class Map {
         this.currentEnemy.update();
 
 
-        if (this.currentEnemy.getX() < 0) {
+        if (this.player.getX() < 100 && this.currentEnemy.isDead()) {
             this.currentEnemy.setStartPosition();
             for (Entity entity : this.entities) {
                 if (!entity.isDead() && entity instanceof Enemy) {
