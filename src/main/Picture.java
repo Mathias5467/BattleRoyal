@@ -48,10 +48,6 @@ public class Picture {
         }
     }
 
-    public boolean isVisible() {
-        return this.isVisible;
-    }
-
     public void setVisible(boolean visible) {
         this.isVisible = visible;
     }

@@ -78,9 +78,6 @@ public class Options {
         return true;
     }
 
-    public int getNumberOfCoins() {
-        return this.numberOfCoins;
-    }
 
     public void setNumberOfCoins(int numberOfCoins) {
         this.numberOfCoins = numberOfCoins;

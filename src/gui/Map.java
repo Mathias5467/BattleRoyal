@@ -41,9 +41,13 @@ public class Map {
         this.currentEnemy.getHpBar().resetHP();
         for (Entity entity : this.entities) {
             entity.setDead(false);
-            entity.getPicture().setVisible(true);
+            entity.setVisible(true);
         }
         this.anotherEnemy();
+    }
+
+    public void changeKnight(KnightType knightType) {
+        this.player.setKnight(knightType);
     }
 
     public void draw(Graphics g) {
@@ -72,10 +76,10 @@ public class Map {
                 this.ground.changeCords(0, this.ground.getY());
             }
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
-            this.ground.changeCords(this.ground.getX() - 2, this.ground.getY());
+            this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
             this.player.onlyAnimate(Direction.RIGHT);
             this.currentEnemy.moveWithoutAnimation();
-            if (this.player.getX() > 50) {
+            if (this.player.getX() > 80) {
                 this.player.moveWithoutAnimation();
             }
         } else {
@@ -120,7 +124,7 @@ public class Map {
         this.currentEnemy.update();
 
 
-        if (this.currentEnemy.getX() < -150) {
+        if (this.currentEnemy.getX() < 0) {
             this.currentEnemy.setStartPosition();
             for (Entity entity : this.entities) {
                 if (!entity.isDead() && entity instanceof Enemy) {
@@ -143,7 +147,9 @@ public class Map {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
                     if (entity instanceof  Player) {
 //                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
-                        this.currentEnemy.hit(100);
+                        if (this.currentEnemy.isVisible()) {
+                            this.currentEnemy.hit(100);
+                        }
                     } else {
                         this.player.hit(5);
                     }

@@ -48,8 +48,8 @@ public class Player extends Entity {
     }
 
 
-    public KnightType getKnightType() {
-        return this.knightType;
+    public boolean mayStop() {
+        return !this.isDead() && !this.isAttacking() && !this.isDying();
     }
 
 

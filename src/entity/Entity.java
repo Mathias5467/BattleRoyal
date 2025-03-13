@@ -20,6 +20,7 @@ public class Entity {
     private boolean isDead;
     private boolean hitRegistered;
     private int continualAnimationCounter;
+    private boolean isVisible;
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
@@ -38,6 +39,7 @@ public class Entity {
         this.isDying = false;
         this.isDead = false;
         this.hitRegistered = false;
+        this.isVisible = true;
     }
 
     public String getPictureName() {
@@ -262,5 +264,14 @@ public class Entity {
 
     public void setDead(boolean b) {
         this.isDead = b;
+    }
+
+    public boolean isVisible() {
+        return this.isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+        this.picture.setVisible(this.isVisible);
     }
 }

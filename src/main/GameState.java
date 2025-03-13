@@ -2,7 +2,6 @@ package main;
 
 public enum GameState {
     MENU("Menu"),
-    PAUSE("Pause"),
     PLAY("Play"),
     EXIT("Exit"),
     OPTIONS("Options");
