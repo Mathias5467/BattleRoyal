@@ -20,7 +20,6 @@ public class Entity {
     private boolean isDead;
     private boolean hitRegistered;
     private int continualAnimationCounter;
-
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
@@ -170,6 +169,7 @@ public class Entity {
                     if (this.isDying) {
                         this.isDying = false;
                         this.isDead = true;
+                        this.picture.setVisible(false);
                     } else {
                         this.isAttacking = false;
                         this.movementType = Movement.STAY;

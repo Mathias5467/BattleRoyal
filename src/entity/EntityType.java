@@ -21,4 +21,14 @@ public enum EntityType {
     public int getAttack() {
         return this.attack;
     }
+
+    public EntityType getEntityByName(String name) {
+        return switch (name) {
+            case "skeleton" -> EntityType.SKELETON;
+            case "viking" -> EntityType.VIKING;
+            case "soldier" -> EntityType.SOLDIER;
+            case "monster" -> EntityType.MONSTER;
+            default -> null;
+        };
+    }
 }

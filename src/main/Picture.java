@@ -11,6 +11,7 @@ public class Picture {
     private int y;
     private int width;
     private int height;
+    private boolean isVisible;
     public Picture(int  x, int y, int width, int height, String picturePath) {
         this.picturePath = picturePath;
         this.x = x;
@@ -18,6 +19,7 @@ public class Picture {
         this.width = width;
         this.height = height;
         this.picture = new ImageIcon(this.picturePath);
+        this.isVisible = true;
     }
 
     public void changeCords(int x, int y) {
@@ -30,6 +32,7 @@ public class Picture {
         this.picture = new ImageIcon(this.picturePath);
     }
 
+
     public int getX() {
         return this.x;
     }
@@ -40,6 +43,16 @@ public class Picture {
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-        g2.drawImage(this.picture.getImage() , this.x, this.y, this.width, this.height, null);
+        if (this.isVisible) {
+            g2.drawImage(this.picture.getImage(), this.x, this.y, this.width, this.height, null);
+        }
+    }
+
+    public boolean isVisible() {
+        return this.isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
     }
 }

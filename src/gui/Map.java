@@ -4,8 +4,11 @@ import entity.*;
 import main.Picture;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Map {
     private Picture background1;
@@ -15,27 +18,20 @@ public class Map {
     private Player player;
     private List<Entity> entities;
     private Enemy currentEnemy;
-    private Enemy soldier;
-    private Enemy viking;
-    private Enemy skeleton;
-    private Enemy monster;
-    public Map() {
+    public Map() throws FileNotFoundException {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
         this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
         this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
-        this.viking = new Enemy(EntityType.VIKING);
-        this.soldier = new Enemy(EntityType.SOLDIER);
-        this.skeleton = new Enemy(EntityType.SKELETON);
-        this.monster = new Enemy(EntityType.MONSTER);
         this.entities = new ArrayList<Entity>();
-        this.entities.add(this.soldier);
         this.entities.add(this.player);
-        this.entities.add(this.viking);
-        this.entities.add(this.skeleton);
-        this.entities.add(this.monster);
-        this.currentEnemy = this.skeleton;
+        File enemyFile = new File("res/data/enemies.txt");
+        Scanner input = new Scanner(enemyFile);
+        while (input.hasNextLine()) {
+            this.entities.add(new Enemy(EntityType.MONSTER.getEntityByName(input.nextLine())));
+        }
+        this.currentEnemy = (Enemy)this.entities.get(1);
     }
 
     public void reset() {
@@ -45,6 +41,7 @@ public class Map {
         this.currentEnemy.getHpBar().resetHP();
         for (Entity entity : this.entities) {
             entity.setDead(false);
+            entity.getPicture().setVisible(true);
         }
         this.anotherEnemy();
     }
