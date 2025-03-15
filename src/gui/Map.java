@@ -122,7 +122,6 @@ public class Map {
         this.player.update();
         this.currentEnemy.update();
 
-
         if (this.player.getX() < 100 && this.currentEnemy.isDead()) {
             this.currentEnemy.setStartPosition();
             for (Entity entity : this.entities) {
@@ -149,7 +148,7 @@ public class Map {
                             this.currentEnemy.hit(100);
                         }
                     } else {
-                        this.player.hit(5);
+                        this.player.hit(100);
                     }
                     entity.setHitRegistered(true);
                 }

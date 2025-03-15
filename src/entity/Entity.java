@@ -15,9 +15,6 @@ public class Entity {
     private final int maxAnimationNumber;
     private int actualAnimationNumber;
     private final int movementSpeed;
-    private boolean isAttacking;
-    private boolean isDying;
-    private boolean isDead;
     private boolean hitRegistered;
     private int continualAnimationCounter;
     private boolean isVisible;
@@ -34,10 +31,7 @@ public class Entity {
         this.movementSpeed = speed;
         this.maxAnimationNumber = 8;
         this.entityType = entityType;
-        this.isAttacking = false;
         this.continualAnimationCounter = 0;
-        this.isDying = false;
-        this.isDead = false;
         this.hitRegistered = false;
         this.isVisible = true;
     }
@@ -51,15 +45,15 @@ public class Entity {
 
 
     public boolean isAttacking() {
-        return this.isAttacking;
+        return (this.movementType == Movement.ATTACK1 || this.movementType == Movement.ATTACK2 || this.movementType == Movement.ATTACK3);
     }
 
     public boolean isDead() {
-        return this.isDead;
+        return this.movementType == Movement.DEATH;
     }
 
     public boolean isDying() {
-        return this.isDying;
+        return this.movementType == Movement.DYING;
     }
 
     public void changePicture() {
@@ -88,7 +82,7 @@ public class Entity {
     }
 
     public void moveHorizontaly(Direction direction, boolean animationOnly) {
-        if (!this.isDead && !this.isDying) {
+        if (!this.isDead() && !this.isDying()) {
             this.movementType = Movement.WALK;
             this.direction = direction;
             int movementNumber;
@@ -131,29 +125,26 @@ public class Entity {
     // Modified attack method to start the animation sequence
 
     public void attack(Movement movementType) {
-        if (!this.isAttacking && !this.isDead && !this.isDying) {
+        if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
             this.movementType = movementType;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
-            this.isAttacking = true;
             this.continualAnimationCounter = 0;
         }
     }
 
     public void death() {
-        if (this.movementType != Movement.DYING) {
+        if (this.movementType != Movement.DYING && this.movementType != Movement.DEATH) {
             this.movementType = Movement.DYING;
-            this.isAttacking = false;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
-            this.isDying = true;
             this.continualAnimationCounter = 0;
         }
     }
 
     // New method to continue the attack animation
     public void update() {
-        if ((this.isAttacking || this.isDying) && !this.isDead) {
+        if ((this.isAttacking() || this.isDying()) && !this.isDead()) {
             this.continualAnimationCounter++;
 
             // Change frame every few game ticks (adjust timing as needed)
@@ -165,12 +156,12 @@ public class Entity {
                 if (this.actualAnimationNumber >= this.maxAnimationNumber - 1) {
                     // End of animation
                     this.actualAnimationNumber = 0;
-                    if (this.isDying) {
-                        this.isDying = false;
-                        this.isDead = true;
-                        this.picture.setVisible(false);
+                    if (this.isDying()) {
+                        this.movementType = Movement.DEATH;
+                        if (this.entityType != EntityType.KNIGHT) {
+                            this.picture.setVisible(false);
+                        }
                     } else {
-                        this.isAttacking = false;
                         this.movementType = Movement.STAY;
                     }
                     this.numberOfAnimation = "";
@@ -259,8 +250,13 @@ public class Entity {
         this.hitRegistered = hitRegistered;
     }
 
-    public void setDead(boolean b) {
-        this.isDead = b;
+    public void setDead(boolean dead) {
+        if (dead) {
+            this.movementType = Movement.DEATH;
+        } else {
+            this.movementType = Movement.STAY;
+        }
+
     }
 
     public boolean isVisible() {
