@@ -7,7 +7,8 @@ public enum Movement {
     ATTACK2("attack2"),
     ATTACK3("attack3"),
     DEFEND("defend"),
-    DEATH("death");
+    DEATH("death"),
+    DYING("dying");
 
 
     private String symbol;

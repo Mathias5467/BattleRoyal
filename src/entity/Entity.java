@@ -48,21 +48,7 @@ public class Entity {
 
 
 
-    /**
-     * Maybe make this inside walkRight with boolean parameter
-     * @param direction
-     */
-    public void onlyAnimate(Direction direction) {
-        this.movementType = Movement.WALK;
-        this.direction = direction;
-        this.actualAnimationNumber++;
-        if (this.actualAnimationNumber >= this.maxAnimationNumber) {
-            this.actualAnimationNumber = 0;
-            this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
-            this.animation();
-        }
 
-    }
 
     public boolean isAttacking() {
         return this.isAttacking;
@@ -89,13 +75,39 @@ public class Entity {
     }
 
 
-    public void moveRight() {
+    public void onlyAnimate(Direction direction) {
+        this.movementType = Movement.WALK;
+        this.direction = direction;
+        this.actualAnimationNumber++;
+        if (this.actualAnimationNumber >= this.maxAnimationNumber) {
+            this.actualAnimationNumber = 0;
+            this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
+            this.animation();
+        }
+
+    }
+
+    public void moveHorizontaly(Direction direction, boolean animationOnly) {
         if (!this.isDead && !this.isDying) {
             this.movementType = Movement.WALK;
-            this.direction = Direction.RIGHT;
-            if (this.x + this.movementSpeed < 980) {
-                this.x += this.movementSpeed;
-                this.picture.changeCords(this.x, this.y);
+            this.direction = direction;
+            int movementNumber;
+            switch (direction) {
+                case RIGHT -> {
+                    movementNumber = this.movementSpeed;
+                }
+                case LEFT -> {
+                    movementNumber = -this.movementSpeed;
+                }
+                default -> {
+                    movementNumber = 0;
+                }
+            }
+            if (this.x + movementNumber < 980 && this.x + movementNumber > 30) {
+                if (!animationOnly) {
+                    this.x += movementNumber;
+                    this.picture.changeCords(this.x, this.y);
+                }
                 this.actualAnimationNumber++;
                 if (this.actualAnimationNumber >= this.maxAnimationNumber) {
                     this.actualAnimationNumber = 0;
@@ -103,26 +115,10 @@ public class Entity {
                     this.animation();
                 }
             }
+
+
         }
     }
-
-    public void moveLeft() {
-        if (!this.isDead && !this.isDying) {
-            this.movementType = Movement.WALK;
-            this.direction = Direction.LEFT;
-            if (this.x > -30) {
-                this.x -= this.movementSpeed;
-                this.picture.changeCords(this.x, this.y);
-                this.actualAnimationNumber++;
-                if (this.actualAnimationNumber >= this.maxAnimationNumber) {
-                    this.actualAnimationNumber = 0;
-                    this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
-                    this.animation();
-                }
-            }
-        }
-    }
-
 
 
     public void hit(int damage) {
@@ -145,8 +141,8 @@ public class Entity {
     }
 
     public void death() {
-        if (!this.isDying) {
-            this.movementType = Movement.DEATH;
+        if (this.movementType != Movement.DYING) {
+            this.movementType = Movement.DYING;
             this.isAttacking = false;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";

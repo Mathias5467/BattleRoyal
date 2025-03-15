@@ -41,9 +41,9 @@ public class Enemy extends Entity {
             if (player.getX() + 80 > this.getX() && player.getX() < this.getX() + 80) {
                 this.attack(Movement.ATTACK1);
             } else if (Math.abs(player.getX() - this.getX()) > 0 && player.getX() > this.getX()) {
-                this.moveRight();
+                this.moveHorizontaly(Direction.RIGHT, false);
             } else if (Math.abs(player.getX() - this.getX()) > 0 && player.getX() < this.getX()) {
-                this.moveLeft();
+                this.moveHorizontaly(Direction.LEFT, false);
             }
         } else {
             this.setMovementType(Movement.STAY);

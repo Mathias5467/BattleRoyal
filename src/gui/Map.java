@@ -43,7 +43,7 @@ public class Map {
             entity.setDead(false);
             entity.setVisible(true);
         }
-        this.anotherEnemy();
+        this.findAliveEnemy();
     }
 
     public void changeKnight(KnightType knightType) {
@@ -66,8 +66,8 @@ public class Map {
         return this.player;
     }
 
-    public void moveRight() {
 
+    public void moveRight() {
         if (this.currentEnemy.isDead()) {
             if (this.background3.getX() < -1100) {
                 this.background3.changeCords(0, this.background3.getY());
@@ -78,12 +78,13 @@ public class Map {
             }
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
             this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
-            this.player.onlyAnimate(Direction.RIGHT);
+
+            this.player.moveHorizontaly(Direction.RIGHT, true);
             if (this.player.getX() > 99) {
                 this.player.moveWithoutAnimation();
             }
         } else {
-            this.player.moveRight();
+            this.player.moveHorizontaly(Direction.RIGHT, false);
             this.player.setDefending(false);
         }
 
@@ -96,9 +97,9 @@ public class Map {
 
     public void moveLeft() {
         if (this.currentEnemy.isDead()) {
-            this.player.onlyAnimate(Direction.LEFT);
+            this.player.moveHorizontaly(Direction.LEFT, true);
         } else {
-            this.player.moveLeft();
+            this.player.moveHorizontaly(Direction.LEFT, false);
             this.player.setDefending(false);
         }
     }
@@ -108,9 +109,7 @@ public class Map {
         this.player.stop();
     }
 
-
-
-    public boolean anotherEnemy() {
+    public boolean findAliveEnemy() {
         for (Entity entity : this.entities) {
             if (!entity.isDead() && entity instanceof Enemy) {
                 return true;
@@ -141,7 +140,6 @@ public class Map {
             }
         }
 
-        // Check if we're close enough to the skeleton and on the correct frame
         if (this.player.getX() + 80 > this.currentEnemy.getX()) {
             for (Entity entity : this.entities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
