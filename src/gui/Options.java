@@ -144,7 +144,7 @@ public class Options {
         g2.setColor(new Color(43, 43, 43));
         g2.setFont(new Font("Consolas", Font.BOLD, 50));
         g2.drawString(this.knightType.getName(), 720, 170);
-        g2.setColor(new Color(217, 174, 4));
+        g2.setColor(new Color(255, 204, 0));
         if (!this.knightsBought.get(this.knightType)) {
             g2.setFont(new Font("Courier New", Font.BOLD, 35));
             g2.drawString(String.format("%d$", this.knightType.getPrice()), 775, 570);

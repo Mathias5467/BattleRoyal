@@ -49,6 +49,8 @@ public class Map {
         }
     }
 
+    //TODO: MAYBE CHANGE THE BACKGROUND TO CASTLE IN OPTIONS AND HERE (CREATE BACKUP)
+
     public void changeKnight(KnightType knightType) {
         this.player.setKnight(knightType);
     }
