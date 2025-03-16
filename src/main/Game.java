@@ -164,6 +164,10 @@ public class Game extends JPanel implements Runnable {
                         } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                             this.dialog.setConfirmed(true);
                             if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
+                                if (this.gameState == GameState.PLAY) {
+                                    this.numberOfCoins += this.map.getNumberOfCoins();
+                                    this.options.setNumberOfCoins(this.numberOfCoins);
+                                }
                                 this.gameState = GameState.MENU;
                                 this.dialog.setPlayState(PlayState.TIE);
                             }
@@ -173,7 +177,7 @@ public class Game extends JPanel implements Runnable {
                 }
             }
         }
-        if (!this.nonKeyTyped && this.map.getPlayer().mayStop()) {
+        if (!this.nonKeyTyped && this.map.getPlayer().mayDoAction()) {
             this.map.stop();
         }
         this.nonKeyTyped = false;
@@ -205,17 +209,10 @@ public class Game extends JPanel implements Runnable {
 
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
-            if (this.map.getCurrentEnemy().isDead() && !this.coinAdded) {
-                this.numberOfCoins++;
-                this.options.setNumberOfCoins(this.numberOfCoins);
-                this.coinAdded = true;
-            }
 
-            if (!this.map.getCurrentEnemy().isDead() && this.coinAdded) {
-                this.coinAdded = false;
-            }
-            //give dialog to all gui classes
-            if (!this.map.findAliveEnemy()) {
+            //this.numberOfCoins += this.map.getNumberOfCoins();
+
+            if (!this.map.isAnotherEnemy()) {
                 this.dialog.setPlayState(PlayState.WIN);
                 this.dialog.setVisible();
             } else if (this.map.getPlayer().isDead()) {

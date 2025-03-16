@@ -3,23 +3,21 @@ package entity;
 import main.Picture;
 
 public class Player extends Entity {
-    private boolean isDefending;
     private KnightType knightType;
 
     public Player(EntityType entityType, KnightType knightType) {
         super(
-                50,
+                80,
                 480,
                 entityType,
                 knightType.getName(),
-                new Picture(50, 480, 150, 170, "res/knight/red/stayR.png"),
+                new Picture(80, 480, 150, 170, "res/knight/red/stayR.png"),
                 "Knight/red/stayL.png",
                 Direction.RIGHT,
                 new HPBar(50, 80, knightType.getHp(), 50, 70, knightType.getName()),
                 4
         );
         this.knightType = knightType;
-        this.isDefending = false;
     }
 
     public void moveWithoutAnimation() {
@@ -27,11 +25,8 @@ public class Player extends Entity {
         this.getPicture().changeCords(this.getX(), this.getY());
     }
 
-    public void setStartPosition() {
-        this.setX(50);
-        this.setY(480);
-        this.setDirection(Direction.RIGHT);
-        this.getPicture().changeCords(this.getX(), this.getY());
+    public KnightType getKnightType() {
+        return this.knightType;
     }
 
     public void setKnight(KnightType knightType) {
@@ -51,20 +46,14 @@ public class Player extends Entity {
                 this.getNumberOfAnimation());
     }
 
-
-    public boolean mayStop() {
-        return !this.isDead() && !this.isAttacking() && !this.isDying();
-    }
-
-
     public void setDefending(boolean defending) {
-        if (!this.isAttacking()) {
-            this.isDefending = defending;
+        if (!this.isAttacking() && defending) {
+            this.setMovementType(Movement.DEFEND);
         }
     }
 
     public void defend() {
-        if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
+        if (this.mayDoAction()) {
             this.setMovementType(Movement.DEFEND);
             this.setNumberOfAnimation("");
             this.changePicture();
@@ -73,7 +62,7 @@ public class Player extends Entity {
 
     @Override
     public void hit(int damage) {
-        if (this.isDefending) {
+        if (this.getMovementType() == Movement.DEFEND) {
             this.getHpBar().reduceHP((int)Math.ceil(((double)(100 - this.knightType.getDefend()) / 100) * damage));
         } else {
             this.getHpBar().reduceHP(damage);
