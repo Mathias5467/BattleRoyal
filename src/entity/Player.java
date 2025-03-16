@@ -4,7 +4,8 @@ import main.Picture;
 
 public class Player extends Entity {
     private KnightType knightType;
-
+    private int maxJump;
+    private int actualJump;
     public Player(EntityType entityType, KnightType knightType) {
         super(
                 80,
@@ -18,6 +19,8 @@ public class Player extends Entity {
                 4
         );
         this.knightType = knightType;
+        this.maxJump = 100;
+        this.actualJump = 0;
     }
 
     public void moveWithoutAnimation() {
@@ -62,5 +65,6 @@ public class Player extends Entity {
         }
     }
 
+    //TODO: METHODS TO JUMP AND FALL -> it will need to be combined with update method in Entity class
 
 }
