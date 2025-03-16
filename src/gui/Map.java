@@ -88,7 +88,6 @@ public class Map {
             }
         } else {
             this.player.moveHorizontaly(Direction.RIGHT, false);
-            this.player.setDefending(false);
         }
 
     }
@@ -102,12 +101,10 @@ public class Map {
             this.player.moveHorizontaly(Direction.LEFT, true);
         } else {
             this.player.moveHorizontaly(Direction.LEFT, false);
-            this.player.setDefending(false);
         }
     }
 
     public void stop() {
-        this.player.setDefending(false);
         this.player.stop();
     }
 
@@ -157,7 +154,7 @@ public class Map {
             this.numberOfCoins++;
         }
 
-        //make coins add when this method is done refactoring
+
 
         if (this.hittingDistance()) {
             for (Entity entity : this.currentEntities) {

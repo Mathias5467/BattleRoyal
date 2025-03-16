@@ -46,11 +46,6 @@ public class Player extends Entity {
                 this.getNumberOfAnimation());
     }
 
-    public void setDefending(boolean defending) {
-        if (!this.isAttacking() && defending) {
-            this.setMovementType(Movement.DEFEND);
-        }
-    }
 
     public void defend() {
         if (this.mayDoAction()) {
