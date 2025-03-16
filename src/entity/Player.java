@@ -11,7 +11,7 @@ public class Player extends Entity {
                 480,
                 entityType,
                 knightType.getName(),
-                new Picture(80, 480, 150, 170, "res/knight/red/stayR.png"),
+                new Picture(80, 480, 150, 170, "res/Knight/red/stayR.png"),
                 "Knight/red/stayL.png",
                 Direction.RIGHT,
                 new HPBar(50, 80, knightType.getHp(), 50, 70, knightType.getName()),
