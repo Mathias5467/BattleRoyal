@@ -25,10 +25,6 @@ public class Player extends Entity {
         this.getPicture().changeCords(this.getX(), this.getY());
     }
 
-    public KnightType getKnightType() {
-        return this.knightType;
-    }
-
     public void setKnight(KnightType knightType) {
         this.knightType = knightType;
         this.getHpBar().setName(this.knightType.getName());
@@ -45,7 +41,6 @@ public class Player extends Entity {
                 this.getDirection(),
                 this.getNumberOfAnimation());
     }
-
 
     public void defend() {
         if (this.mayDoAction()) {
