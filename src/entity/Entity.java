@@ -51,7 +51,6 @@ public class Entity {
         } else {
             this.direction = Direction.LEFT;
             this.hpBar.resetHP();
-            this.hpBar.resetWidth();
         }
         this.setX(this.getStartX());
         this.setY(this.getStartY());

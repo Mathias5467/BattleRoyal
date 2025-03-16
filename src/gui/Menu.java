@@ -12,14 +12,12 @@ import java.awt.Font;
 
 
 public class Menu {
-    private Picture background;
-    private GameState[] options;
-    private GameState chosenGameState;
-    private int[] rectangleChosenCords;
+    private final Picture background;
+    private final GameState[] options;
+    private final int[] rectangleChosenCords;
     private int chosenOptionNumber;
     public Menu() {
         this.background = new Picture(0, 0, 1245, 700, "res/background/menu.png");
-        this.chosenGameState = GameState.PLAY;
         this.options = new GameState[] {GameState.PLAY, GameState.OPTIONS, GameState.EXIT};
         this.rectangleChosenCords = new int[] {478, 305}; //   305  375  445
         this.chosenOptionNumber = 0;
@@ -28,7 +26,6 @@ public class Menu {
     public void selectOption(int direction) {
         this.chosenOptionNumber += direction;
         this.chosenOptionNumber = this.mod(this.chosenOptionNumber, 3);
-        this.chosenGameState = this.options[this.chosenOptionNumber];
         this.rectangleChosenCords[1] = 305 + this.chosenOptionNumber * 70;
     }
 
@@ -42,6 +39,8 @@ public class Menu {
         g2.setStroke(new BasicStroke(5));
         g2.setColor(new Color(255, 255, 255, 140));
         g2.fillRoundRect(400, 250, 300, 300, 30, 30);
+        g2.setColor(new Color(255, 255, 255));
+        g2.drawRoundRect(400, 250, 300, 300, 30, 30);
         g2.setColor(new Color(1, 11, 64));
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 80));
         g2.drawString("Battle Royal", 315, 150);
@@ -53,7 +52,7 @@ public class Menu {
     }
 
     public GameState getChosenGameState() {
-        return this.chosenGameState;
+        return this.options[this.chosenOptionNumber];
     }
 
 

@@ -126,7 +126,9 @@ public class Game extends JPanel implements Runnable {
                             } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
                                 this.options.changeColor(1);
                             } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                                if (this.options.tryChoose()) {
+                                if (!this.options.isBought()) {
+                                    this.numberOfCoins = this.options.tryBuy();
+                                } else {
                                     this.gameState = GameState.MENU;
                                     this.knightType = this.options.getKnightType();
                                     this.map.changeKnight(this.knightType);
@@ -163,7 +165,7 @@ public class Game extends JPanel implements Runnable {
                             this.dialog.hide();
                         } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                             this.dialog.setConfirmed(true);
-                            if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
+                            if (this.dialog.getChosenOption().equals(ConfirmDialog.YES.toString())) {
                                 if (this.gameState == GameState.PLAY) {
                                     this.numberOfCoins += this.map.getNumberOfCoins();
                                     this.options.setNumberOfCoins(this.numberOfCoins);
