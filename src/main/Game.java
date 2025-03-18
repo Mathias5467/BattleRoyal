@@ -32,7 +32,6 @@ public class Game extends JPanel implements Runnable {
     private Map map;
     private boolean nonKeyTyped;
     private int numberOfCoins;
-    private boolean coinAdded;
     public Game() throws FileNotFoundException {
         this.setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
         this.setDoubleBuffered(true);
@@ -49,19 +48,17 @@ public class Game extends JPanel implements Runnable {
         this.knightType = this.options.getKnightType();
         this.dialog = new Dialog(this.gameState);
         this.nonKeyTyped = false;
-        this.numberOfCoins = 0;
-        this.coinAdded = true;
-    }
-
-    public void start() throws FileNotFoundException {
-        this.running = true;
-        this.frameCount = 0;
-        this.gameThread = new Thread(this);
-        this.gameThread.start();
         File coinsFile = new File("res/data/coins.txt");
         Scanner input = new Scanner(coinsFile);
         this.numberOfCoins = input.nextInt();
         input.close();
+    }
+
+    public void start() {
+        this.running = true;
+        this.frameCount = 0;
+        this.gameThread = new Thread(this);
+        this.gameThread.start();
         this.options.setNumberOfCoins(this.numberOfCoins);
     }
 
@@ -126,10 +123,15 @@ public class Game extends JPanel implements Runnable {
                             } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
                                 this.options.changeColor(1);
                             } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+
                                 if (this.options.tryChoose()) {
                                     this.gameState = GameState.MENU;
                                     this.knightType = this.options.getKnightType();
                                     this.map.changeKnight(this.knightType);
+                                } else {
+                                    if (this.options.tryBuy()) {
+                                        this.numberOfCoins = this.options.getNumberOfCoins();
+                                    }
                                 }
                             }
                         }
@@ -163,7 +165,11 @@ public class Game extends JPanel implements Runnable {
                             this.dialog.hide();
                         } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
                             this.dialog.setConfirmed(true);
-                            if (this.dialog.getChosenOption().equals(MessageType.EXIT.getOk())) {
+                            if (this.dialog.getChosenOption().equals(ConfirmDialog.YES.toString())) {
+                                if (this.gameState == GameState.PLAY) {
+                                    this.numberOfCoins += this.map.getNumberOfCoins();
+                                    this.options.setNumberOfCoins(this.numberOfCoins);
+                                }
                                 this.gameState = GameState.MENU;
                                 this.dialog.setPlayState(PlayState.TIE);
                             }
@@ -205,18 +211,9 @@ public class Game extends JPanel implements Runnable {
 
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
-            if (this.map.getCurrentEnemy().isDead() && !this.coinAdded) {
-                this.numberOfCoins++;
-                this.options.setNumberOfCoins(this.numberOfCoins);
-                this.coinAdded = true;
-            }
-
-            if (!this.map.getCurrentEnemy().isDead() && this.coinAdded) {
-                this.coinAdded = false;
-            }
 
             //give dialog to all gui classes
-            if (!this.map.isAliveEnemy()) {
+            if (!this.map.isAliveEnemy() && !this.map.getCurrentEnemy().isVisible()) {
                 this.dialog.setPlayState(PlayState.WIN);
                 this.dialog.setVisible();
             } else if (this.map.getPlayer().isDead()) {
@@ -225,4 +222,6 @@ public class Game extends JPanel implements Runnable {
             }
         }
     }
+
+
 }

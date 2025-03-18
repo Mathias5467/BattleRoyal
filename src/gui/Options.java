@@ -47,15 +47,7 @@ public class Options {
         this.coinPicture = new Picture(95, 490, 40, 40, "res/coin.png");
     }
 
-    public boolean tryBuy() {
-        if (this.knightType.getPrice() <= this.numberOfCoins) {
-            this.knightsBought.put(this.knightType, true);
-            this.numberOfCoins -= this.knightType.getPrice();
-            this.knightPicture.changeImage(this.getPathToImage());
-            return true;
-        }
-        return false;
-    }
+
 
     public void writeIntoFile() throws FileNotFoundException {
         File file = new File("res/data/knightsBought.txt");
@@ -71,11 +63,22 @@ public class Options {
         input.close();
     }
 
-    public boolean tryChoose() {
-        if (!this.knightsBought.get(this.knightType)) {
-            return this.tryBuy();
+    public int getNumberOfCoins() {
+        return this.numberOfCoins;
+    }
+
+    public boolean tryBuy() {
+        if (this.knightType.getPrice() <= this.numberOfCoins) {
+            this.knightsBought.put(this.knightType, true);
+            this.numberOfCoins -= this.knightType.getPrice();
+            this.knightPicture.changeImage(this.getPathToImage());
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    public boolean tryChoose() {
+        return this.knightsBought.get(this.knightType);
     }
 
 

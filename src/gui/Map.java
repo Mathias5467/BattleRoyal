@@ -59,14 +59,15 @@ public class Map {
     }
 
     public void draw(Graphics g) {
-        Graphics2D g2 = (Graphics2D)g;
         this.background1.draw(g);
         this.background2.draw(g);
         this.background3.draw(g);
         this.ground.draw(g);
         for (Entity entity : this.currentEntities) {
             entity.getHpBar().draw(g);
-            entity.getPicture().draw(g);
+            if (entity.isVisible()) {
+                entity.getPicture().draw(g);
+            }
         }
     }
 
@@ -123,7 +124,6 @@ public class Map {
             if (!enemy.isDead()) {
                 enemy.setStartPosition();
                 this.currentEntities.add(enemy);
-                this.player.setStartPosition();
                 break;
             }
         }
@@ -138,18 +138,29 @@ public class Map {
         return false;
     }
 
+    public int getNumberOfCoins() {
+        return this.numberOfCoins;
+    }
+
     public void update() {
+
         for (Entity entity : this.currentEntities) {
             entity.update();
         }
 
+        if (this.currentEntities.getLast().isDead() && this.currentEntities.getLast().isVisible()) {
+            this.currentEntities.getLast().setVisible(false);
+            this.coinAdded = false;
+        }
 
-
+        if (!this.coinAdded && this.currentEntities.getLast().isDead()) {
+            this.numberOfCoins++;
+            this.coinAdded = true;
+        }
 
         if (this.player.getX() < 100 && this.currentEntities.getLast().isDead()) {
             if (this.isAliveEnemy()) {
                 this.findAliveEnemy();
-                this.currentEntities.getLast().setStartPosition();
             }
         }
         for (Entity entity : this.currentEntities) {
@@ -157,8 +168,6 @@ public class Map {
                 entity.setHitRegistered(false);
             }
         }
-
-
 
         if (this.player.getX() + 80 > this.currentEntities.getLast().getX()) {
             for (Entity entity : this.currentEntities) {
@@ -173,22 +182,11 @@ public class Map {
                 }
             }
         }
-        if (this.currentEntities.getLast().isVisible()) {
-            ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
-        }
-
-//        if (this.currentEntities.getLast().isDead()) {
-//            this.coinAdded = false;
-//        }
-//
-//        if (this.currentEntities.getLast().isDead() && !this.coinAdded) {
-//            this.numberOfCoins++;
-//            this.coinAdded = true;
-//            System.out.println(this.numberOfCoins);
-//        }
+        ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
     }
 
     public Enemy getCurrentEnemy() {
         return ((Enemy)this.currentEntities.getLast());
     }
+
 }
