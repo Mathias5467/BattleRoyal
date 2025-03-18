@@ -48,11 +48,16 @@ public class Entity {
     public void setStartPosition() {
         this.x = this.startX;
         this.y = this.startY;
-        this.direction = Direction.RIGHT;
-        this.getPicture().changeCords(this.getX(), this.getY());
+        this.movementType = Movement.STAY;
+        this.numberOfAnimation = "";
+        this.picture.changeCords(this.getX(), this.getY());
         if (this.entityType != EntityType.KNIGHT) {
             this.hpBar.resetHP();
+            this.direction = Direction.LEFT;
+        } else {
+            this.direction = Direction.RIGHT;
         }
+        this.changePicture();
     }
 
 
@@ -78,19 +83,6 @@ public class Entity {
         currentAnimationNum = (currentAnimationNum % 6) + 1;
         this.numberOfAnimation = String.valueOf(currentAnimationNum);
         this.changePicture();
-    }
-
-
-    public void onlyAnimate(Direction direction) {
-        this.movementType = Movement.WALK;
-        this.direction = direction;
-        this.actualAnimationNumber++;
-        if (this.actualAnimationNumber >= this.maxAnimationNumber) {
-            this.actualAnimationNumber = 0;
-            this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
-            this.animation();
-        }
-
     }
 
     public void moveHorizontaly(Direction direction, boolean animationOnly) {

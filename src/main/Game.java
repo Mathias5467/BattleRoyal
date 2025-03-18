@@ -214,8 +214,9 @@ public class Game extends JPanel implements Runnable {
             if (!this.map.getCurrentEnemy().isDead() && this.coinAdded) {
                 this.coinAdded = false;
             }
+
             //give dialog to all gui classes
-            if (!this.map.findAliveEnemy()) {
+            if (!this.map.isAliveEnemy()) {
                 this.dialog.setPlayState(PlayState.WIN);
                 this.dialog.setVisible();
             } else if (this.map.getPlayer().isDead()) {

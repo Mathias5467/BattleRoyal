@@ -18,6 +18,8 @@ public class Map {
     private Player player;
     private List<Enemy> enemies;
     private List<Entity> currentEntities;
+    private int numberOfCoins;
+    private boolean coinAdded;
     public Map() throws FileNotFoundException {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -34,9 +36,12 @@ public class Map {
             this.enemies.add(new Enemy(EntityType.MONSTER.getEntityByName(input.nextLine())));
         }
         this.currentEntities.add(this.enemies.getFirst());
+        this.numberOfCoins = 0;
+        this.coinAdded = true;
     }
 
     public void reset() {
+        this.numberOfCoins = 0;
         for (Entity entity : this.currentEntities) {
             entity.setStartPosition();
             entity.setDead(false);
@@ -108,11 +113,23 @@ public class Map {
     }
 
     public void stop() {
-        this.player.setDefending(false);
+        this.player.setDefending(false); // defend movement type
         this.player.stop();
     }
 
-    public boolean findAliveEnemy() {
+    public void findAliveEnemy() {
+        this.currentEntities.removeLast();
+        for (Enemy enemy : this.enemies) {
+            if (!enemy.isDead()) {
+                enemy.setStartPosition();
+                this.currentEntities.add(enemy);
+                this.player.setStartPosition();
+                break;
+            }
+        }
+    }
+
+    public boolean isAliveEnemy() {
         for (Entity entity : this.enemies) {
             if (!entity.isDead() && entity instanceof Enemy) {
                 return true;
@@ -126,15 +143,13 @@ public class Map {
             entity.update();
         }
 
+
+
+
         if (this.player.getX() < 100 && this.currentEntities.getLast().isDead()) {
-            this.currentEntities.removeLast();
-            for (Enemy enemy : this.enemies) {
-                if (!enemy.isDead()) {
-                    this.currentEntities.add(enemy);
-                    this.currentEntities.getLast().setStartPosition();
-                    this.player.setStartPosition();
-                    break;
-                }
+            if (this.isAliveEnemy()) {
+                this.findAliveEnemy();
+                this.currentEntities.getLast().setStartPosition();
             }
         }
         for (Entity entity : this.currentEntities) {
@@ -142,6 +157,8 @@ public class Map {
                 entity.setHitRegistered(false);
             }
         }
+
+
 
         if (this.player.getX() + 80 > this.currentEntities.getLast().getX()) {
             for (Entity entity : this.currentEntities) {
@@ -156,8 +173,19 @@ public class Map {
                 }
             }
         }
-        ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
+        if (this.currentEntities.getLast().isVisible()) {
+            ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
+        }
 
+//        if (this.currentEntities.getLast().isDead()) {
+//            this.coinAdded = false;
+//        }
+//
+//        if (this.currentEntities.getLast().isDead() && !this.coinAdded) {
+//            this.numberOfCoins++;
+//            this.coinAdded = true;
+//            System.out.println(this.numberOfCoins);
+//        }
     }
 
     public Enemy getCurrentEnemy() {
