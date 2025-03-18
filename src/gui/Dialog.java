@@ -55,12 +55,13 @@ public class Dialog {
         }
         g2.setColor(new Color(1, 11, 64));
 
+        g2.setFont(new Font("Consolas", Font.BOLD, 30));
         if (this.playState == PlayState.WIN) {
-            g2.setFont(new Font("Consolas", Font.BOLD, 30));
             g2.drawString("You Won!", 480, 290);
         } else if (this.playState == PlayState.LOST) {
-            g2.setFont(new Font("Consolas", Font.BOLD, 30));
             g2.drawString("You Lost!", 480, 290);
+        } else if (this.playState == PlayState.TIME_OUT) {
+            g2.drawString("Time is out!", 450, 290);
         }
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
         g2.drawString("Do you want to exit?", 440, 320);

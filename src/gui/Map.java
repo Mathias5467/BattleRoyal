@@ -2,8 +2,8 @@ package gui;
 
 import entity.*;
 import main.Picture;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,6 +20,8 @@ public class Map {
     private List<Entity> currentEntities;
     private int numberOfCoins;
     private boolean coinAdded;
+    private int timeInSeconds;
+    private int fpsCounter;
     public Map() throws FileNotFoundException {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -29,7 +31,8 @@ public class Map {
         this.enemies = new ArrayList<Enemy>();
         this.currentEntities = new ArrayList<Entity>();
         this.currentEntities.add(this.player);
-
+        this.timeInSeconds = 0;
+        this.fpsCounter = 0;
         File enemyFile = new File("res/data/enemies.txt");
         Scanner input = new Scanner(enemyFile);
         while (input.hasNextLine()) {
@@ -41,6 +44,7 @@ public class Map {
     }
 
     public void reset() {
+        this.timeInSeconds = 5;
         this.numberOfCoins = 0;
         for (Entity entity : this.currentEntities) {
             entity.setStartPosition();
@@ -59,10 +63,14 @@ public class Map {
     }
 
     public void draw(Graphics g) {
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
+        g2.setColor(Color.WHITE);
         this.background1.draw(g);
         this.background2.draw(g);
         this.background3.draw(g);
         this.ground.draw(g);
+        g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
         for (Entity entity : this.currentEntities) {
             entity.getHpBar().draw(g);
             if (entity.isVisible()) {
@@ -138,11 +146,21 @@ public class Map {
         return false;
     }
 
+    public boolean isTimeOut() {
+        return this.timeInSeconds == 0;
+    }
+
     public int getNumberOfCoins() {
         return this.numberOfCoins;
     }
 
     public void update() {
+
+        this.fpsCounter++;
+        if (this.fpsCounter == 60 && !this.isTimeOut()) {
+            this.fpsCounter = 0;
+            this.timeInSeconds--;
+        }
 
         for (Entity entity : this.currentEntities) {
             entity.update();

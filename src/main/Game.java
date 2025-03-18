@@ -211,7 +211,10 @@ public class Game extends JPanel implements Runnable {
 
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.map.update();
-
+            if (this.map.isTimeOut()) {
+                this.dialog.setPlayState(PlayState.TIME_OUT);
+                this.dialog.setVisible();
+            }
             //give dialog to all gui classes
             if (!this.map.isAliveEnemy() && !this.map.getCurrentEnemy().isVisible()) {
                 this.dialog.setPlayState(PlayState.WIN);
