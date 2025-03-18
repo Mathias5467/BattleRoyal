@@ -42,7 +42,7 @@ public class Game extends JPanel implements Runnable {
         this.menu = new Menu();
         this.options = new Options();
         this.map = new Map();
-        this.gameState = GameState.MENU;
+        this.gameState = GameState.OPTIONS;
         this.running = false;
         this.keysPressed = new HashMap<>(this.keyInput.getKeys());
         this.knightType = this.options.getKnightType();

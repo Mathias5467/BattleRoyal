@@ -3,7 +3,7 @@ package entity;
 public enum KnightType {
     RED("red", "Thorne", 100, 50, 40, 0),
     GREEN("green", "Alaric", 100, 90, 70, 50),
-    BLUE("blue", "Rhogar", 100, 75, 85, 30);
+    BLUE("blue", "Aragon", 100, 75, 85, 30);
 
     private String color;
     private String name;

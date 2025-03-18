@@ -152,20 +152,19 @@ public class Entity {
             this.continualAnimationCounter++;
 
             // Change frame every few game ticks (adjust timing as needed)
-            if (this.continualAnimationCounter >= 8) { // Change 5 to adjust animation speed
+            if (this.continualAnimationCounter >= 8) {
                 this.continualAnimationCounter = 0;
 
                 this.actualAnimationNumber++;
 
                 if (this.actualAnimationNumber >= this.maxAnimationNumber - 1) {
-                    // End of animation
                     this.actualAnimationNumber = 0;
                     if (this.isDying()) {
                         this.movementType = Movement.DEATH;
                     } else {
                         this.movementType = Movement.STAY;
+                        this.stop();
                     }
-                    this.numberOfAnimation = "";
                 } else {
                     this.animation();
                 }

@@ -44,7 +44,7 @@ public class Map {
     }
 
     public void reset() {
-        this.timeInSeconds = 5;
+        this.timeInSeconds = 300;
         this.numberOfCoins = 0;
         for (Entity entity : this.currentEntities) {
             entity.setStartPosition();
@@ -187,7 +187,7 @@ public class Map {
             }
         }
 
-        if (this.player.getX() + 80 > this.currentEntities.getLast().getX()) {
+        if (this.inAttackArea()) {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
                     if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
@@ -201,6 +201,10 @@ public class Map {
             }
         }
         ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
+    }
+
+    public boolean inAttackArea() {
+        return this.player.getX() + 80 > this.currentEntities.getLast().getX() && this.player.getX() - 150 < this.currentEntities.getLast().getX();
     }
 
     public Enemy getCurrentEnemy() {
