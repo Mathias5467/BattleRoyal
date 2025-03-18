@@ -4,14 +4,14 @@ import main.Picture;
 
 public class Entity {
     private int x;
-    private int startX;
+    private final int startX;
     private int y;
-    private int startY;
-    private Picture picture;
+    private final int startY;
+    private final Picture picture;
     private String pictureName;
-    private HPBar hpBar;
+    private final HPBar hpBar;
     private Direction direction;
-    private EntityType entityType;
+    private final EntityType entityType;
     private Movement movementType;
     private String numberOfAnimation;
     private final int maxAnimationNumber;
@@ -23,8 +23,8 @@ public class Entity {
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
-        this.startX = x;
         this.startY = y;
+        this.startX = x;
         this.picture = picture;
         this.pictureName = pictureName;
         this.direction = direction;
@@ -46,24 +46,15 @@ public class Entity {
 
 
     public void setStartPosition() {
-        if (this.entityType == EntityType.KNIGHT) {
-            this.direction = Direction.RIGHT;
-        } else {
-            this.direction = Direction.LEFT;
+        this.x = this.startX;
+        this.y = this.startY;
+        this.direction = Direction.RIGHT;
+        this.getPicture().changeCords(this.getX(), this.getY());
+        if (this.entityType != EntityType.KNIGHT) {
             this.hpBar.resetHP();
         }
-        this.setX(this.getStartX());
-        this.setY(this.getStartY());
-        this.getPicture().changeCords(this.getX(), this.getY());
     }
 
-    public int getStartX() {
-        return this.startX;
-    }
-
-    public int getStartY() {
-        return this.startY;
-    }
 
     public boolean isAttacking() {
         return (this.movementType == Movement.ATTACK1 || this.movementType == Movement.ATTACK2 || this.movementType == Movement.ATTACK3);
@@ -89,9 +80,6 @@ public class Entity {
         this.changePicture();
     }
 
-    public boolean mayDoAction() {
-        return !this.isDead() && !this.isAttacking() && !this.isDying();
-    }
 
     public void onlyAnimate(Direction direction) {
         this.movementType = Movement.WALK;
@@ -106,7 +94,7 @@ public class Entity {
     }
 
     public void moveHorizontaly(Direction direction, boolean animationOnly) {
-        if (this.mayDoAction()) {
+        if (!this.isDead() && !this.isDying()) {
             this.movementType = Movement.WALK;
             this.direction = direction;
             int movementNumber;
@@ -121,7 +109,7 @@ public class Entity {
                     movementNumber = 0;
                 }
             }
-            if (this.x + movementNumber < 980 && this.x + movementNumber > 0) {
+            if (this.x + movementNumber < 980 && this.x + movementNumber > 30) {
                 if (!animationOnly) {
                     this.x += movementNumber;
                     this.picture.changeCords(this.x, this.y);
@@ -149,7 +137,7 @@ public class Entity {
     // Modified attack method to start the animation sequence
 
     public void attack(Movement movementType) {
-        if (this.mayDoAction()) {
+        if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
             this.movementType = movementType;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
@@ -158,7 +146,7 @@ public class Entity {
     }
 
     public void death() {
-        if (!this.isDead() && !this.isDying()) {
+        if (this.movementType != Movement.DYING && this.movementType != Movement.DEATH) {
             this.movementType = Movement.DYING;
             this.actualAnimationNumber = 0;
             this.numberOfAnimation = "0";
@@ -183,12 +171,10 @@ public class Entity {
                     if (this.isDying()) {
                         this.movementType = Movement.DEATH;
                         if (this.entityType != EntityType.KNIGHT) {
-                            this.setVisible(false);
+                            this.picture.setVisible(false);
                         }
                     } else {
                         this.movementType = Movement.STAY;
-                        this.numberOfAnimation = "";
-                        this.changePicture();
                     }
                     this.numberOfAnimation = "";
                 } else {
@@ -232,10 +218,17 @@ public class Entity {
         this.numberOfAnimation = numberOfAnimation;
     }
 
+    public int getMaxAnimationNumber() {
+        return this.maxAnimationNumber;
+    }
+
     public int getActualAnimationNumber() {
         return this.actualAnimationNumber;
     }
 
+    public void setActualAnimationNumber(int actualAnimationNumber) {
+        this.actualAnimationNumber = actualAnimationNumber;
+    }
 
     public HPBar getHpBar() {
         return this.hpBar;
@@ -255,6 +248,10 @@ public class Entity {
 
     public Direction getDirection() {
         return this.direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public boolean isHitRegistered() {

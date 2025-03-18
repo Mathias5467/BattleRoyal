@@ -44,7 +44,7 @@ public class HPBar {
         g2.fillRect(this.x, this.y, this.width, this.height);
         g2.setColor(Color.WHITE);
         g2.drawRect(this.x, this.y, this.maxWidth, this.height);
-        g2.setFont(new Font("Old English Text MT", Font.BOLD, 30));
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
         g2.setColor(Color.WHITE);
         g2.drawString(this.name, this.textX, this.textY);
     }

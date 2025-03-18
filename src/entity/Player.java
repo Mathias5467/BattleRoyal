@@ -3,24 +3,23 @@ package entity;
 import main.Picture;
 
 public class Player extends Entity {
+    private boolean isDefending;
     private KnightType knightType;
-    private int maxJump;
-    private int actualJump;
+
     public Player(EntityType entityType, KnightType knightType) {
         super(
-                80,
+                50,
                 480,
                 entityType,
                 knightType.getName(),
-                new Picture(80, 480, 150, 170, "res/Knight/red/stayR.png"),
+                new Picture(50, 480, 150, 170, "res/knight/red/stayR.png"),
                 "Knight/red/stayL.png",
                 Direction.RIGHT,
                 new HPBar(50, 80, knightType.getHp(), 50, 70, knightType.getName()),
                 4
         );
         this.knightType = knightType;
-        this.maxJump = 100;
-        this.actualJump = 0;
+        this.isDefending = false;
     }
 
     public void moveWithoutAnimation() {
@@ -45,8 +44,20 @@ public class Player extends Entity {
                 this.getNumberOfAnimation());
     }
 
+
+    public boolean mayStop() {
+        return !this.isDead() && !this.isAttacking() && !this.isDying();
+    }
+
+
+    public void setDefending(boolean defending) {
+        if (!this.isAttacking()) {
+            this.isDefending = defending;
+        }
+    }
+
     public void defend() {
-        if (this.mayDoAction()) {
+        if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
             this.setMovementType(Movement.DEFEND);
             this.setNumberOfAnimation("");
             this.changePicture();
@@ -55,7 +66,7 @@ public class Player extends Entity {
 
     @Override
     public void hit(int damage) {
-        if (this.getMovementType() == Movement.DEFEND) {
+        if (this.isDefending) {
             this.getHpBar().reduceHP((int)Math.ceil(((double)(100 - this.knightType.getDefend()) / 100) * damage));
         } else {
             this.getHpBar().reduceHP(damage);
@@ -65,6 +76,5 @@ public class Player extends Entity {
         }
     }
 
-    //TODO: METHODS TO JUMP AND FALL -> it will need to be combined with update method in Entity class
 
 }

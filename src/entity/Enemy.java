@@ -3,7 +3,6 @@ package entity;
 import main.Picture;
 
 public class Enemy extends Entity {
-    private int attackCounter;
     public Enemy(EntityType entityType) {
 
         super(
@@ -17,7 +16,6 @@ public class Enemy extends Entity {
                 new HPBar(750, 80, 100, 925, 70, entityType.toString()),
                 1
         );
-        this.attackCounter = 0;
     }
 
     @Override
@@ -32,18 +30,17 @@ public class Enemy extends Entity {
 
     public void enemyAI(Player player) {
         if (!player.isDead()) {
-            if (player.getX() + 80 > this.getX() && player.getX()  < this.getX() + 130 && this.attackCounter % 50 == 0) {
+            if (player.getX() + 80 > this.getX() && player.getX() < this.getX() + 80) {
                 this.attack(Movement.ATTACK1);
-            } else if (player.getX() + 70 < this.getX()) {
-                this.moveHorizontaly(Direction.LEFT, false);
-            } else if (player.getX() > this.getX() + 120) {
+            } else if (Math.abs(player.getX() - this.getX()) > 0 && player.getX() > this.getX()) {
                 this.moveHorizontaly(Direction.RIGHT, false);
+            } else if (Math.abs(player.getX() - this.getX()) > 0 && player.getX() < this.getX()) {
+                this.moveHorizontaly(Direction.LEFT, false);
             }
         } else {
             this.setMovementType(Movement.STAY);
             this.setNumberOfAnimation("");
             this.changePicture();
         }
-        this.attackCounter++;
     }
 }

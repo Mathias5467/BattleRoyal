@@ -18,8 +18,7 @@ import java.util.Scanner;
 
 
 public class Options {
-    private Picture rightArrow;
-    private Picture leftArrow;
+
     private Picture knightPicture;
     private Picture coinPicture;
     private KnightType knightType;
@@ -46,11 +45,17 @@ public class Options {
         this.counter = 0;
         this.numberOfCoins = 0;
         this.coinPicture = new Picture(95, 490, 40, 40, "res/coin.png");
-        this.rightArrow = new Picture(925, 340, 80, 80, "res/right.png");
-        this.leftArrow = new Picture(595, 340, 80, 80, "res/left.png");
     }
 
-
+    public boolean tryBuy() {
+        if (this.knightType.getPrice() <= this.numberOfCoins) {
+            this.knightsBought.put(this.knightType, true);
+            this.numberOfCoins -= this.knightType.getPrice();
+            this.knightPicture.changeImage(this.getPathToImage());
+            return true;
+        }
+        return false;
+    }
 
     public void writeIntoFile() throws FileNotFoundException {
         File file = new File("res/data/knightsBought.txt");
@@ -66,18 +71,13 @@ public class Options {
         input.close();
     }
 
-    public int tryBuy() {
-        if (this.knightType.getPrice() <= this.numberOfCoins) {
-            this.knightsBought.put(this.knightType, true);
-            this.numberOfCoins -= this.knightType.getPrice();
-            this.knightPicture.changeImage(this.getPathToImage());
+    public boolean tryChoose() {
+        if (!this.knightsBought.get(this.knightType)) {
+            return this.tryBuy();
         }
-        return this.numberOfCoins;
+        return true;
     }
 
-    public boolean isBought() {
-        return (this.knightsBought.get(KnightType.values()[this.counter % 3]));
-    }
 
     public void setNumberOfCoins(int numberOfCoins) {
         this.numberOfCoins = numberOfCoins;
@@ -102,7 +102,6 @@ public class Options {
             this.knightPicture.changeImage(this.getPathToImage());
         }
     }
-
     public int mod(int a, int b) {
         return (a % b < 0) ? (a % b) + Math.abs(b) : (a % b);
     }
@@ -115,8 +114,7 @@ public class Options {
         g2.fillRoundRect(600, 100, 400, 500, 30, 30);
         this.knightPicture.draw(g);
         this.coinPicture.draw(g);
-        this.rightArrow.draw(g);
-        this.leftArrow.draw(g);
+
         g2.setStroke(new BasicStroke(5));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));
         g2.drawString("HP", 100, 160);
@@ -142,9 +140,12 @@ public class Options {
         g2.drawRect(100, 420, 300, 30);
         g2.drawString(String.format("%d/%d", this.knightType.getDefend(), 100), 420, 440);
         g2.setColor(new Color(43, 43, 43));
+        g2.setFont(new Font("Segoe Print", Font.BOLD, 90));
+        g2.drawString("<", 610, 380);
+        g2.drawString(">", 940, 380);
         g2.setFont(new Font("Consolas", Font.BOLD, 50));
         g2.drawString(this.knightType.getName(), 720, 170);
-        g2.setColor(new Color(255, 204, 0));
+        g2.setColor(new Color(217, 174, 4));
         if (!this.knightsBought.get(this.knightType)) {
             g2.setFont(new Font("Courier New", Font.BOLD, 35));
             g2.drawString(String.format("%d$", this.knightType.getPrice()), 775, 570);

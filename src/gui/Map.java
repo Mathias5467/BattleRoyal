@@ -18,38 +18,36 @@ public class Map {
     private Player player;
     private List<Enemy> enemies;
     private List<Entity> currentEntities;
-    private boolean coinAdded;
-    private int numberOfCoins;
     public Map() throws FileNotFoundException {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
         this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
         this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
-        this.enemies = new ArrayList<>();
-        this.currentEntities = new ArrayList<>();
+        this.enemies = new ArrayList<Enemy>();
+        this.currentEntities = new ArrayList<Entity>();
         this.currentEntities.add(this.player);
+
         File enemyFile = new File("res/data/enemies.txt");
         Scanner input = new Scanner(enemyFile);
         while (input.hasNextLine()) {
             this.enemies.add(new Enemy(EntityType.MONSTER.getEntityByName(input.nextLine())));
         }
-        this.numberOfCoins = 0;
-        this.currentEntities.add(this.enemies.get(1));
-        this.coinAdded = false;
+        this.currentEntities.add(this.enemies.getFirst());
     }
 
     public void reset() {
-        this.numberOfCoins = 0;
         for (Entity entity : this.currentEntities) {
+            entity.setStartPosition();
             entity.setDead(false);
             entity.setVisible(true);
-            entity.getHpBar().resetHP();
-            entity.setStartPosition();
         }
+        for (Enemy enemy : this.enemies) {
+            enemy.setDead(false);
+            enemy.setVisible(true);
+        }
+        this.player.getHpBar().resetHP();
     }
-
-    //TODO: MAYBE CHANGE THE BACKGROUND TO CASTLE IN OPTIONS AND HERE (CREATE BACKUP)
 
     public void changeKnight(KnightType knightType) {
         this.player.setKnight(knightType);
@@ -62,8 +60,8 @@ public class Map {
         this.background3.draw(g);
         this.ground.draw(g);
         for (Entity entity : this.currentEntities) {
-            entity.getPicture().draw(g);
             entity.getHpBar().draw(g);
+            entity.getPicture().draw(g);
         }
     }
 
@@ -73,7 +71,7 @@ public class Map {
 
 
     public void moveRight() {
-        if (this.currentEntities.get(1).isDead()) {
+        if (this.currentEntities.getLast().isDead()) {
             if (this.background3.getX() < -1100) {
                 this.background3.changeCords(0, this.background3.getY());
 
@@ -85,99 +83,84 @@ public class Map {
             this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
 
             this.player.moveHorizontaly(Direction.RIGHT, true);
-            if (this.player.getX() > 79) {
+            if (this.player.getX() > 99) {
                 this.player.moveWithoutAnimation();
             }
         } else {
             this.player.moveHorizontaly(Direction.RIGHT, false);
+            this.player.setDefending(false);
         }
 
     }
 
     public void defend() {
+        this.player.setDefending(true);
         this.player.defend();
     }
 
     public void moveLeft() {
-        if (this.currentEntities.get(1).isDead()) {
+        if (this.currentEntities.getLast().isDead()) {
             this.player.moveHorizontaly(Direction.LEFT, true);
         } else {
             this.player.moveHorizontaly(Direction.LEFT, false);
+            this.player.setDefending(false);
         }
     }
 
     public void stop() {
+        this.player.setDefending(false);
         this.player.stop();
     }
 
-    public boolean isAnotherEnemy() {
-        for (Enemy enemy : this.enemies) {
-            if (!enemy.isDead()) {
+    public boolean findAliveEnemy() {
+        for (Entity entity : this.enemies) {
+            if (!entity.isDead() && entity instanceof Enemy) {
                 return true;
             }
         }
         return false;
     }
 
-    public void findAliveEnemy() {
-        for (Enemy enemy : this.enemies) {
-            if (!enemy.isDead()) {
-                this.currentEntities.set(1, enemy);
-            }
-        }
-    }
-
-    public boolean hittingDistance() {
-        return (this.player.getX() + 80 > this.currentEntities.get(1).getX() && this.player.getX()  < this.currentEntities.get(1).getX() + 130);
-    }
-
     public void update() {
-        //updatujem playera a currentEnemy
         for (Entity entity : this.currentEntities) {
             entity.update();
         }
 
-        //vyber dalsieho ziveho moba a nastavenie zaciatocnej hodnoty
-        if (this.player.getX() < 80 && this.currentEntities.get(1).isDead()) {
-            this.findAliveEnemy();
-            this.coinAdded = false;
-            this.currentEntities.getLast().setStartPosition();
+        if (this.player.getX() < 100 && this.currentEntities.getLast().isDead()) {
+            this.currentEntities.removeLast();
+            for (Enemy enemy : this.enemies) {
+                if (!enemy.isDead()) {
+                    this.currentEntities.add(enemy);
+                    this.currentEntities.getLast().setStartPosition();
+                    this.player.setStartPosition();
+                    break;
+                }
+            }
         }
-
-
         for (Entity entity : this.currentEntities) {
             if (!entity.isAttacking()) {
                 entity.setHitRegistered(false);
             }
         }
 
-        if (this.currentEntities.getLast().isDead() && !this.coinAdded) {
-            this.coinAdded = true;
-            this.numberOfCoins++;
-        }
-
-
-
-        if (this.hittingDistance()) {
+        if (this.player.getX() + 80 > this.currentEntities.getLast().getX()) {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
-                    if (entity instanceof  Player && this.currentEntities.get(1).isVisible()) {
-//                      this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
-                        this.currentEntities.get(1).hit(100);
+                    if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
+//                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+                        this.currentEntities.getLast().hit(100);
                     } else {
-                        this.player.hit(this.currentEntities.get(1).getEntity().getAttack());
+                        this.player.hit(this.currentEntities.getLast().getEntity().getAttack());
                     }
                     entity.setHitRegistered(true);
                 }
             }
         }
-        ((Enemy)this.currentEntities.get(1)).enemyAI(this.player);
+        ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
 
     }
 
-
-
-    public int getNumberOfCoins() {
-        return this.numberOfCoins;
+    public Enemy getCurrentEnemy() {
+        return ((Enemy)this.currentEntities.getLast());
     }
 }

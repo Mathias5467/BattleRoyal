@@ -8,8 +8,6 @@ public enum Movement {
     ATTACK3("attack3"),
     DEFEND("defend"),
     DEATH("death"),
-    JUMP("jump"),
-    FALL("fall"),
     DYING("dying");
 
 

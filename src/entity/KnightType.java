@@ -21,12 +21,18 @@ public enum KnightType {
     }
 
     public KnightType getBasedColor(String color) {
-        return switch (color) {
-            case "red" -> KnightType.RED;
-            case "green" -> KnightType.GREEN;
-            case "blue" -> KnightType.BLUE;
-            default -> null;
-        };
+        switch (color) {
+            case "red" -> {
+                return KnightType.RED;
+            }
+            case "green" -> {
+                return KnightType.GREEN;
+            }
+            case "blue" -> {
+                return KnightType.BLUE;
+            }
+        }
+        return null;
     }
 
     public int getPrice() {
