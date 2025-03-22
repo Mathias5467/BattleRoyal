@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.*;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import entity.KnightType;
@@ -91,12 +92,12 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private void handleMenu() throws FileNotFoundException {
-        if (this.keyInput.getKeys().get(KeyType.UP)) {
+    private void handleMenu(Map<KeyType, Boolean> pressed) throws FileNotFoundException {
+        if (pressed.get(KeyType.UP)) {
             this.menu.selectOption(-1);
-        } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+        } else if (pressed.get(KeyType.DOWN)) {
             this.menu.selectOption(1);
-        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+        } else if (pressed.get(KeyType.ENTER)) {
             this.gameState = this.menu.getChosenGameState();
             if (this.gameState == GameState.PLAY) {
                 this.play.reset();
@@ -111,12 +112,12 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private void handleOptions() {
-        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+    private void handleOptions(Map<KeyType, Boolean> pressed) {
+        if (pressed.get(KeyType.LEFT)) {
             this.options.changeColor(-1);
-        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+        } else if (pressed.get(KeyType.RIGHT)) {
             this.options.changeColor(1);
-        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+        } else if (pressed.get(KeyType.ENTER)) {
 
             if (this.options.tryChoose()) {
                 this.gameState = GameState.MENU;
@@ -130,33 +131,33 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private void handlePlay() {
+    private void handlePlay(Map<KeyType, Boolean> pressed) {
         if (!this.dialog.isVisible()) {
-            if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+            if (pressed.get(KeyType.LEFT)) {
                 this.play.moveLeft();
-            } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+            } else if (pressed.get(KeyType.RIGHT)) {
                 this.play.moveRight();
-            } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+            } else if (pressed.get(KeyType.DOWN)) {
                 this.play.defend();
-            } else if (this.keyInput.getKeys().get(KeyType.A)) {
+            } else if (pressed.get(KeyType.A)) {
                 this.play.getPlayer().attack(Movement.ATTACK1);
-            } else if (this.keyInput.getKeys().get(KeyType.S)) {
+            } else if (pressed.get(KeyType.S)) {
                 this.play.getPlayer().attack(Movement.ATTACK2);
-            } else if (this.keyInput.getKeys().get(KeyType.D)) {
+            } else if (pressed.get(KeyType.D)) {
                 this.play.getPlayer().attack(Movement.ATTACK3);
             }
 
         }
     }
 
-    private void handleDialog() {
-        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+    private void handleDialog(Map<KeyType, Boolean> pressed) {
+        if (pressed.get(KeyType.LEFT)) {
             this.dialog.changeOption(0);
-        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+        } else if (pressed.get(KeyType.RIGHT)) {
             this.dialog.changeOption(1);
-        } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+        } else if (pressed.get(KeyType.ESC)) {
             this.dialog.hide();
-        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+        } else if (pressed.get(KeyType.ENTER)) {
             this.dialog.setConfirmed(true);
             if (this.dialog.getChosenOption().equals(ConfirmDialog.YES.toString())) {
                 if (this.gameState == GameState.PLAY) {
@@ -171,6 +172,7 @@ public class Game extends JPanel implements Runnable {
     }
     //TODO: refactor to more methods
     public void handleInput() throws IOException {
+        var pressed = this.keyInput.getKeys();
         var numberOfPressedKeys = 0;
         for (KeyType keyValue : this.keysPressedReaction.keySet()) {
             if (numberOfPressedKeys < 1) {
@@ -179,15 +181,15 @@ public class Game extends JPanel implements Runnable {
                     this.nonKeyTyped = true;
                     if (!this.dialog.isVisible()) {
                         switch (this.gameState) {
-                            case MENU -> this.handleMenu();
-                            case OPTIONS -> this.handleOptions();
-                            case PLAY -> this.handlePlay();
+                            case MENU -> this.handleMenu(pressed);
+                            case OPTIONS -> this.handleOptions(pressed);
+                            case PLAY -> this.handlePlay(pressed);
                         }
                         if (this.keyInput.getKeys().get(KeyType.ESC) && this.gameState != GameState.MENU) {
                             this.dialog.setVisible();
                         }
                     } else {
-                        this.handleDialog();
+                        this.handleDialog(pressed);
                     }
                 }
             }
