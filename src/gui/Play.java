@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Map {
+public class Play {
     private Picture background1;
     private Picture background2;
     private Picture background3;
@@ -22,14 +22,14 @@ public class Map {
     private boolean coinAdded;
     private int timeInSeconds;
     private int fpsCounter;
-    public Map() throws FileNotFoundException {
+    public Play() throws FileNotFoundException {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
         this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
         this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
-        this.enemies = new ArrayList<Enemy>();
-        this.currentEntities = new ArrayList<Entity>();
+        this.enemies = new ArrayList<>();
+        this.currentEntities = new ArrayList<>();
         this.currentEntities.add(this.player);
         this.timeInSeconds = 0;
         this.fpsCounter = 0;

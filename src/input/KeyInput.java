@@ -3,24 +3,26 @@ package input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class KeyInput implements KeyListener {
-    private HashMap<KeyType, Boolean> keys;
+    private EnumMap<KeyType, Boolean> keys;
 
     public KeyInput() {
-        this.keys = new HashMap<>() {{
-                put(KeyType.DOWN, false);
-                put(KeyType.UP, false);
-                put(KeyType.LEFT, false);
-                put(KeyType.M, false);
-                put(KeyType.A, false);
-                put(KeyType.S, false);
-                put(KeyType.D, false);
-                put(KeyType.ESC, false);
-                put(KeyType.RIGHT, false);
-                put(KeyType.ENTER, false);
-            }};
+        this.keys = new EnumMap<>(KeyType.class);
+        this.keys.put(KeyType.DOWN, false);
+        this.keys.put(KeyType.UP, false);
+        this.keys.put(KeyType.LEFT, false);
+        this.keys.put(KeyType.M, false);
+        this.keys.put(KeyType.A, false);
+        this.keys.put(KeyType.S, false);
+        this.keys.put(KeyType.D, false);
+        this.keys.put(KeyType.ESC, false);
+        this.keys.put(KeyType.RIGHT, false);
+        this.keys.put(KeyType.ENTER, false);
     }
 
 
@@ -82,8 +84,8 @@ public class KeyInput implements KeyListener {
     }
 
 
-    public HashMap<KeyType, Boolean> getKeys() {
-        return this.keys;
+    public Map<KeyType, Boolean> getKeys() {
+        return Collections.unmodifiableMap(this.keys);
     }
 
 

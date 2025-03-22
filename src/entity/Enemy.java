@@ -29,11 +29,18 @@ public class Enemy extends Entity {
                 this.getNumberOfAnimation());
     }
 
+    @Override
+    public void hit(int damage) {
+        this.getHpBar().reduceHP(damage);
+        if (this.getHpBar().getActualHP() == 0) {
+            this.death();
+        }
+    }
 
     public void enemyAI(Player player) {
         this.attackCounter++;
         if (!player.isDead()) {
-            if (this.attackCounter == 60) {
+            if (this.attackCounter == 120) {
                 if (player.getX() + 80 > this.getX() && player.getX() > this.getX() - 150) {
                     this.attack(Movement.ATTACK1);
                 }

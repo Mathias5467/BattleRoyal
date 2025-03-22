@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.*;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Scanner;
 
 import entity.KnightType;
@@ -20,16 +20,16 @@ public class Game extends JPanel implements Runnable {
     private static final int HEIGHT = 700;
     private GameState gameState;
     private Thread gameThread;
-    private KeyInput keyInput;
+    private final KeyInput keyInput;
     private boolean running;
-    private HashMap<KeyType, Boolean> keysPressed;
+    private EnumMap<KeyType, Boolean> keysPressedReaction;
     private final int fps = 60;
     private int frameCount = 0;
     private Menu menu;
     private Options options;
     private Dialog dialog;
     private KnightType knightType;
-    private Map map;
+    private Play play;
     private boolean nonKeyTyped;
     private int numberOfCoins;
     public Game() throws FileNotFoundException {
@@ -41,10 +41,10 @@ public class Game extends JPanel implements Runnable {
         this.addKeyListener(this.keyInput);
         this.menu = new Menu();
         this.options = new Options();
-        this.map = new Map();
+        this.play = new Play();
         this.gameState = GameState.OPTIONS;
         this.running = false;
-        this.keysPressed = new HashMap<>(this.keyInput.getKeys());
+        this.keysPressedReaction = new EnumMap<>(this.keyInput.getKeys());
         this.knightType = this.options.getKnightType();
         this.dialog = new Dialog(this.gameState);
         this.nonKeyTyped = false;
@@ -84,103 +84,116 @@ public class Game extends JPanel implements Runnable {
                 this.update();
                 this.repaint();
                 if (this.gameState != GameState.PLAY || this.dialog.isVisible()) {
-                    this.keysPressed = new HashMap<KeyType, Boolean>(this.keyInput.getKeys());
+                    this.keysPressedReaction = new EnumMap<>(this.keyInput.getKeys());
                 }
                 lastFrame = now;
             }
         }
     }
 
+    private void handleMenu() throws FileNotFoundException {
+        if (this.keyInput.getKeys().get(KeyType.UP)) {
+            this.menu.selectOption(-1);
+        } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+            this.menu.selectOption(1);
+        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+            this.gameState = this.menu.getChosenGameState();
+            if (this.gameState == GameState.PLAY) {
+                this.play.reset();
+                this.dialog.setPlayState(PlayState.TIE);
+            } else if (this.gameState == GameState.EXIT) {
+                File coinFile = new File("res/data/coins.txt");
+                PrintWriter input = new PrintWriter(coinFile);
+                input.println(this.numberOfCoins); // This will correctly write the number as text
+                input.close();
+                this.options.writeIntoFile();
+            }
+        }
+    }
+
+    private void handleOptions() {
+        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+            this.options.changeColor(-1);
+        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+            this.options.changeColor(1);
+        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+
+            if (this.options.tryChoose()) {
+                this.gameState = GameState.MENU;
+                this.knightType = this.options.getKnightType();
+                this.play.changeKnight(this.knightType);
+            } else {
+                if (this.options.tryBuy()) {
+                    this.numberOfCoins = this.options.getNumberOfCoins();
+                }
+            }
+        }
+    }
+
+    private void handlePlay() {
+        if (!this.dialog.isVisible()) {
+            if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+                this.play.moveLeft();
+            } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+                this.play.moveRight();
+            } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
+                this.play.defend();
+            } else if (this.keyInput.getKeys().get(KeyType.A)) {
+                this.play.getPlayer().attack(Movement.ATTACK1);
+            } else if (this.keyInput.getKeys().get(KeyType.S)) {
+                this.play.getPlayer().attack(Movement.ATTACK2);
+            } else if (this.keyInput.getKeys().get(KeyType.D)) {
+                this.play.getPlayer().attack(Movement.ATTACK3);
+            }
+
+        }
+    }
+
+    private void handleDialog() {
+        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
+            this.dialog.changeOption(0);
+        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
+            this.dialog.changeOption(1);
+        } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
+            this.dialog.hide();
+        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
+            this.dialog.setConfirmed(true);
+            if (this.dialog.getChosenOption().equals(ConfirmDialog.YES.toString())) {
+                if (this.gameState == GameState.PLAY) {
+                    this.numberOfCoins += this.play.getNumberOfCoins();
+                    this.options.setNumberOfCoins(this.numberOfCoins);
+                }
+                this.gameState = GameState.MENU;
+                this.dialog.setPlayState(PlayState.TIE);
+            }
+            this.dialog.hide();
+        }
+    }
+    //TODO: refactor to more methods
     public void handleInput() throws IOException {
         var numberOfPressedKeys = 0;
-        for (KeyType keyValue : this.keysPressed.keySet()) {
+        for (KeyType keyValue : this.keysPressedReaction.keySet()) {
             if (numberOfPressedKeys < 1) {
-                if (!this.keysPressed.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
+                if (!this.keysPressedReaction.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
                     numberOfPressedKeys++;
                     this.nonKeyTyped = true;
                     if (!this.dialog.isVisible()) {
-                        if (this.gameState == GameState.MENU) {
-                            if (this.keyInput.getKeys().get(KeyType.UP)) {
-                                this.menu.selectOption(-1);
-                            } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                                this.menu.selectOption(1);
-                            } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                                this.gameState = this.menu.getChosenGameState();
-                                if (this.gameState == GameState.PLAY) {
-                                    this.map.reset();
-                                    this.dialog.setPlayState(PlayState.TIE);
-                                } else if (this.gameState == GameState.EXIT) {
-                                    File coinFile = new File("res/data/coins.txt");
-                                    PrintWriter input = new PrintWriter(coinFile);
-                                    input.println(this.numberOfCoins); // This will correctly write the number as text
-                                    input.close();
-                                    this.options.writeIntoFile();
-                                }
-                            }
-                        } else if (this.gameState == GameState.OPTIONS) {
-                            if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                                this.options.changeColor(-1);
-                            } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                                this.options.changeColor(1);
-                            } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-
-                                if (this.options.tryChoose()) {
-                                    this.gameState = GameState.MENU;
-                                    this.knightType = this.options.getKnightType();
-                                    this.map.changeKnight(this.knightType);
-                                } else {
-                                    if (this.options.tryBuy()) {
-                                        this.numberOfCoins = this.options.getNumberOfCoins();
-                                    }
-                                }
-                            }
-                        }
-                        if (this.gameState == GameState.PLAY) {
-                            if (!this.dialog.isVisible()) {
-                                if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                                    this.map.moveLeft();
-                                } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                                    this.map.moveRight();
-                                } else if (this.keyInput.getKeys().get(KeyType.DOWN)) {
-                                    this.map.defend();
-                                } else if (this.keyInput.getKeys().get(KeyType.A)) {
-                                    this.map.getPlayer().attack(Movement.ATTACK1);
-                                } else if (this.keyInput.getKeys().get(KeyType.S)) {
-                                    this.map.getPlayer().attack(Movement.ATTACK2);
-                                } else if (this.keyInput.getKeys().get(KeyType.D)) {
-                                    this.map.getPlayer().attack(Movement.ATTACK3);
-                                }
-
-                            }
+                        switch (this.gameState) {
+                            case MENU -> this.handleMenu();
+                            case OPTIONS -> this.handleOptions();
+                            case PLAY -> this.handlePlay();
                         }
                         if (this.keyInput.getKeys().get(KeyType.ESC) && this.gameState != GameState.MENU) {
                             this.dialog.setVisible();
                         }
                     } else {
-                        if (this.keyInput.getKeys().get(KeyType.LEFT)) {
-                            this.dialog.changeOption(0);
-                        } else if (this.keyInput.getKeys().get(KeyType.RIGHT)) {
-                            this.dialog.changeOption(1);
-                        } else if (this.keyInput.getKeys().get(KeyType.ESC)) {
-                            this.dialog.hide();
-                        } else if (this.keyInput.getKeys().get(KeyType.ENTER)) {
-                            this.dialog.setConfirmed(true);
-                            if (this.dialog.getChosenOption().equals(ConfirmDialog.YES.toString())) {
-                                if (this.gameState == GameState.PLAY) {
-                                    this.numberOfCoins += this.map.getNumberOfCoins();
-                                    this.options.setNumberOfCoins(this.numberOfCoins);
-                                }
-                                this.gameState = GameState.MENU;
-                                this.dialog.setPlayState(PlayState.TIE);
-                            }
-                            this.dialog.hide();
-                        }
+                        this.handleDialog();
                     }
                 }
             }
         }
-        if (!this.nonKeyTyped && this.map.getPlayer().mayStop()) {
-            this.map.stop();
+        if (!this.nonKeyTyped && this.play.getPlayer().mayStop()) {
+            this.play.stop();
         }
         this.nonKeyTyped = false;
     }
@@ -190,7 +203,7 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         switch (this.gameState) {
             case GameState.PLAY -> {
-                this.map.draw(g);
+                this.play.draw(g);
             }
             case GameState.EXIT -> {
                 System.exit(0);
@@ -210,16 +223,16 @@ public class Game extends JPanel implements Runnable {
     private void update() {
 
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
-            this.map.update();
-            if (this.map.isTimeOut()) {
+            this.play.update();
+            if (this.play.isTimeOut()) {
                 this.dialog.setPlayState(PlayState.TIME_OUT);
                 this.dialog.setVisible();
             }
-            //give dialog to all gui classes
-            if (!this.map.isAliveEnemy() && !this.map.getCurrentEnemy().isVisible()) {
+
+            if (!this.play.isAliveEnemy() && !this.play.getCurrentEnemy().isVisible()) {
                 this.dialog.setPlayState(PlayState.WIN);
                 this.dialog.setVisible();
-            } else if (this.map.getPlayer().isDead()) {
+            } else if (this.play.getPlayer().isDead()) {
                 this.dialog.setPlayState(PlayState.LOST);
                 this.dialog.setVisible();
             }

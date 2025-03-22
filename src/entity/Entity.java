@@ -2,7 +2,9 @@ package entity;
 import gui.Dialog;
 import main.Picture;
 
-public class Entity {
+import java.awt.*;
+
+public abstract class Entity {
     private int x;
     private final int startX;
     private int y;
@@ -45,6 +47,12 @@ public class Entity {
     }
 
 
+    public void draw(Graphics g) {
+        Graphics2D g2 = (Graphics2D)g;
+        this.picture.draw(g);
+        this.hpBar.draw(g);
+    }
+
     public void setStartPosition() {
         this.x = this.startX;
         this.y = this.startY;
@@ -69,16 +77,16 @@ public class Entity {
         return this.movementType == Movement.DEATH;
     }
 
-    public boolean isDying() {
+    protected boolean isDying() {
         return this.movementType == Movement.DYING;
     }
 
-    public void changePicture() {
+    protected void changePicture() {
         this.pictureName = this.getPictureName();
         this.picture.changeImage(this.pictureName);
     }
 
-    public void animation() {
+    private void animation() {
         int currentAnimationNum = this.numberOfAnimation.isEmpty() ? 1 : Integer.parseInt(this.numberOfAnimation);
         currentAnimationNum = (currentAnimationNum % 6) + 1;
         this.numberOfAnimation = String.valueOf(currentAnimationNum);
@@ -119,12 +127,7 @@ public class Entity {
     }
 
 
-    public void hit(int damage) {
-        if (this.hpBar.getActualHP() == 0) {
-            this.death();
-        }
-        this.hpBar.reduceHP(damage);
-    }
+    public abstract void hit(int damage);
 
     // Modified attack method to start the animation sequence
 
