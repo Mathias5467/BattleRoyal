@@ -176,7 +176,7 @@ public class Game extends JPanel implements Runnable {
         var numberOfPressedKeys = 0;
         for (KeyType keyValue : this.keysPressedReaction.keySet()) {
             if (numberOfPressedKeys < 1) {
-                if (!this.keysPressedReaction.get(keyValue) && this.keyInput.getKeys().get(keyValue)) {
+                if (!this.keysPressedReaction.get(keyValue) && pressed.get(keyValue)) {
                     numberOfPressedKeys++;
                     this.nonKeyTyped = true;
                     if (!this.dialog.isVisible()) {
@@ -185,7 +185,7 @@ public class Game extends JPanel implements Runnable {
                             case OPTIONS -> this.handleOptions(pressed);
                             case PLAY -> this.handlePlay(pressed);
                         }
-                        if (this.keyInput.getKeys().get(KeyType.ESC) && this.gameState != GameState.MENU) {
+                        if (pressed.get(KeyType.ESC) && this.gameState != GameState.MENU) {
                             this.dialog.setVisible();
                         }
                     } else {
