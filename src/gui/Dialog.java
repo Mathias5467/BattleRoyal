@@ -15,7 +15,7 @@ public class Dialog {
     private PlayState playState;
     private ConfirmDialog chosenOption;
     private boolean confirmed;
-    public Dialog(GameState gameState) {
+    public Dialog() {
         this.visible = false;
         this.confirmed = false;
         this.chosenOption = ConfirmDialog.YES;
@@ -23,8 +23,8 @@ public class Dialog {
         this.playState = PlayState.TIE;
     }
 
-    public void changeOption(int direction) {
-        this.chosenOption = this.options[direction];
+    public void changeOption(int index) {
+        this.chosenOption = this.options[index];
     }
 
     public void setPlayState(PlayState playState) {
@@ -74,20 +74,12 @@ public class Dialog {
         return this.visible;
     }
 
-    public void hide() {
-        this.visible = false;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
-    public void setVisible() {
-        this.visible = true;
-    }
-
-    public boolean isConfirmed() {
-        return this.confirmed;
-    }
-
-    public String getChosenOption() {
-        return this.chosenOption.toString();
+    public ConfirmDialog getChosenOption() {
+        return this.chosenOption;
     }
 
     public void setConfirmed(boolean confirmed) {

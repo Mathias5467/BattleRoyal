@@ -23,7 +23,7 @@ public class Enemy extends Entity {
     @Override
     public String getPictureName() {
         return String.format("res/%s/%s%s%s.png",
-                this.getEntity().toString(),
+                this.getEntityType().toString(),
                 this.getMovementType().getSymbol(),
                 this.getDirection(),
                 this.getNumberOfAnimation());

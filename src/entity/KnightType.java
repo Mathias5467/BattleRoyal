@@ -55,7 +55,7 @@ public enum KnightType {
         return this.attack;
     }
 
-    public int getDefend() {
+    public int getDefence() {
         return this.defend;
     }
 }

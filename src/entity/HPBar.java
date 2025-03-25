@@ -58,11 +58,6 @@ public class HPBar {
         this.resetWidth();
     }
 
-    public void setMaxHP(int hp) {
-        this.maximalHP = hp;
-        this.resetWidth();
-    }
-
     public void reduceHP(int downHP) {
         if (this.actualHP - downHP > 0) {
             this.actualHP -= downHP;

@@ -1,5 +1,4 @@
 package entity;
-import gui.Dialog;
 import main.Picture;
 
 import java.awt.*;
@@ -21,7 +20,6 @@ public abstract class Entity {
     private final int movementSpeed;
     private boolean hitRegistered;
     private int continualAnimationCounter;
-    private boolean isVisible;
     public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
@@ -39,16 +37,12 @@ public abstract class Entity {
         this.entityType = entityType;
         this.continualAnimationCounter = 0;
         this.hitRegistered = false;
-        this.isVisible = true;
     }
 
-    public String getPictureName() {
-        return null;
-    }
+    public abstract String getPictureName();
 
 
     public void draw(Graphics g) {
-        Graphics2D g2 = (Graphics2D)g;
         this.picture.draw(g);
         this.hpBar.draw(g);
     }
@@ -58,7 +52,7 @@ public abstract class Entity {
         this.y = this.startY;
         this.movementType = Movement.STAY;
         this.numberOfAnimation = "";
-        this.picture.changeCords(this.getX(), this.getY());
+        this.picture.changeCords(this.x, this.y);
         if (this.entityType != EntityType.KNIGHT) {
             this.hpBar.resetHP();
             this.direction = Direction.LEFT;
@@ -99,15 +93,9 @@ public abstract class Entity {
             this.direction = direction;
             int movementNumber;
             switch (direction) {
-                case RIGHT -> {
-                    movementNumber = this.movementSpeed;
-                }
-                case LEFT -> {
-                    movementNumber = -this.movementSpeed;
-                }
-                default -> {
-                    movementNumber = 0;
-                }
+                case RIGHT -> movementNumber = this.movementSpeed;
+                case LEFT -> movementNumber = -this.movementSpeed;
+                default -> movementNumber = 0;
             }
             if (this.x + movementNumber < 980 && this.x + movementNumber > 30) {
                 if (!animationOnly) {
@@ -140,7 +128,7 @@ public abstract class Entity {
         }
     }
 
-    public void death() {
+    protected void death() {
         if (this.movementType != Movement.DYING && this.movementType != Movement.DEATH) {
             this.movementType = Movement.DYING;
             this.actualAnimationNumber = 0;
@@ -175,7 +163,7 @@ public abstract class Entity {
         }
     }
 
-    public Picture getPicture() {
+    protected Picture getPicture() {
         return this.picture;
     }
 
@@ -185,7 +173,7 @@ public abstract class Entity {
         this.changePicture();
     }
 
-    public void setX(int x) {
+    protected void setX(int x) {
         this.x = x;
     }
 
@@ -193,15 +181,12 @@ public abstract class Entity {
         return this.x;
     }
 
-    public int getY() {
-        return this.y;
-    }
 
-    public String getNumberOfAnimation() {
+    protected String getNumberOfAnimation() {
         return this.numberOfAnimation;
     }
 
-    public void setNumberOfAnimation(String numberOfAnimation) {
+    protected void setNumberOfAnimation(String numberOfAnimation) {
         this.numberOfAnimation = numberOfAnimation;
     }
 
@@ -213,11 +198,11 @@ public abstract class Entity {
         return this.hpBar;
     }
 
-    public void setMovementType(Movement type) {
+    protected void setMovementType(Movement type) {
         this.movementType = type;
     }
 
-    public EntityType getEntity() {
+    public EntityType getEntityType() {
         return this.entityType;
     }
 
@@ -225,7 +210,7 @@ public abstract class Entity {
         return this.movementType;
     }
 
-    public Direction getDirection() {
+    protected Direction getDirection() {
         return this.direction;
     }
 
@@ -233,8 +218,8 @@ public abstract class Entity {
         return this.hitRegistered;
     }
 
-    public void setHitRegistered(boolean hitRegistered) {
-        this.hitRegistered = hitRegistered;
+    public void setHitRegistered(boolean hit) {
+        this.hitRegistered = hit;
     }
 
     public void setDead(boolean dead) {
@@ -247,11 +232,14 @@ public abstract class Entity {
     }
 
     public boolean isVisible() {
-        return this.isVisible;
+        return this.picture.isVisible();
     }
 
     public void setVisible(boolean visible) {
-        this.isVisible = visible;
-        this.picture.setVisible(this.isVisible);
+        this.picture.setVisible(visible);
+    }
+
+    protected int getY() {
+        return this.y;
     }
 }

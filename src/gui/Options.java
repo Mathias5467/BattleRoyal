@@ -2,7 +2,6 @@ package gui;
 
 
 import entity.KnightType;
-import main.GameState;
 import main.Picture;
 
 import java.awt.Graphics;
@@ -28,7 +27,7 @@ public class Options {
     private HashMap<KnightType, Boolean> knightsBought;
     public Options() throws FileNotFoundException {
         this.knightType = KnightType.RED;
-        this.knightPicture = new Picture(750, 380, 170, 190, this.getPathToImage());
+        this.knightPicture = new Picture(750, 380, 170, 190, this.getPathToKnightImage());
         this.knightsBought = new HashMap<KnightType, Boolean>();
         File file = new File("res/data/knightsBought.txt");
         Scanner input = new Scanner(file);
@@ -72,7 +71,7 @@ public class Options {
         if (this.knightType.getPrice() <= this.numberOfCoins) {
             this.knightsBought.put(this.knightType, true);
             this.numberOfCoins -= this.knightType.getPrice();
-            this.knightPicture.changeImage(this.getPathToImage());
+            this.knightPicture.changeImage(this.getPathToKnightImage());
             return true;
         }
         return false;
@@ -87,7 +86,7 @@ public class Options {
         this.numberOfCoins = numberOfCoins;
     }
 
-    public String getPathToImage() {
+    public String getPathToKnightImage() {
         return String.format("res/knight/%s/stayL.png", this.knightType.getColor());
     }
 
@@ -103,9 +102,10 @@ public class Options {
         if (!this.knightsBought.get(this.knightType)) {
             this.knightPicture.changeImage("res/lock.png");
         } else {
-            this.knightPicture.changeImage(this.getPathToImage());
+            this.knightPicture.changeImage(this.getPathToKnightImage());
         }
     }
+
     public int mod(int a, int b) {
         return (a % b < 0) ? (a % b) + Math.abs(b) : (a % b);
     }
@@ -123,7 +123,7 @@ public class Options {
         g2.setColor(new Color(255, 255, 255, 150));
         g2.drawString("HP", 100, 180);
         g2.drawString("Attack", 100, 270);
-        g2.drawString("Defend", 100, 360);
+        g2.drawString("Defence", 100, 360);
         g2.setFont(new Font("Courier New", Font.BOLD, 20));
         g2.drawString("Press ENTER to save changes", 410, 630);
         g2.drawString("Press ESC to get back to menu", 395, 670);
@@ -132,7 +132,7 @@ public class Options {
         g2.setColor(new Color(142, 37, 29));
         g2.fillRect(100, 280, this.knightType.getAttack() * this.tile, 20);
         g2.setColor(new Color(1, 48, 94));
-        g2.fillRect(100, 370, this.knightType.getDefend() * this.tile, 20);
+        g2.fillRect(100, 370, this.knightType.getDefence() * this.tile, 20);
 
         g2.setColor(new Color(255, 255, 255, 150));
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
@@ -142,7 +142,7 @@ public class Options {
         g2.drawRect(100, 280, 300, 20);
         g2.drawString(String.format("%d/%d", this.knightType.getAttack(), 100), 420, 295);
         g2.drawRect(100, 370, 300, 20);
-        g2.drawString(String.format("%d/%d", this.knightType.getDefend(), 100), 420, 385);
+        g2.drawString(String.format("%d/%d", this.knightType.getDefence(), 100), 420, 385);
         g2.setColor(new Color(255, 255, 255, 200));
         g2.setFont(new Font("Segoe Print", Font.BOLD, 60));
         g2.drawString("<", 690, 520);

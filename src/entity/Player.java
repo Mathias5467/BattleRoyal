@@ -31,13 +31,12 @@ public class Player extends Entity {
         this.knightType = knightType;
         this.getHpBar().setName(this.knightType.getName());
         this.getHpBar().setHP(this.knightType.getHp());
-        this.getHpBar().setMaxHP(this.knightType.getHp());
     }
 
     @Override
     public String getPictureName() {
         return String.format("res/%s/%s/%s%s%s.png",
-                this.getEntity().toString(),
+                this.getEntityType().toString(),
                 this.knightType.getColor(),
                 this.getMovementType().getSymbol(),
                 this.getDirection(),
@@ -50,12 +49,6 @@ public class Player extends Entity {
     }
 
 
-    public void setDefending(boolean defending) {
-        if (!this.isAttacking()) {
-            this.isDefending = defending;
-        }
-    }
-
     public void defend() {
         if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
             this.setMovementType(Movement.DEFEND);
@@ -66,8 +59,8 @@ public class Player extends Entity {
 
     @Override
     public void hit(int damage) {
-        if (this.isDefending) {
-            this.getHpBar().reduceHP((int)Math.ceil(((double)(100 - this.knightType.getDefend()) / 100) * damage));
+        if (this.getMovementType() == Movement.DEFEND) {
+            this.getHpBar().reduceHP((int)Math.ceil(((double)(100 - this.knightType.getDefence()) / 100) * damage));
         } else {
             this.getHpBar().reduceHP(damage);
         }

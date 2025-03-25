@@ -3,7 +3,6 @@ package input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -16,7 +15,6 @@ public class KeyInput implements KeyListener {
         this.keys.put(KeyType.DOWN, false);
         this.keys.put(KeyType.UP, false);
         this.keys.put(KeyType.LEFT, false);
-        this.keys.put(KeyType.M, false);
         this.keys.put(KeyType.A, false);
         this.keys.put(KeyType.S, false);
         this.keys.put(KeyType.D, false);
@@ -40,8 +38,6 @@ public class KeyInput implements KeyListener {
                 this.keys.put(KeyType.RIGHT, true); }
             case KeyEvent.VK_ESCAPE -> {
                 this.keys.put(KeyType.ESC, true); }
-            case KeyEvent.VK_M -> {
-                this.keys.put(KeyType.M, true); }
             case KeyEvent.VK_A -> {
                 this.keys.put(KeyType.A, true); }
             case KeyEvent.VK_S -> {
@@ -66,8 +62,6 @@ public class KeyInput implements KeyListener {
                 this.keys.put(KeyType.RIGHT, false); }
             case KeyEvent.VK_ESCAPE -> {
                 this.keys.put(KeyType.ESC, false); }
-            case KeyEvent.VK_M -> {
-                this.keys.put(KeyType.M, false); }
             case KeyEvent.VK_A -> {
                 this.keys.put(KeyType.A, false); }
             case KeyEvent.VK_S -> {

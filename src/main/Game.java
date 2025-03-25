@@ -47,7 +47,7 @@ public class Game extends JPanel implements Runnable {
         this.running = false;
         this.keysPressedReaction = new EnumMap<>(this.keyInput.getKeys());
         this.knightType = this.options.getKnightType();
-        this.dialog = new Dialog(this.gameState);
+        this.dialog = new Dialog();
         this.nonKeyTyped = false;
         File coinsFile = new File("res/data/coins.txt");
         Scanner input = new Scanner(coinsFile);
@@ -138,7 +138,7 @@ public class Game extends JPanel implements Runnable {
             } else if (pressed.get(KeyType.RIGHT)) {
                 this.play.moveRight();
             } else if (pressed.get(KeyType.DOWN)) {
-                this.play.defend();
+                this.play.getPlayer().defend();
             } else if (pressed.get(KeyType.A)) {
                 this.play.getPlayer().attack(Movement.ATTACK1);
             } else if (pressed.get(KeyType.S)) {
@@ -156,10 +156,10 @@ public class Game extends JPanel implements Runnable {
         } else if (pressed.get(KeyType.RIGHT)) {
             this.dialog.changeOption(1);
         } else if (pressed.get(KeyType.ESC)) {
-            this.dialog.hide();
+            this.dialog.setVisible(false);
         } else if (pressed.get(KeyType.ENTER)) {
             this.dialog.setConfirmed(true);
-            if (this.dialog.getChosenOption().equals(ConfirmDialog.YES.toString())) {
+            if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
                 if (this.gameState == GameState.PLAY) {
                     this.numberOfCoins += this.play.getNumberOfCoins();
                     this.options.setNumberOfCoins(this.numberOfCoins);
@@ -167,10 +167,10 @@ public class Game extends JPanel implements Runnable {
                 this.gameState = GameState.MENU;
                 this.dialog.setPlayState(PlayState.TIE);
             }
-            this.dialog.hide();
+            this.dialog.setVisible(false);
         }
     }
-    //TODO: refactor to more methods
+
     public void handleInput() throws IOException {
         var pressed = this.keyInput.getKeys();
         var numberOfPressedKeys = 0;
@@ -186,7 +186,7 @@ public class Game extends JPanel implements Runnable {
                             case PLAY -> this.handlePlay(pressed);
                         }
                         if (pressed.get(KeyType.ESC) && this.gameState != GameState.MENU) {
-                            this.dialog.setVisible();
+                            this.dialog.setVisible(true);
                         }
                     } else {
                         this.handleDialog(pressed);
@@ -195,7 +195,7 @@ public class Game extends JPanel implements Runnable {
             }
         }
         if (!this.nonKeyTyped && this.play.getPlayer().mayStop()) {
-            this.play.stop();
+            this.play.getPlayer().stop();
         }
         this.nonKeyTyped = false;
     }
@@ -226,17 +226,17 @@ public class Game extends JPanel implements Runnable {
 
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.play.update();
-            if (this.play.isTimeOut()) {
+            if (this.play.outOfTime()) {
                 this.dialog.setPlayState(PlayState.TIME_OUT);
-                this.dialog.setVisible();
+                this.dialog.setVisible(true);
             }
 
-            if (!this.play.isAliveEnemy() && !this.play.getCurrentEnemy().isVisible()) {
+            if (!this.play.isAnyAliveEnemy() && !this.play.getCurrentEnemy().isVisible()) {
                 this.dialog.setPlayState(PlayState.WIN);
-                this.dialog.setVisible();
+                this.dialog.setVisible(true);
             } else if (this.play.getPlayer().isDead()) {
                 this.dialog.setPlayState(PlayState.LOST);
-                this.dialog.setVisible();
+                this.dialog.setVisible(true);
             }
         }
     }

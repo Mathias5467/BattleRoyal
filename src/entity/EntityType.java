@@ -22,7 +22,7 @@ public enum EntityType {
         return this.attack;
     }
 
-    public EntityType getEntityByName(String name) {
+    public EntityType getByName(String name) {
         return switch (name) {
             case "skeleton" -> EntityType.SKELETON;
             case "viking" -> EntityType.VIKING;

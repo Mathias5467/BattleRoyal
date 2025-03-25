@@ -14,6 +14,7 @@ public class Play {
     private Picture background1;
     private Picture background2;
     private Picture background3;
+    private Picture arrow;
     private Picture ground;
     private Player player;
     private List<Enemy> enemies;
@@ -26,6 +27,7 @@ public class Play {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
         this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
+        this.arrow = new Picture(800, 490, 100, 155, "res/arrow.png");
         this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
         this.enemies = new ArrayList<>();
@@ -36,26 +38,28 @@ public class Play {
         File enemyFile = new File("res/data/enemies.txt");
         Scanner input = new Scanner(enemyFile);
         while (input.hasNextLine()) {
-            this.enemies.add(new Enemy(EntityType.MONSTER.getEntityByName(input.nextLine())));
+            this.enemies.add(new Enemy(EntityType.MONSTER.getByName(input.nextLine())));
         }
+        input.close();
         this.currentEntities.add(this.enemies.getFirst());
         this.numberOfCoins = 0;
         this.coinAdded = true;
     }
 
     public void reset() {
+        this.arrow.setVisible(false);
         this.timeInSeconds = 300;
         this.numberOfCoins = 0;
         for (Entity entity : this.currentEntities) {
             entity.setStartPosition();
             entity.setDead(false);
             entity.setVisible(true);
+            entity.getHpBar().resetHP();
         }
         for (Enemy enemy : this.enemies) {
             enemy.setDead(false);
             enemy.setVisible(true);
         }
-        this.player.getHpBar().resetHP();
     }
 
     public void changeKnight(KnightType knightType) {
@@ -69,12 +73,15 @@ public class Play {
         this.background1.draw(g);
         this.background2.draw(g);
         this.background3.draw(g);
+        if (this.arrow.isVisible()) {
+            this.arrow.draw(g);
+        }
         this.ground.draw(g);
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
         for (Entity entity : this.currentEntities) {
-            entity.getHpBar().draw(g);
+            entity.draw(g);
             if (entity.isVisible()) {
-                entity.getPicture().draw(g);
+                entity.draw(g);
             }
         }
     }
@@ -95,21 +102,16 @@ public class Play {
             }
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
             this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
+            this.arrow.changeCords(this.arrow.getX() - 3, this.arrow.getY());
 
             this.player.moveHorizontaly(Direction.RIGHT, true);
-            if (this.player.getX() > 99) {
+            if (this.player.getX() > 99 && this.arrow.getX() > -100) {
                 this.player.moveWithoutAnimation();
             }
         } else {
             this.player.moveHorizontaly(Direction.RIGHT, false);
-            this.player.setDefending(false);
         }
 
-    }
-
-    public void defend() {
-        this.player.setDefending(true);
-        this.player.defend();
     }
 
     public void moveLeft() {
@@ -117,13 +119,7 @@ public class Play {
             this.player.moveHorizontaly(Direction.LEFT, true);
         } else {
             this.player.moveHorizontaly(Direction.LEFT, false);
-            this.player.setDefending(false);
         }
-    }
-
-    public void stop() {
-        this.player.setDefending(false); // defend movement type
-        this.player.stop();
     }
 
     public void findAliveEnemy() {
@@ -137,7 +133,7 @@ public class Play {
         }
     }
 
-    public boolean isAliveEnemy() {
+    public boolean isAnyAliveEnemy() {
         for (Entity entity : this.enemies) {
             if (!entity.isDead() && entity instanceof Enemy) {
                 return true;
@@ -146,7 +142,7 @@ public class Play {
         return false;
     }
 
-    public boolean isTimeOut() {
+    public boolean outOfTime() {
         return this.timeInSeconds == 0;
     }
 
@@ -157,7 +153,7 @@ public class Play {
     public void update() {
 
         this.fpsCounter++;
-        if (this.fpsCounter == 60 && !this.isTimeOut()) {
+        if (this.fpsCounter == 60 && !this.outOfTime()) {
             this.fpsCounter = 0;
             this.timeInSeconds--;
         }
@@ -168,6 +164,8 @@ public class Play {
 
         if (this.currentEntities.getLast().isDead() && this.currentEntities.getLast().isVisible()) {
             this.currentEntities.getLast().setVisible(false);
+            this.arrow.setVisible(true);
+
             this.coinAdded = false;
         }
 
@@ -176,9 +174,11 @@ public class Play {
             this.coinAdded = true;
         }
 
-        if (this.player.getX() < 100 && this.currentEntities.getLast().isDead()) {
-            if (this.isAliveEnemy()) {
+        if (this.player.getX() < 100 && this.currentEntities.getLast().isDead() && this.arrow.getX() < -100) {
+            if (this.isAnyAliveEnemy()) {
                 this.findAliveEnemy();
+                this.arrow.setVisible(false);
+                this.arrow.changeCords(800, this.arrow.getY());
             }
         }
         for (Entity entity : this.currentEntities) {
@@ -194,7 +194,7 @@ public class Play {
 //                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                         this.currentEntities.getLast().hit(100);
                     } else {
-                        this.player.hit(this.currentEntities.getLast().getEntity().getAttack());
+                        this.player.hit(this.currentEntities.getLast().getEntityType().getAttack());
                     }
                     entity.setHitRegistered(true);
                 }
