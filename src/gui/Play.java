@@ -68,7 +68,6 @@ public class Play {
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-        g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.setColor(Color.WHITE);
         this.background1.draw(g);
         this.background2.draw(g);
@@ -77,6 +76,7 @@ public class Play {
             this.arrow.draw(g);
         }
         this.ground.draw(g);
+        g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
         for (Entity entity : this.currentEntities) {
             entity.draw(g);
