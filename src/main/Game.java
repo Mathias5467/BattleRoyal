@@ -114,9 +114,9 @@ public class Game extends JPanel implements Runnable {
 
     private void handleOptions(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
-            this.options.changeColor(-1);
+            this.options.selectOption(-1);
         } else if (pressed.get(KeyType.RIGHT)) {
-            this.options.changeColor(1);
+            this.options.selectOption(1);
         } else if (pressed.get(KeyType.ENTER)) {
 
             if (this.options.tryChoose()) {
@@ -152,13 +152,12 @@ public class Game extends JPanel implements Runnable {
 
     private void handleDialog(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
-            this.dialog.changeOption(0);
+            this.dialog.selectOption(-1);
         } else if (pressed.get(KeyType.RIGHT)) {
-            this.dialog.changeOption(1);
+            this.dialog.selectOption(1);
         } else if (pressed.get(KeyType.ESC)) {
             this.dialog.setVisible(false);
         } else if (pressed.get(KeyType.ENTER)) {
-            this.dialog.setConfirmed(true);
             if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
                 if (this.gameState == GameState.PLAY) {
                     this.numberOfCoins += this.play.getNumberOfCoins();

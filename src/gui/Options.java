@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 
-public class Options {
+public class Options extends SelectOption {
     private Picture knightPicture;
     private Picture coinPicture;
     private KnightType knightType;
@@ -92,7 +92,7 @@ public class Options {
         return this.knightType;
     }
 
-    public void changeColor(int direction) {
+    public void selectOption(int direction) {
         this.counter += direction;
         this.counter = this.mod(this.counter, 3);
         KnightType[] values = KnightType.values();
@@ -102,10 +102,6 @@ public class Options {
         } else {
             this.knightPicture.changeImage(this.getPathToKnightImage());
         }
-    }
-
-    public int mod(int a, int b) {
-        return (a % b < 0) ? (a % b) + Math.abs(b) : (a % b);
     }
 
     public void draw(Graphics g) {

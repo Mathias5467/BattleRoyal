@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.Font;
 
 
-public class Menu {
+public class Menu extends SelectOption {
     private Picture background;
     private GameState[] options;
     private GameState chosenGameState;
@@ -25,6 +25,7 @@ public class Menu {
         this.chosenOptionNumber = 0;
     }
 
+    @Override
     public void selectOption(int direction) {
         this.chosenOptionNumber += direction;
         this.chosenOptionNumber = this.mod(this.chosenOptionNumber, 3);
@@ -32,9 +33,6 @@ public class Menu {
         this.rectangleChosenCords[1] = 305 + this.chosenOptionNumber * 70;
     }
 
-    public int mod(int a, int b) {
-        return (a % b < 0) ? (a % b) + Math.abs(b) : (a % b);
-    }
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;

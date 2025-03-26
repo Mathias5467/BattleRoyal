@@ -9,23 +9,28 @@ import java.awt.Color;
 import java.awt.BasicStroke;
 import java.awt.Font;
 
-public class Dialog {
+public class Dialog extends SelectOption {
     private boolean visible;
     private ConfirmDialog[] options;
     private PlayState playState;
     private ConfirmDialog chosenOption;
-    private boolean confirmed;
+    private int counter;
+
     public Dialog() {
         this.visible = false;
-        this.confirmed = false;
+        this.counter = 0;
         this.chosenOption = ConfirmDialog.YES;
         this.options = new ConfirmDialog[] {ConfirmDialog.YES, ConfirmDialog.NO};
         this.playState = PlayState.TIE;
     }
 
-    public void changeOption(int index) {
-        this.chosenOption = this.options[index];
+    public void selectOption(int direction) {
+        this.counter += direction;
+        this.counter = this.mod(this.counter, 2);
+        this.chosenOption = this.options[this.counter];
     }
+
+
 
     public void setPlayState(PlayState playState) {
         this.playState = playState;
@@ -82,8 +87,5 @@ public class Dialog {
         return this.chosenOption;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
-    }
 
 }
