@@ -92,6 +92,7 @@ public class Options extends SelectOption {
         return this.knightType;
     }
 
+    @Override
     public void selectOption(int direction) {
         this.counter += direction;
         this.counter = this.mod(this.counter, 3);

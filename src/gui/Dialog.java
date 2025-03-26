@@ -24,6 +24,7 @@ public class Dialog extends SelectOption {
         this.playState = PlayState.TIE;
     }
 
+    @Override
     public void selectOption(int direction) {
         this.counter += direction;
         this.counter = this.mod(this.counter, 2);
