@@ -97,7 +97,7 @@ public abstract class Entity {
                 case LEFT -> movementNumber = -this.movementSpeed;
                 default -> movementNumber = 0;
             }
-            if (this.x + movementNumber < 980 && this.x + movementNumber > 30) {
+            if (this.x + movementNumber < 970 && this.x + movementNumber > -20) {
                 if (!animationOnly) {
                     this.x += movementNumber;
                     this.picture.changeCords(this.x, this.y);
@@ -109,15 +109,10 @@ public abstract class Entity {
                     this.animation();
                 }
             }
-
-
         }
     }
 
-
     public abstract void hit(int damage);
-
-    // Modified attack method to start the animation sequence
 
     public void attack(Movement movementType) {
         if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
@@ -181,6 +176,9 @@ public abstract class Entity {
         return this.x;
     }
 
+    protected int getY() {
+        return this.y;
+    }
 
     protected String getNumberOfAnimation() {
         return this.numberOfAnimation;
@@ -194,20 +192,23 @@ public abstract class Entity {
         return this.actualAnimationNumber;
     }
 
+    //TODO: OK
     public HPBar getHpBar() {
         return this.hpBar;
     }
 
-    protected void setMovementType(Movement type) {
-        this.movementType = type;
-    }
-
+    //TODO: OK
     public EntityType getEntityType() {
         return this.entityType;
     }
 
-    public Movement getMovementType() {
+    //TODO: OK
+    protected Movement getMovementType() {
         return this.movementType;
+    }
+    //TODO: OK
+    protected void setMovementType(Movement type) {
+        this.movementType = type;
     }
 
     protected Direction getDirection() {
@@ -239,7 +240,5 @@ public abstract class Entity {
         this.picture.setVisible(visible);
     }
 
-    protected int getY() {
-        return this.y;
-    }
+
 }

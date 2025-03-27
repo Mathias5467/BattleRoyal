@@ -110,7 +110,7 @@ public class Options extends SelectOption {
 
         g2.setStroke(new BasicStroke(5));
         g2.setFont(new Font("Consolas", Font.BOLD, 25));
-        g2.setColor(new Color(255, 255, 255, 150));
+        g2.setColor(new Color(255, 255, 255, 50));
         g2.fillRoundRect(600, 100, 400, 500, 30, 30);
         this.knightPicture.draw(g);
         this.coinPicture.draw(g);

@@ -79,7 +79,6 @@ public class Play {
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
         for (Entity entity : this.currentEntities) {
-            entity.draw(g);
             if (entity.isVisible()) {
                 entity.draw(g);
             }
@@ -105,7 +104,7 @@ public class Play {
             this.arrow.changeCords(this.arrow.getX() - 3, this.arrow.getY());
 
             this.player.moveHorizontaly(Direction.RIGHT, true);
-            if (this.player.getX() > 99 && this.arrow.getX() > -100) {
+            if (this.player.getX() > 99) {
                 this.player.moveWithoutAnimation();
             }
         } else {
@@ -210,5 +209,6 @@ public class Play {
     public Enemy getCurrentEnemy() {
         return ((Enemy)this.currentEntities.getLast());
     }
+
 
 }
