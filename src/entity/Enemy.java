@@ -40,7 +40,7 @@ public class Enemy extends Entity {
     public void enemyAI(Player player) {
         this.attackCounter++;
         if (!player.isDead()) {
-            if (this.attackCounter == 120) {
+            if (this.attackCounter == 50) {
                 if (player.getX() + 80 > this.getX() && player.getX() > this.getX() - 150) {
                     this.attack(Movement.ATTACK1);
                 }

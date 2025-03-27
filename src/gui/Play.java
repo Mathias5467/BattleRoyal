@@ -79,9 +79,7 @@ public class Play {
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
         for (Entity entity : this.currentEntities) {
-            if (entity.isVisible()) {
-                entity.draw(g);
-            }
+            entity.draw(g);
         }
     }
 
@@ -149,30 +147,30 @@ public class Play {
         return this.numberOfCoins;
     }
 
-    public void update() {
+    private void tryToAddCoin() {
+        if (!this.coinAdded && this.currentEntities.getLast().isDead()) {
+            this.numberOfCoins++;
+            this.coinAdded = true;
+        }
+    }
 
+    private void outOfTimeControl() {
         this.fpsCounter++;
         if (this.fpsCounter == 60 && !this.outOfTime()) {
             this.fpsCounter = 0;
             this.timeInSeconds--;
         }
+    }
 
-        for (Entity entity : this.currentEntities) {
-            entity.update();
-        }
-
+    private void levelTransition() {
         if (this.currentEntities.getLast().isDead() && this.currentEntities.getLast().isVisible()) {
             this.currentEntities.getLast().setVisible(false);
             this.arrow.setVisible(true);
-
             this.coinAdded = false;
         }
+    }
 
-        if (!this.coinAdded && this.currentEntities.getLast().isDead()) {
-            this.numberOfCoins++;
-            this.coinAdded = true;
-        }
-
+    private void readyForNextLevel() {
         if (this.player.getX() < 100 && this.currentEntities.getLast().isDead() && this.arrow.getX() < -100) {
             if (this.isAnyAliveEnemy()) {
                 this.findAliveEnemy();
@@ -180,15 +178,12 @@ public class Play {
                 this.arrow.changeCords(800, this.arrow.getY());
             }
         }
-        for (Entity entity : this.currentEntities) {
-            if (!entity.isAttacking()) {
-                entity.setHitRegistered(false);
-            }
-        }
+    }
 
+    private void tryFight() {
         if (this.inAttackArea()) {
             for (Entity entity : this.currentEntities) {
-                if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActualAnimationNumber() == 5) {
+                if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
 //                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                         this.currentEntities.getLast().hit(100);
@@ -199,6 +194,24 @@ public class Play {
                 }
             }
         }
+    }
+
+    public void update() {
+
+        this.outOfTimeControl();
+        for (Entity entity : this.currentEntities) {
+            entity.update();
+        }
+        this.levelTransition();
+        this.tryToAddCoin();
+        this.readyForNextLevel();
+
+        for (Entity entity : this.currentEntities) {
+            if (!entity.isAttacking()) {
+                entity.setHitRegistered(false);
+            }
+        }
+        this.tryFight();
         ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
     }
 

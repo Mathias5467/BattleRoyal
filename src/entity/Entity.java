@@ -16,7 +16,7 @@ public abstract class Entity {
     private Movement movementType;
     private String numberOfAnimation;
     private final int maxAnimationNumber;
-    private int actualAnimationNumber;
+    private int actAnimNumber;
     private final int movementSpeed;
     private boolean hitRegistered;
     private int continualAnimationCounter;
@@ -31,7 +31,7 @@ public abstract class Entity {
         this.movementType = Movement.STAY;
         this.hpBar = hpBar;
         this.numberOfAnimation = "";
-        this.actualAnimationNumber = 0;
+        this.actAnimNumber = 0;
         this.movementSpeed = speed;
         this.maxAnimationNumber = 8;
         this.entityType = entityType;
@@ -40,7 +40,6 @@ public abstract class Entity {
     }
 
     public abstract String getPictureName();
-
 
     public void draw(Graphics g) {
         this.picture.draw(g);
@@ -102,9 +101,9 @@ public abstract class Entity {
                     this.x += movementNumber;
                     this.picture.changeCords(this.x, this.y);
                 }
-                this.actualAnimationNumber++;
-                if (this.actualAnimationNumber >= this.maxAnimationNumber) {
-                    this.actualAnimationNumber = 0;
+                this.actAnimNumber++;
+                if (this.actAnimNumber >= this.maxAnimationNumber) {
+                    this.actAnimNumber = 0;
                     this.numberOfAnimation = this.numberOfAnimation.isEmpty() ? "1" : this.numberOfAnimation;
                     this.animation();
                 }
@@ -117,7 +116,7 @@ public abstract class Entity {
     public void attack(Movement movementType) {
         if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
             this.movementType = movementType;
-            this.actualAnimationNumber = 0;
+            this.actAnimNumber = 0;
             this.numberOfAnimation = "0";
             this.continualAnimationCounter = 0;
         }
@@ -126,7 +125,7 @@ public abstract class Entity {
     protected void death() {
         if (this.movementType != Movement.DYING && this.movementType != Movement.DEATH) {
             this.movementType = Movement.DYING;
-            this.actualAnimationNumber = 0;
+            this.actAnimNumber = 0;
             this.numberOfAnimation = "0";
             this.continualAnimationCounter = 0;
         }
@@ -137,14 +136,12 @@ public abstract class Entity {
         if ((this.isAttacking() || this.isDying()) && !this.isDead()) {
             this.continualAnimationCounter++;
 
-            // Change frame every few game ticks (adjust timing as needed)
-            if (this.continualAnimationCounter >= 8) {
+            if (this.continualAnimationCounter >= 7) {
                 this.continualAnimationCounter = 0;
+                this.actAnimNumber++;
 
-                this.actualAnimationNumber++;
-
-                if (this.actualAnimationNumber >= this.maxAnimationNumber - 1) {
-                    this.actualAnimationNumber = 0;
+                if (this.actAnimNumber >= this.maxAnimationNumber - 1) {
+                    this.actAnimNumber = 0;
                     if (this.isDying()) {
                         this.movementType = Movement.DEATH;
                     } else {
@@ -188,8 +185,8 @@ public abstract class Entity {
         this.numberOfAnimation = numberOfAnimation;
     }
 
-    public int getActualAnimationNumber() {
-        return this.actualAnimationNumber;
+    public int getActAnimNumber() {
+        return this.actAnimNumber;
     }
 
     //TODO: OK
