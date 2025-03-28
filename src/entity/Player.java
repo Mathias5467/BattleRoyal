@@ -10,8 +10,7 @@ public class Player extends Entity {
                 100,
                 480,
                 entityType,
-                knightType.getName(),
-                new Picture(100, 480, 150, 170, "res/knight/red/stayR.png"),
+                new Picture(100, 480, 150, 170, "res/Knight/red/stayR.png"),
                 "Knight/red/stayL.png",
                 Direction.RIGHT,
                 new HPBar(50, 80, knightType.getHp(), 50, 70, knightType.getName()),
@@ -51,7 +50,7 @@ public class Player extends Entity {
     public void defend() {
         if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
             this.setMovementType(Movement.DEFEND);
-            this.setNumberOfAnimation("");
+            this.resetNumberOfAnimation();
             this.changePicture();
         }
     }

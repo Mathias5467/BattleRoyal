@@ -7,8 +7,8 @@ public enum EntityType {
     MONSTER("Monster", 8),
     KNIGHT("Knight", 0);
 
-    private String name;
-    private int attack;
+    private final String name;
+    private final int attack;
     EntityType(String name, int attack) {
         this.name = name;
         this.attack = attack;

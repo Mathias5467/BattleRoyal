@@ -52,13 +52,9 @@ public class Play {
         this.numberOfCoins = 0;
         for (Entity entity : this.currentEntities) {
             entity.setStartPosition();
-            entity.setDead(false);
-            entity.setVisible(true);
-            entity.getHpBar().resetHP();
         }
         for (Enemy enemy : this.enemies) {
-            enemy.setDead(false);
-            enemy.setVisible(true);
+            enemy.setStartPosition();
         }
     }
 

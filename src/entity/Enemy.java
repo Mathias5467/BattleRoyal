@@ -10,9 +10,8 @@ public class Enemy extends Entity {
                 800,
                 460,
                 entityType,
-                entityType.toString(),
-                new Picture(820, 460, 200, 220, String.format("res/%s/stayL.png", entityType.toString())),
-                String.format("res/%s/stayL.png", entityType.toString()),
+                new Picture(820, 460, 200, 220, String.format("res/%s/stayL.png", entityType)),
+                String.format("res/%s/stayL.png", entityType),
                 Direction.LEFT,
                 new HPBar(750, 80, 100, 925, 70, entityType.toString()),
                 1
@@ -53,7 +52,7 @@ public class Enemy extends Entity {
             }
         } else {
             this.setMovementType(Movement.STAY);
-            this.setNumberOfAnimation("");
+            this.resetNumberOfAnimation();
             this.changePicture();
         }
     }

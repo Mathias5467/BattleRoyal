@@ -20,7 +20,7 @@ public abstract class Entity {
     private final int movementSpeed;
     private boolean hitRegistered;
     private int continualAnimationCounter;
-    public Entity(int x, int y, EntityType entityType, String name, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
+    public Entity(int x, int y, EntityType entityType, Picture picture, String pictureName, Direction direction, HPBar hpBar, int speed) {
         this.x = x;
         this.y = y;
         this.startY = y;
@@ -30,7 +30,7 @@ public abstract class Entity {
         this.direction = direction;
         this.movementType = Movement.STAY;
         this.hpBar = hpBar;
-        this.numberOfAnimation = "";
+        this.resetNumberOfAnimation();
         this.actAnimNumber = 0;
         this.movementSpeed = speed;
         this.maxAnimationNumber = 8;
@@ -50,13 +50,16 @@ public abstract class Entity {
         this.x = this.startX;
         this.y = this.startY;
         this.movementType = Movement.STAY;
-        this.numberOfAnimation = "";
+        this.resetNumberOfAnimation();
         this.picture.changeCords(this.x, this.y);
         if (this.entityType != EntityType.KNIGHT) {
             this.hpBar.resetHP();
             this.direction = Direction.LEFT;
         } else {
             this.direction = Direction.RIGHT;
+        }
+        if (!this.isVisible()) {
+            this.setVisible(true);
         }
         this.changePicture();
     }
@@ -161,7 +164,7 @@ public abstract class Entity {
 
     public void stop() {
         this.movementType = Movement.STAY;
-        this.numberOfAnimation = "";
+        this.resetNumberOfAnimation();
         this.changePicture();
     }
 
@@ -181,30 +184,27 @@ public abstract class Entity {
         return this.numberOfAnimation;
     }
 
-    protected void setNumberOfAnimation(String numberOfAnimation) {
-        this.numberOfAnimation = numberOfAnimation;
+    protected void resetNumberOfAnimation() {
+        this.numberOfAnimation = "";
     }
 
     public int getActAnimNumber() {
         return this.actAnimNumber;
     }
 
-    //TODO: OK
     public HPBar getHpBar() {
         return this.hpBar;
     }
 
-    //TODO: OK
     public EntityType getEntityType() {
         return this.entityType;
     }
 
-    //TODO: OK
     protected Movement getMovementType() {
         return this.movementType;
     }
-    //TODO: OK
-    protected void setMovementType(Movement type) {
+
+    public void setMovementType(Movement type) {
         this.movementType = type;
     }
 
@@ -218,15 +218,6 @@ public abstract class Entity {
 
     public void setHitRegistered(boolean hit) {
         this.hitRegistered = hit;
-    }
-
-    public void setDead(boolean dead) {
-        if (dead) {
-            this.movementType = Movement.DEATH;
-        } else {
-            this.movementType = Movement.STAY;
-        }
-
     }
 
     public boolean isVisible() {
