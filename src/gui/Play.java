@@ -62,19 +62,13 @@ public class Play {
         }
     }
 
-    public void changeKnight(KnightType knightType) {
-        this.player.setKnight(knightType);
-    }
-
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.WHITE);
         this.background1.draw(g);
         this.background2.draw(g);
         this.background3.draw(g);
-        if (this.arrow.isVisible()) {
-            this.arrow.draw(g);
-        }
+        this.arrow.draw(g);
         this.ground.draw(g);
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
@@ -112,11 +106,7 @@ public class Play {
     }
 
     public void moveLeft() {
-        if (this.currentEntities.getLast().isDead()) {
-            this.player.moveHorizontaly(Direction.LEFT, true);
-        } else {
-            this.player.moveHorizontaly(Direction.LEFT, false);
-        }
+        this.player.moveHorizontaly(Direction.LEFT, this.currentEntities.getLast().isDead());
     }
 
     public void findAliveEnemy() {
@@ -163,11 +153,9 @@ public class Play {
     }
 
     private void levelTransition() {
-        if (this.currentEntities.getLast().isDead() && this.currentEntities.getLast().isVisible()) {
-            this.currentEntities.getLast().setVisible(false);
-            this.arrow.setVisible(true);
-            this.coinAdded = false;
-        }
+        this.currentEntities.getLast().setVisible(false);
+        this.arrow.setVisible(true);
+        this.coinAdded = false;
     }
 
     private void readyForNextLevel() {
@@ -198,30 +186,24 @@ public class Play {
 
     public void update() {
 
-        this.outOfTimeControl();
         for (Entity entity : this.currentEntities) {
             entity.update();
-        }
-        this.levelTransition();
-        this.tryToAddCoin();
-        this.readyForNextLevel();
-
-        for (Entity entity : this.currentEntities) {
             if (!entity.isAttacking()) {
                 entity.setHitRegistered(false);
             }
         }
+        if (this.currentEntities.getLast().isDead() && this.currentEntities.getLast().isVisible()) {
+            this.levelTransition();
+        }
+        this.outOfTimeControl();
+        this.tryToAddCoin();
+        this.readyForNextLevel();
         this.tryFight();
         ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
     }
 
-    public boolean inAttackArea() {
+    private boolean inAttackArea() {
         return this.player.getX() + 80 > this.currentEntities.getLast().getX() && this.player.getX() - 150 < this.currentEntities.getLast().getX();
     }
-
-    public Enemy getCurrentEnemy() {
-        return ((Enemy)this.currentEntities.getLast());
-    }
-
 
 }

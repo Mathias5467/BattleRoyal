@@ -3,7 +3,6 @@ package entity;
 import main.Picture;
 
 public class Player extends Entity {
-    private boolean isDefending;
     private KnightType knightType;
 
     public Player(EntityType entityType, KnightType knightType) {
@@ -19,13 +18,13 @@ public class Player extends Entity {
                 4
         );
         this.knightType = knightType;
-        this.isDefending = false;
     }
 
     public void moveWithoutAnimation() {
         this.setX(this.getX() - 2);
         this.getPicture().changeCords(this.getX(), this.getY());
     }
+
 
     public void setKnight(KnightType knightType) {
         this.knightType = knightType;

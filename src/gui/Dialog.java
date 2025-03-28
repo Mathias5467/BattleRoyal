@@ -1,6 +1,6 @@
 package gui;
 
-import main.GameState;
+import backend.SelectOption;
 import main.PlayState;
 
 import java.awt.Graphics;

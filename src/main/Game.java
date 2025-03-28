@@ -79,9 +79,10 @@ public class Game extends JPanel implements Runnable {
 
                 try {
                     this.handleInput();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (FileNotFoundException e) {
+                    System.out.println("System file is missing");
                 }
+
                 this.update();
                 this.repaint();
                 if (this.gameState != GameState.PLAY || this.dialog.isVisible()) {
@@ -105,7 +106,7 @@ public class Game extends JPanel implements Runnable {
             } else if (this.gameState == GameState.EXIT) {
                 File coinFile = new File("res/data/coins.txt");
                 PrintWriter input = new PrintWriter(coinFile);
-                input.println(this.numberOfCoins); // This will correctly write the number as text
+                input.println(this.numberOfCoins);
                 input.close();
                 this.options.writeIntoFile();
             }
@@ -122,7 +123,7 @@ public class Game extends JPanel implements Runnable {
             if (this.options.tryChoose()) {
                 this.gameState = GameState.MENU;
                 this.knightType = this.options.getKnightType();
-                this.play.changeKnight(this.knightType);
+                this.play.getPlayer().setKnight(this.knightType);
             } else {
                 if (this.options.tryBuy()) {
                     this.numberOfCoins = this.options.getNumberOfCoins();
@@ -170,7 +171,7 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    public void handleInput() throws IOException {
+    public void handleInput() throws FileNotFoundException {
         var pressed = this.keyInput.getKeys();
         var numberOfPressedKeys = 0;
         for (KeyType keyValue : this.keysPressedReaction.keySet()) {
@@ -222,22 +223,25 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void update() {
-
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.play.update();
-            if (this.play.outOfTime()) {
-                this.dialog.setPlayState(PlayState.TIME_OUT);
-                this.dialog.setVisible(true);
-            }
-
-            if (!this.play.isAnyAliveEnemy() && !this.play.getCurrentEnemy().isVisible()) {
-                this.dialog.setPlayState(PlayState.WIN);
-                this.dialog.setVisible(true);
-            } else if (this.play.getPlayer().isDead()) {
-                this.dialog.setPlayState(PlayState.LOST);
+            var endGameState = this.determineEndGameState();
+            if (endGameState != null) {
+                this.dialog.setPlayState(endGameState);
                 this.dialog.setVisible(true);
             }
         }
+    }
+
+    private PlayState determineEndGameState() {
+        if (this.play.outOfTime()) {
+            return PlayState.TIME_OUT;
+        } else if (!this.play.isAnyAliveEnemy()) {
+            return PlayState.WIN;
+        } else if (this.play.getPlayer().isDead()) {
+            return PlayState.LOST;
+        }
+        return null;
     }
 
 

@@ -1,6 +1,7 @@
 package gui;
 
 
+import backend.SelectOption;
 import main.GameState;
 import main.Picture;
 
