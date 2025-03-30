@@ -24,14 +24,12 @@ public class Game extends JPanel implements Runnable {
     private final KeyInput keyInput;
     private boolean running;
     private Map<KeyType, Boolean> keysPressedReaction;
-    private final int fps = 60;
     private int frameCount = 0;
-    private Menu menu;
-    private Options options;
-    private Dialog dialog;
+    private final Menu menu;
+    private final Options options;
+    private final Dialog dialog;
     private KnightType knightType;
-    private Play play;
-    private boolean nonKeyTyped;
+    private final Play play;
     private int numberOfCoins;
     public Game() throws FileNotFoundException {
         this.setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
@@ -48,7 +46,6 @@ public class Game extends JPanel implements Runnable {
         this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
         this.knightType = this.options.getKnightType();
         this.dialog = new Dialog();
-        this.nonKeyTyped = false;
         File coinsFile = new File("res/data/coins.txt");
         Scanner input = new Scanner(coinsFile);
         this.numberOfCoins = input.nextInt();
@@ -65,7 +62,8 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double timePerFrame = 1000000000.0 / this.fps;
+        var fps = 60;
+        double timePerFrame = 1000000000.0 / fps;
         long lastFrame = System.nanoTime();
         long now;
 
@@ -73,16 +71,14 @@ public class Game extends JPanel implements Runnable {
             now = System.nanoTime();
             if (now - lastFrame >= timePerFrame) {
                 this.frameCount++;
-                if (this.frameCount >= this.fps) {
+                if (this.frameCount >= fps) {
                     this.frameCount = 0;
                 }
-
                 try {
                     this.handleInput();
                 } catch (FileNotFoundException e) {
                     System.out.println("System file is missing");
                 }
-
                 this.update();
                 this.repaint();
                 if (this.gameState != GameState.PLAY || this.dialog.isVisible()) {
@@ -169,9 +165,10 @@ public class Game extends JPanel implements Runnable {
 
     public void handleInput() throws FileNotFoundException {
         var alreadyPressed = this.keyInput.getKeys();
+        var keyTyped = false;
         for (KeyType keyValue : this.keysPressedReaction.keySet()) {
             if (!this.keysPressedReaction.get(keyValue) && alreadyPressed.get(keyValue)) {
-                this.nonKeyTyped = true;
+                keyTyped = true;
                 if (!this.dialog.isVisible()) {
                     switch (this.gameState) {
                         case MENU -> this.handleMenu(alreadyPressed);
@@ -187,10 +184,9 @@ public class Game extends JPanel implements Runnable {
                 break;
             }
         }
-        if (!this.nonKeyTyped && this.play.getPlayer().mayStop()) {
+        if (!keyTyped && this.play.getPlayer().mayStop()) {
             this.play.getPlayer().stop();
         }
-        this.nonKeyTyped = false;
     }
 
     @Override
@@ -199,9 +195,6 @@ public class Game extends JPanel implements Runnable {
         switch (this.gameState) {
             case GameState.PLAY -> {
                 this.play.draw(g);
-            }
-            case GameState.EXIT -> {
-                System.exit(0);
             }
             case GameState.OPTIONS -> {
                 this.options.draw(g);
@@ -223,6 +216,8 @@ public class Game extends JPanel implements Runnable {
                 this.dialog.setPlayState(endGameState);
                 this.dialog.setVisible(true);
             }
+        } else if (this.gameState == GameState.EXIT) {
+            System.exit(0);
         }
     }
 

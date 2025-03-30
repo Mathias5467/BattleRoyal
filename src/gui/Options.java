@@ -106,61 +106,38 @@ public class Options extends SelectOption {
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setStroke(new BasicStroke(5));
-
-        // Background white rectangle
         g2.setColor(new Color(255, 255, 255, 90));
         g2.fillRoundRect(600, 100, 400, 500, 30, 30);
-
-        // Draw images and coin count
         this.knightPicture.draw(g);
         this.coinPicture.draw(g);
-
-        // Fonts
         g2.setFont(new Font("Consolas", Font.BOLD, 25));
         g2.drawString("x " + this.numberOfCoins, 150, 145);
-
-        // Stat Labels
         g2.drawString("HP", 100, 200);
         g2.drawString("Attack", 100, 300);
         g2.drawString("Defence", 100, 400);
-
-        // Instructions
         g2.setFont(new Font("Courier New", Font.BOLD, 20));
         g2.drawString("Press ENTER to save changes", 125, 510);
         g2.drawString("Press ESC to get back to menu", 110, 550);
-
-        // Stat Bars
         g2.setColor(new Color(17, 72, 7));
         g2.fillRect(100, 210, this.knightType.getHp() * Options.TILE, 20);
-
         g2.setColor(new Color(142, 37, 29));
         g2.fillRect(100, 310, this.knightType.getAttack() * Options.TILE, 20);
-
         g2.setColor(new Color(1, 48, 94));
         g2.fillRect(100, 410, this.knightType.getDefence() * Options.TILE, 20);
-
-        // Stat Value Borders and Current/Max Values
         g2.setColor(new Color(255, 255, 255, 90));
         g2.drawRect(100, 210, 300, 20);
         g2.drawRect(100, 310, 300, 20);
         g2.drawRect(100, 410, 300, 20);
-
-        // Stat Text
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
         g2.drawString(String.format("%3d/100", this.knightType.getHp()), 420, 225);
         g2.drawString(String.format("%3d/100", this.knightType.getAttack()), 420, 325);
         g2.drawString(String.format("%3d/100", this.knightType.getDefence()), 420, 425);
-
-        // Navigation Arrows and Knight Name
         g2.setFont(new Font("Segoe Print", Font.BOLD, 90));
         g2.setColor(new Color(43, 43, 43));
         g2.drawString("<", 615, 420);
         g2.drawString(">", 935, 420);
-
         g2.setFont(new Font("Consolas", Font.BOLD, 50));
         g2.drawString(this.knightType.getName(), 715, 180);
-
-        // Price (if not bought)
         if (!this.knightsBought.get(this.knightType)) {
             g2.setFont(new Font("Courier New", Font.BOLD, 40));
             g2.setColor(new Color(255, 255, 255, 150));

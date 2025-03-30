@@ -22,7 +22,7 @@ public class Play {
     private int numberOfCoins;
     private boolean coinAdded;
     private int timeInSeconds;
-    private int fpsCounter;
+    private int miliSeconds;
     public Play() throws FileNotFoundException {
         this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
         this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
@@ -34,7 +34,7 @@ public class Play {
         this.currentEntities = new ArrayList<>();
         this.currentEntities.add(this.player);
         this.timeInSeconds = 0;
-        this.fpsCounter = 0;
+        this.miliSeconds = 0;
         File enemyFile = new File("res/data/enemies.txt");
         Scanner input = new Scanner(enemyFile);
         while (input.hasNextLine()) {
@@ -50,6 +50,7 @@ public class Play {
         this.arrow.setVisible(false);
         this.timeInSeconds = 300;
         this.numberOfCoins = 0;
+        this.player.getHpBar().resetHP();
         for (Entity entity : this.currentEntities) {
             entity.setStartPosition();
         }
@@ -82,7 +83,6 @@ public class Play {
         if (this.currentEntities.getLast().isDead()) {
             if (this.background3.getX() < -1100) {
                 this.background3.changeCords(0, this.background3.getY());
-
             }
             if (this.ground.getX() < -1100) {
                 this.ground.changeCords(0, this.ground.getY());
@@ -90,7 +90,6 @@ public class Play {
             this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
             this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
             this.arrow.changeCords(this.arrow.getX() - 3, this.arrow.getY());
-
             this.player.moveHorizontaly(Direction.RIGHT, true);
             if (this.player.getX() > 99) {
                 this.player.moveWithoutAnimation();
@@ -117,8 +116,8 @@ public class Play {
     }
 
     public boolean isAnyAliveEnemy() {
-        for (Entity entity : this.enemies) {
-            if (!entity.isDead() && entity instanceof Enemy) {
+        for (Enemy enemy : this.enemies) {
+            if (!enemy.isDead()) {
                 return true;
             }
         }
@@ -141,9 +140,9 @@ public class Play {
     }
 
     private void outOfTimeControl() {
-        this.fpsCounter++;
-        if (this.fpsCounter == 60 && !this.outOfTime()) {
-            this.fpsCounter = 0;
+        this.miliSeconds++;
+        if (this.miliSeconds == 60 && !this.outOfTime()) {
+            this.miliSeconds = 0;
             this.timeInSeconds--;
         }
     }
@@ -154,7 +153,7 @@ public class Play {
         this.coinAdded = false;
     }
 
-    private void readyForNextLevel() {
+    private void readyForNextLevelCheck() {
         if (this.player.getX() < 100 && this.currentEntities.getLast().isDead() && this.arrow.getX() < -100) {
             if (this.isAnyAliveEnemy()) {
                 this.findAliveEnemy();
@@ -169,8 +168,7 @@ public class Play {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
-//                        this.currentEnemy.hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
-                        this.currentEntities.getLast().hit(100);
+                        this.currentEntities.getLast().hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                     } else {
                         this.player.hit(this.currentEntities.getLast().getEntityType().getAttack());
                     }
@@ -178,6 +176,10 @@ public class Play {
                 }
             }
         }
+    }
+
+    private boolean inAttackArea() {
+        return this.player.getX() + 80 > this.currentEntities.getLast().getX() && this.player.getX() - 150 < this.currentEntities.getLast().getX();
     }
 
     public void update() {
@@ -193,13 +195,11 @@ public class Play {
         }
         this.outOfTimeControl();
         this.tryToAddCoin();
-        this.readyForNextLevel();
+        this.readyForNextLevelCheck();
         this.tryFight();
         ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
     }
 
-    private boolean inAttackArea() {
-        return this.player.getX() + 80 > this.currentEntities.getLast().getX() && this.player.getX() - 150 < this.currentEntities.getLast().getX();
-    }
+
 
 }
