@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.*;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -23,7 +23,7 @@ public class Game extends JPanel implements Runnable {
     private Thread gameThread;
     private final KeyInput keyInput;
     private boolean running;
-    private EnumMap<KeyType, Boolean> keysPressedReaction;
+    private Map<KeyType, Boolean> keysPressedReaction;
     private final int fps = 60;
     private int frameCount = 0;
     private Menu menu;
@@ -45,7 +45,7 @@ public class Game extends JPanel implements Runnable {
         this.play = new Play();
         this.gameState = GameState.OPTIONS;
         this.running = false;
-        this.keysPressedReaction = new EnumMap<>(this.keyInput.getKeys());
+        this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
         this.knightType = this.options.getKnightType();
         this.dialog = new Dialog();
         this.nonKeyTyped = false;
@@ -86,7 +86,7 @@ public class Game extends JPanel implements Runnable {
                 this.update();
                 this.repaint();
                 if (this.gameState != GameState.PLAY || this.dialog.isVisible()) {
-                    this.keysPressedReaction = new EnumMap<>(this.keyInput.getKeys());
+                    this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
                 }
                 lastFrame = now;
             }
@@ -119,15 +119,12 @@ public class Game extends JPanel implements Runnable {
         } else if (pressed.get(KeyType.RIGHT)) {
             this.options.selectOption(1);
         } else if (pressed.get(KeyType.ENTER)) {
-
             if (this.options.tryChoose()) {
                 this.gameState = GameState.MENU;
                 this.knightType = this.options.getKnightType();
                 this.play.getPlayer().setKnight(this.knightType);
-            } else {
-                if (this.options.tryBuy()) {
-                    this.numberOfCoins = this.options.getNumberOfCoins();
-                }
+            } else if (this.options.tryBuy()) {
+                this.numberOfCoins = this.options.getNumberOfCoins();
             }
         }
     }
@@ -147,7 +144,6 @@ public class Game extends JPanel implements Runnable {
             } else if (pressed.get(KeyType.D)) {
                 this.play.getPlayer().attack(Movement.ATTACK3);
             }
-
         }
     }
 
@@ -172,26 +168,23 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void handleInput() throws FileNotFoundException {
-        var pressed = this.keyInput.getKeys();
-        var numberOfPressedKeys = 0;
+        var alreadyPressed = this.keyInput.getKeys();
         for (KeyType keyValue : this.keysPressedReaction.keySet()) {
-            if (numberOfPressedKeys < 1) {
-                if (!this.keysPressedReaction.get(keyValue) && pressed.get(keyValue)) {
-                    numberOfPressedKeys++;
-                    this.nonKeyTyped = true;
-                    if (!this.dialog.isVisible()) {
-                        switch (this.gameState) {
-                            case MENU -> this.handleMenu(pressed);
-                            case OPTIONS -> this.handleOptions(pressed);
-                            case PLAY -> this.handlePlay(pressed);
-                        }
-                        if (pressed.get(KeyType.ESC) && this.gameState != GameState.MENU) {
-                            this.dialog.setVisible(true);
-                        }
-                    } else {
-                        this.handleDialog(pressed);
+            if (!this.keysPressedReaction.get(keyValue) && alreadyPressed.get(keyValue)) {
+                this.nonKeyTyped = true;
+                if (!this.dialog.isVisible()) {
+                    switch (this.gameState) {
+                        case MENU -> this.handleMenu(alreadyPressed);
+                        case OPTIONS -> this.handleOptions(alreadyPressed);
+                        case PLAY -> this.handlePlay(alreadyPressed);
                     }
+                    if (alreadyPressed.get(KeyType.ESC) && this.gameState != GameState.MENU) {
+                        this.dialog.setVisible(true);
+                    }
+                } else {
+                    this.handleDialog(alreadyPressed);
                 }
+                break;
             }
         }
         if (!this.nonKeyTyped && this.play.getPlayer().mayStop()) {
