@@ -8,9 +8,9 @@ public class Player extends Entity {
     public Player(EntityType entityType, KnightType knightType) {
         super(
                 100,
-                480,
+                495,
                 entityType,
-                new Picture(100, 480, 150, 170, "res/Knight/red/stayR.png"),
+                new Picture(100, 495, 150, 170, "res/Knight/red/stayR.png"),
                 "Knight/red/stayL.png",
                 Direction.RIGHT,
                 new HPBar(50, 80, knightType.getHp(), 50, 70, knightType.getName()),

@@ -24,11 +24,11 @@ public class Play {
     private int timeInSeconds;
     private int miliSeconds;
     public Play() throws FileNotFoundException {
-        this.background1 = new Picture(0, 0, 1100, 700, "res/background/background1.png");
-        this.background2 = new Picture(0, 0, 1100, 700, "res/background/background2.png");
-        this.background3 = new Picture(0, 0, 2200, 700, "res/background/background3.png");
-        this.arrow = new Picture(800, 490, 100, 155, "res/arrow.png");
-        this.ground = new Picture(0, 590, 2200, 114, "res/background/ground.png");
+        this.background1 = new Picture(0, 0, 2200, 700, "res/background/Dune/b1.png");
+        this.background2 = new Picture(0, 0, 2200, 700, "res/background/Dune/b2.png");
+        this.background3 = new Picture(0, 0, 2200, 700, "res/background/Dune/b3.png");
+        this.arrow = new Picture(800, 520, 100, 155, "res/arrow.png");
+        this.ground = new Picture(0, 650, 2200, 58, "res/background/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
         this.enemies = new ArrayList<>();
         this.currentEntities = new ArrayList<>();
@@ -79,17 +79,27 @@ public class Play {
     }
 
 
+
+
     public void moveRight() {
         if (this.currentEntities.getLast().isDead()) {
-            if (this.background3.getX() < -1100) {
-                this.background3.changeCords(0, this.background3.getY());
+            if (this.background2.getX() < -1100) {
+                this.background2.changeCords(0, this.background2.getY());
+            }
+            if (this.background1.getX() < -1100) {
+                this.background1.changeCords(0, this.background1.getY());
             }
             if (this.ground.getX() < -1100) {
                 this.ground.changeCords(0, this.ground.getY());
             }
-            this.background3.changeCords(this.background3.getX() - 1, this.background3.getY());
-            this.ground.changeCords(this.ground.getX() - 3, this.ground.getY());
-            this.arrow.changeCords(this.arrow.getX() - 3, this.arrow.getY());
+            if (this.background3.getX() < -1100) {
+                this.background3.changeCords(0, this.background3.getY());
+            }
+            this.background1.changeCords(this.background1.getX() - 1, this.background1.getY());
+            this.background2.changeCords(this.background2.getX() - 2, this.background2.getY());
+            this.background3.changeCords(this.background3.getX() - 3, this.background2.getY());
+            this.ground.changeCords(this.ground.getX() - 4, this.ground.getY());
+            this.arrow.changeCords(this.arrow.getX() - 4, this.arrow.getY());
             this.player.moveHorizontaly(Direction.RIGHT, true);
             if (this.player.getX() > 99) {
                 this.player.moveWithoutAnimation();
@@ -168,7 +178,8 @@ public class Play {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
-                        this.currentEntities.getLast().hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+//                        this.currentEntities.getLast().hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+                        this.currentEntities.getLast().hit(100);
                     } else {
                         this.player.hit(this.currentEntities.getLast().getEntityType().getAttack());
                     }
