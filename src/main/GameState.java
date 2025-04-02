@@ -4,7 +4,8 @@ public enum GameState {
     MENU("Menu"),
     PLAY("Play"),
     EXIT("Exit"),
-    OPTIONS("Options");
+    KNIGHTS("Knights"),
+    MAPS("Map");
 
     private String name;
 

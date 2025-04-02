@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 
-public class Options extends SelectOption {
+public class KnightOption extends SelectOption {
     private final Picture knightPicture;
     private final Picture coinPicture;
     private KnightType knightType;
@@ -25,7 +25,7 @@ public class Options extends SelectOption {
     private int counter;
     private int numberOfCoins;
     private final HashMap<KnightType, Boolean> knightsBought;
-    public Options() throws FileNotFoundException {
+    public KnightOption() throws FileNotFoundException {
         this.knightType = KnightType.RED;
         this.knightPicture = new Picture(665, 220, 270, 290, String.format("res/knight/%s/stayL.png", this.knightType.getColor()));
         this.knightsBought = new HashMap<>();
@@ -119,11 +119,11 @@ public class Options extends SelectOption {
         g2.drawString("Press ENTER to save changes", 125, 510);
         g2.drawString("Press ESC to get back to menu", 110, 550);
         g2.setColor(new Color(17, 72, 7));
-        g2.fillRect(100, 210, this.knightType.getHp() * Options.TILE, 20);
+        g2.fillRect(100, 210, this.knightType.getHp() * KnightOption.TILE, 20);
         g2.setColor(new Color(142, 37, 29));
-        g2.fillRect(100, 310, this.knightType.getAttack() * Options.TILE, 20);
+        g2.fillRect(100, 310, this.knightType.getAttack() * KnightOption.TILE, 20);
         g2.setColor(new Color(1, 48, 94));
-        g2.fillRect(100, 410, this.knightType.getDefence() * Options.TILE, 20);
+        g2.fillRect(100, 410, this.knightType.getDefence() * KnightOption.TILE, 20);
         g2.setColor(new Color(255, 255, 255, 90));
         g2.drawRect(100, 210, 300, 20);
         g2.drawRect(100, 310, 300, 20);

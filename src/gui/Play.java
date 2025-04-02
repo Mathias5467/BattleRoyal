@@ -1,5 +1,6 @@
 package gui;
 
+import backend.Biom;
 import entity.*;
 import main.Picture;
 
@@ -19,16 +20,18 @@ public class Play {
     private Player player;
     private List<Enemy> enemies;
     private List<Entity> currentEntities;
+    private Biom biom;
     private int numberOfCoins;
     private boolean coinAdded;
     private int timeInSeconds;
     private int miliSeconds;
     public Play() throws FileNotFoundException {
-        this.background1 = new Picture(0, 0, 2200, 700, "res/background/Dune/b1.png");
-        this.background2 = new Picture(0, 0, 2200, 700, "res/background/Dune/b2.png");
-        this.background3 = new Picture(0, 0, 2200, 700, "res/background/Dune/b3.png");
-        this.arrow = new Picture(800, 520, 100, 155, "res/arrow.png");
-        this.ground = new Picture(0, 650, 2200, 58, "res/background/ground.png");
+        this.biom = Biom.FOREST;
+        this.background1 = new Picture(0, 0, 2200, 700, String.format("res/back/%s/b1.png", this.biom.name()));
+        this.background2 = new Picture(0, 0, 2200, 700, String.format("res/back/%s/b2.png", this.biom.name()));
+        this.background3 = new Picture(0, 0, 2200, 700, String.format("res/back/%s/b3.png", this.biom.name()));
+        this.arrow = new Picture(800, 535, 100, 155, "res/arrow.png");
+        this.ground = new Picture(0, 650, 2200, 58, "res/back/ground.png");
         this.player = new Player(EntityType.KNIGHT, KnightType.RED);
         this.enemies = new ArrayList<>();
         this.currentEntities = new ArrayList<>();

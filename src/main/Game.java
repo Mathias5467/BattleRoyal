@@ -15,7 +15,7 @@ import gui.*;
 
 import input.KeyInput;
 import input.KeyType;
-
+import backend.Biom;
 public class Game extends JPanel implements Runnable {
     private static final int WIDTH = 1100;
     private static final int HEIGHT = 700;
@@ -26,7 +26,9 @@ public class Game extends JPanel implements Runnable {
     private Map<KeyType, Boolean> keysPressedReaction;
     private int frameCount = 0;
     private final Menu menu;
-    private final Options options;
+    private final KnightOption knightOption;
+    private Biom biom;
+    private final MapOption mapOption;
     private final Dialog dialog;
     private KnightType knightType;
     private final Play play;
@@ -39,12 +41,14 @@ public class Game extends JPanel implements Runnable {
         this.keyInput = new KeyInput();
         this.addKeyListener(this.keyInput);
         this.menu = new Menu();
-        this.options = new Options();
+        this.knightOption = new KnightOption();
+        this.mapOption = new MapOption();
+        this.biom = Biom.FOREST;
         this.play = new Play();
         this.gameState = GameState.MENU;
         this.running = false;
         this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
-        this.knightType = this.options.getKnightType();
+        this.knightType = this.knightOption.getKnightType();
         this.dialog = new Dialog();
         File coinsFile = new File("res/data/coins.txt");
         Scanner input = new Scanner(coinsFile);
@@ -57,7 +61,7 @@ public class Game extends JPanel implements Runnable {
         this.frameCount = 0;
         this.gameThread = new Thread(this);
         this.gameThread.start();
-        this.options.setNumberOfCoins(this.numberOfCoins);
+        this.knightOption.setNumberOfCoins(this.numberOfCoins);
     }
 
     @Override
@@ -104,23 +108,23 @@ public class Game extends JPanel implements Runnable {
                 PrintWriter input = new PrintWriter(coinFile);
                 input.println(this.numberOfCoins);
                 input.close();
-                this.options.writeIntoFile();
+                this.knightOption.writeIntoFile();
             }
         }
     }
 
     private void handleOptions(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
-            this.options.selectOption(-1);
+            this.knightOption.selectOption(-1);
         } else if (pressed.get(KeyType.RIGHT)) {
-            this.options.selectOption(1);
+            this.knightOption.selectOption(1);
         } else if (pressed.get(KeyType.ENTER)) {
-            if (this.options.tryChoose()) {
+            if (this.knightOption.tryChoose()) {
                 this.gameState = GameState.MENU;
-                this.knightType = this.options.getKnightType();
+                this.knightType = this.knightOption.getKnightType();
                 this.play.getPlayer().setKnight(this.knightType);
-            } else if (this.options.tryBuy()) {
-                this.numberOfCoins = this.options.getNumberOfCoins();
+            } else if (this.knightOption.tryBuy()) {
+                this.numberOfCoins = this.knightOption.getNumberOfCoins();
             }
         }
     }
@@ -154,7 +158,7 @@ public class Game extends JPanel implements Runnable {
             if (this.dialog.getChosenOption() == ConfirmDialog.YES) {
                 if (this.gameState == GameState.PLAY) {
                     this.numberOfCoins += this.play.getNumberOfCoins();
-                    this.options.setNumberOfCoins(this.numberOfCoins);
+                    this.knightOption.setNumberOfCoins(this.numberOfCoins);
                 }
                 this.gameState = GameState.MENU;
                 this.dialog.setPlayState(PlayState.TIE);
@@ -172,7 +176,7 @@ public class Game extends JPanel implements Runnable {
                 if (!this.dialog.isVisible()) {
                     switch (this.gameState) {
                         case MENU -> this.handleMenu(alreadyPressed);
-                        case OPTIONS -> this.handleOptions(alreadyPressed);
+                        case KNIGHTS -> this.handleOptions(alreadyPressed);
                         case PLAY -> this.handlePlay(alreadyPressed);
                     }
                     if (alreadyPressed.get(KeyType.ESC) && this.gameState != GameState.MENU) {
@@ -193,15 +197,10 @@ public class Game extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         switch (this.gameState) {
-            case GameState.PLAY -> {
-                this.play.draw(g);
-            }
-            case GameState.OPTIONS -> {
-                this.options.draw(g);
-            }
-            case GameState.MENU -> {
-                this.menu.draw(g);
-            }
+            case PLAY -> this.play.draw(g);
+            case KNIGHTS -> this.knightOption.draw(g);
+            case MENU -> this.menu.draw(g);
+//            case MAPS -> this.mapOption.draw(g);
         }
         if (this.dialog.isVisible()) {
             this.dialog.draw(g);
