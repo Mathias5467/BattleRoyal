@@ -54,4 +54,12 @@ public class Picture {
     public void setVisible(boolean visible) {
         this.isVisible = visible;
     }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
 }

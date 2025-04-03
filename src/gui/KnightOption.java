@@ -117,7 +117,7 @@ public class KnightOption extends SelectOption {
         g2.drawString("Defence", 100, 400);
         g2.setFont(new Font("Courier New", Font.BOLD, 20));
         g2.drawString("Press ENTER to save changes", 125, 510);
-        g2.drawString("Press ESC to get back to menu", 110, 550);
+        g2.drawString("Press ESC to get back to menu", 113, 550);
         g2.setColor(new Color(17, 72, 7));
         g2.fillRect(100, 210, this.knightType.getHp() * KnightOption.TILE, 20);
         g2.setColor(new Color(142, 37, 29));

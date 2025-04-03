@@ -113,7 +113,7 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private void handleOptions(Map<KeyType, Boolean> pressed) {
+    private void handleKnightOptions(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
             this.knightOption.selectOption(-1);
         } else if (pressed.get(KeyType.RIGHT)) {
@@ -126,6 +126,14 @@ public class Game extends JPanel implements Runnable {
             } else if (this.knightOption.tryBuy()) {
                 this.numberOfCoins = this.knightOption.getNumberOfCoins();
             }
+        }
+    }
+
+    private void handleMapOptions(Map<KeyType, Boolean> pressed) {
+        if (pressed.get(KeyType.LEFT)) {
+            this.mapOption.selectOption(-1);
+        } else if (pressed.get(KeyType.RIGHT)) {
+            this.mapOption.selectOption(1);
         }
     }
 
@@ -176,8 +184,9 @@ public class Game extends JPanel implements Runnable {
                 if (!this.dialog.isVisible()) {
                     switch (this.gameState) {
                         case MENU -> this.handleMenu(alreadyPressed);
-                        case KNIGHTS -> this.handleOptions(alreadyPressed);
+                        case KNIGHTS -> this.handleKnightOptions(alreadyPressed);
                         case PLAY -> this.handlePlay(alreadyPressed);
+                        case MAPS -> this.handleMapOptions(alreadyPressed);
                     }
                     if (alreadyPressed.get(KeyType.ESC) && this.gameState != GameState.MENU) {
                         this.dialog.setVisible(true);
@@ -200,7 +209,7 @@ public class Game extends JPanel implements Runnable {
             case PLAY -> this.play.draw(g);
             case KNIGHTS -> this.knightOption.draw(g);
             case MENU -> this.menu.draw(g);
-//            case MAPS -> this.mapOption.draw(g);
+            case MAPS -> this.mapOption.draw(g);
         }
         if (this.dialog.isVisible()) {
             this.dialog.draw(g);
