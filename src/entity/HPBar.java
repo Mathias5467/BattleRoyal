@@ -39,13 +39,12 @@ public class HPBar {
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-        g2.setStroke(new BasicStroke(3));
+        g2.setStroke(new BasicStroke(5));
         g2.setColor(Color.RED);
-        g2.fillRect(this.x, this.y, this.width, this.height);
-        g2.setColor(Color.WHITE);
-        g2.drawRect(this.x, this.y, this.maxWidth, this.height);
+        g2.fillRoundRect(this.x, this.y, this.width, this.height, 10, 10);
+        g2.setColor(Color.BLACK);
+        g2.drawRoundRect(this.x, this.y, this.maxWidth, this.height, 10, 10);
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 30));
-        g2.setColor(Color.WHITE);
         g2.drawString(this.name, this.textX, this.textY);
     }
 

@@ -62,6 +62,7 @@ public class Game extends JPanel implements Runnable {
         this.gameThread = new Thread(this);
         this.gameThread.start();
         this.knightOption.setNumberOfCoins(this.numberOfCoins);
+        this.mapOption.setNumberOfCoins(this.numberOfCoins);
     }
 
     @Override
@@ -102,6 +103,7 @@ public class Game extends JPanel implements Runnable {
             this.gameState = this.menu.getChosenGameState();
             if (this.gameState == GameState.PLAY) {
                 this.play.reset();
+                this.play.setBiom(this.biom);
                 this.dialog.setPlayState(PlayState.TIE);
             } else if (this.gameState == GameState.EXIT) {
                 File coinFile = new File("res/data/coins.txt");
@@ -109,6 +111,7 @@ public class Game extends JPanel implements Runnable {
                 input.println(this.numberOfCoins);
                 input.close();
                 this.knightOption.writeIntoFile();
+                this.mapOption.writeIntoFile();
             }
         }
     }
@@ -134,6 +137,13 @@ public class Game extends JPanel implements Runnable {
             this.mapOption.selectOption(-1);
         } else if (pressed.get(KeyType.RIGHT)) {
             this.mapOption.selectOption(1);
+        }  else if (pressed.get(KeyType.ENTER)) {
+            if (this.mapOption.tryChoose()) {
+                this.gameState = GameState.MENU;
+                this.biom = this.mapOption.getBiom();
+            } else if (this.mapOption.tryBuy()) {
+                this.numberOfCoins = this.mapOption.getNumberOfCoins();
+            }
         }
     }
 
@@ -167,6 +177,7 @@ public class Game extends JPanel implements Runnable {
                 if (this.gameState == GameState.PLAY) {
                     this.numberOfCoins += this.play.getNumberOfCoins();
                     this.knightOption.setNumberOfCoins(this.numberOfCoins);
+                    this.mapOption.setNumberOfCoins(this.numberOfCoins);
                 }
                 this.gameState = GameState.MENU;
                 this.dialog.setPlayState(PlayState.TIE);

@@ -64,7 +64,7 @@ public class Play {
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-        g2.setColor(Color.WHITE);
+        g2.setColor(Color.BLACK);
         this.background1.draw(g);
         this.background2.draw(g);
         this.background3.draw(g);
@@ -215,5 +215,11 @@ public class Play {
     }
 
 
+    public void setBiom(Biom biom) {
+        this.biom = biom;
+        this.background1.changeImage(String.format("res/back/%s/b1.png", this.biom.name()));
+        this.background2.changeImage(String.format("res/back/%s/b2.png", this.biom.name()));
+        this.background3.changeImage(String.format("res/back/%s/b3.png", this.biom.name()));
 
+    }
 }
