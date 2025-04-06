@@ -71,7 +71,4 @@ public class KnightOptions extends Options<KnightType> {
         }
     }
 
-    public KnightType getKnightType() {
-        return getOption();
-    }
 }

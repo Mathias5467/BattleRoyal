@@ -2,8 +2,8 @@ package backend;
 
 public enum Biom implements NamedOption<Biom> {
     FOREST("Forest", 0),
-    DUNE("Dune", 80),
-    MOUNTAIN("Mountain", 40);
+    DUNE("Dune", 40),
+    MOUNTAIN("Mountain", 80);
 
     private final String name;
     private final int price;

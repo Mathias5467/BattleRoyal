@@ -69,8 +69,4 @@ public class MapOptions extends Options<Biom> {
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 50));
         g2.drawString("Choose Biom", 405, 130);
     }
-
-    public Biom getBiom() {
-        return getOption();
-    }
 }

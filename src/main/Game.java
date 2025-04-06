@@ -52,7 +52,7 @@ public class Game extends JPanel implements Runnable {
         this.gameState = GameState.MENU;
         this.running = false;
         this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
-        this.knightType = this.knightOption.getKnightType();
+        this.knightType = this.knightOption.getOption();
         this.dialog = new Dialog();
 
     }
@@ -125,7 +125,7 @@ public class Game extends JPanel implements Runnable {
         } else if (pressed.get(KeyType.ENTER)) {
             if (this.knightOption.tryChoose()) {
                 this.gameState = GameState.MENU;
-                this.knightType = this.knightOption.getKnightType();
+                this.knightType = this.knightOption.getOption();
                 this.play.getPlayer().setKnight(this.knightType);
             } else if (this.knightOption.tryBuy()) {
                 this.numberOfCoins = this.knightOption.getNumberOfCoins();
@@ -141,7 +141,7 @@ public class Game extends JPanel implements Runnable {
         }  else if (pressed.get(KeyType.ENTER)) {
             if (this.mapOption.tryChoose()) {
                 this.gameState = GameState.MENU;
-                this.biom = this.mapOption.getBiom();
+                this.biom = this.mapOption.getOption();
             } else if (this.mapOption.tryBuy()) {
                 this.numberOfCoins = this.mapOption.getNumberOfCoins();
             }

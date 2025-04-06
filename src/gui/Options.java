@@ -81,7 +81,6 @@ public abstract class Options<T extends NamedOption<T>> extends SelectOption {
 
         @SuppressWarnings("unchecked")
         T[] values = (T[])this.option.getClass().getEnumConstants();
-
         this.option = values[this.counter % values.length];
     }
 
