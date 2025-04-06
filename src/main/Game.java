@@ -26,9 +26,9 @@ public class Game extends JPanel implements Runnable {
     private Map<KeyType, Boolean> keysPressedReaction;
     private int frameCount = 0;
     private final Menu menu;
-    private final KnightOption knightOption;
+    private final KnightOptions knightOption;
     private Biom biom;
-    private final MapOption mapOption;
+    private final MapOptions mapOption;
     private final Dialog dialog;
     private KnightType knightType;
     private final Play play;
@@ -40,9 +40,13 @@ public class Game extends JPanel implements Runnable {
         this.setBackground(new Color(43, 43, 43));
         this.keyInput = new KeyInput();
         this.addKeyListener(this.keyInput);
+        File coinsFile = new File("res/data/coins.txt");
+        Scanner input = new Scanner(coinsFile);
+        this.numberOfCoins = input.nextInt();
+        input.close();
         this.menu = new Menu();
-        this.knightOption = new KnightOption();
-        this.mapOption = new MapOption();
+        this.knightOption = new KnightOptions(this.numberOfCoins);
+        this.mapOption = new MapOptions(this.numberOfCoins);
         this.biom = Biom.FOREST;
         this.play = new Play();
         this.gameState = GameState.MENU;
@@ -50,10 +54,7 @@ public class Game extends JPanel implements Runnable {
         this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
         this.knightType = this.knightOption.getKnightType();
         this.dialog = new Dialog();
-        File coinsFile = new File("res/data/coins.txt");
-        Scanner input = new Scanner(coinsFile);
-        this.numberOfCoins = input.nextInt();
-        input.close();
+
     }
 
     public void start() {

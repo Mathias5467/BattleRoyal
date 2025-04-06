@@ -41,7 +41,7 @@ public class Menu extends SelectOption {
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 80));
         g2.drawString("Battle Royal", 315, 150);
 //        g2.setColor(new Color(223, 223, 223));
-        g2.setColor(new Color(142, 37, 29));
+        g2.setColor(new Color(3, 156, 140));
         g2.drawRoundRect(400, 250, 300, 350, 30, 30);
         g2.setStroke(new BasicStroke(5));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));

@@ -1,6 +1,8 @@
 package entity;
 
-public enum KnightType {
+import backend.NamedOption;
+
+public enum KnightType implements NamedOption<KnightType> {
     RED("red", "Thorne", 100, 50, 40, 0),
     GREEN("green", "Alaric", 100, 90, 70, 50),
     BLUE("blue", "Aragon", 100, 75, 85, 30);
@@ -20,19 +22,15 @@ public enum KnightType {
         this.price = price;
     }
 
-    public KnightType getBasedColor(String color) {
-        switch (color) {
-            case "red" -> {
-                return KnightType.RED;
-            }
-            case "green" -> {
-                return KnightType.GREEN;
-            }
-            case "blue" -> {
-                return KnightType.BLUE;
-            }
-        }
-        return null;
+
+    @Override
+    public KnightType getByName(String option) {
+        return switch (option) {
+            case "Thorne" -> KnightType.RED;
+            case "Alaric" -> KnightType.GREEN;
+            case "Aragon" -> KnightType.BLUE;
+            default -> null;
+        };
     }
 
     public int getPrice() {

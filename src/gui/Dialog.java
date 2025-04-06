@@ -40,14 +40,14 @@ public class Dialog extends SelectOption {
         g2.setStroke(new BasicStroke(8));
         g2.setColor(new Color(43, 43, 43));
         g2.fillRoundRect(375, 240, 350, 220, 10, 10);
-        g2.setColor(new Color(142, 37, 29));
+        g2.setColor(new Color(3, 156, 140));
         g2.drawRoundRect(375, 240, 350, 220, 10, 10);
 
         g2.setFont(new Font("Consolas", Font.BOLD, 20));
         g2.setStroke(new BasicStroke(5));
 // Draw YES button
         if (this.chosenOption == ConfirmDialog.YES) {
-            g2.setColor(new Color(142, 37, 29));
+            g2.setColor(new Color(3, 156, 140));
             g2.fillRoundRect(450, 360, 80, 50, 15, 15);
             g2.setColor(new Color(43, 43, 43));
             g2.drawString(ConfirmDialog.YES.toString(), 473, 390);
@@ -58,16 +58,16 @@ public class Dialog extends SelectOption {
 
 // Draw NO button
         if (this.chosenOption == ConfirmDialog.NO) {
-            g2.setColor(new Color(142, 37, 29));
+            g2.setColor(new Color(1, 145, 130));
             g2.fillRoundRect(570, 360, 80, 50, 15, 15);
             g2.setColor(new Color(43, 43, 43));
             g2.drawString(ConfirmDialog.NO.toString(), 598, 390);
         } else {
-            g2.setColor(new Color(142, 37, 29));
+            g2.setColor(new Color(3, 156, 140));
             g2.drawRoundRect(570, 360, 80, 50, 15, 15);
             g2.drawString(ConfirmDialog.NO.toString(), 598, 390);
         }
-        g2.setColor(new Color(142, 37, 29));
+        g2.setColor(new Color(3, 156, 140));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));
         switch (this.playState) {
             case WIN -> g2.drawString("You Won!", 480, 290);

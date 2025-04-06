@@ -71,6 +71,7 @@ public class Play {
         this.arrow.draw(g);
         this.ground.draw(g);
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
+        g2.drawString("Time", 500, 70);
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
         for (Entity entity : this.currentEntities) {
             entity.draw(g);
@@ -181,8 +182,7 @@ public class Play {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
-//                        this.currentEntities.getLast().hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
-                        this.currentEntities.getLast().hit(100);
+                        this.currentEntities.getLast().hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
                     } else {
                         this.player.hit(this.currentEntities.getLast().getEntityType().getAttack());
                     }
