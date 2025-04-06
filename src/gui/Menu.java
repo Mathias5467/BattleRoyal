@@ -36,12 +36,12 @@ public class Menu extends SelectOption {
         Graphics2D g2 = (Graphics2D)g;
         this.background.draw(g);
         g2.setStroke(new BasicStroke(8));
-        g2.setColor(new Color(0, 0, 0, 140));
+        g2.setColor(new Color(43, 43, 43));
         g2.fillRoundRect(400, 250, 300, 350, 30, 30);
-        g2.setColor(new Color(0, 0, 0));
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 80));
         g2.drawString("Battle Royal", 315, 150);
-        g2.setColor(new Color(227, 226, 226));
+//        g2.setColor(new Color(223, 223, 223));
+        g2.setColor(new Color(142, 37, 29));
         g2.drawRoundRect(400, 250, 300, 350, 30, 30);
         g2.setStroke(new BasicStroke(5));
         g2.setFont(new Font("Consolas", Font.BOLD, 30));
