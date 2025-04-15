@@ -23,14 +23,14 @@ public class Play {
     private boolean coinAdded;
     private int timeInSeconds;
     private int miliSeconds;
-    private static final int PRAH_ZASTAVENIA_HRACA = 99;
-    private static final int PRAH_DALSIEJ_UROVNE_HRACA = 100;
-    private static final double NASOBIC_POKODENIA_UTOKU = 0.08;
-    private static final String SUBOR_S_DATAMI_NEPRIATELOV = "res/data/enemies.txt";
-    private static final int CASOVY_LIMIT_SEKUND = 300;
-    private static final int MILISEKUND_NA_SEKUNDU = 60;
-    private static final int DOSAH_UTOKU_HRACA_VPRAVO = 80;
-    private static final int DOSAH_UTOKU_HRACA_VLAVO = 150;
+    private static final int PLAYER_STOP_THRESHOLD = 99;
+    private static final int PLAYER_NEXT_LEVEL_THRESHOLD = 100;
+    private static final double ATTACK_DAMAGE_MULTIPLIER = 0.08;
+    private static final String ENEMIES_DATA_FILE = "res/data/enemies.txt";
+    private static final int TIME_LIMIT_SECONDS = 300;
+    private static final int MILLISECONDS_PER_SECOND = 60;
+    private static final int PLAYER_ATTACK_RANGE_RIGHT = 80;
+    private static final int PLAYER_ATTACK_RANGE_LEFT = 150;
 
     /**
      * Vytvorí novú inštanciu triedy {@code Play}, inicializuje herné prostredie,
@@ -44,9 +44,9 @@ public class Play {
         this.enemies = new ArrayList<>();
         this.currentEntities = new ArrayList<>();
         this.currentEntities.add(this.player);
-        this.timeInSeconds = CASOVY_LIMIT_SEKUND;
+        this.timeInSeconds = TIME_LIMIT_SECONDS;
         this.miliSeconds = 0;
-        this.nacitajNepriatelov();
+        this.loadEnemies();
         this.currentEntities.add(this.enemies.getFirst());
         this.numberOfCoins = 0;
         this.coinAdded = true;
@@ -57,8 +57,8 @@ public class Play {
      * triedy {@code Enemy}.
      * @throws FileNotFoundException Ak sa nenájde súbor s dátami nepriateľov.
      */
-    private void nacitajNepriatelov() throws FileNotFoundException {
-        File enemyFile = new File(SUBOR_S_DATAMI_NEPRIATELOV);
+    private void loadEnemies() throws FileNotFoundException {
+        File enemyFile = new File(ENEMIES_DATA_FILE);
         try (Scanner input = new Scanner(enemyFile)) {
             while (input.hasNextLine()) {
                 EntityType enemyType = EntityType.MONSTER.getByName(input.nextLine());
@@ -74,8 +74,8 @@ public class Play {
      * časovača a zozbieraných mincí.
      */
     public void reset() {
-        this.levelManager.resetSipku();
-        this.timeInSeconds = CASOVY_LIMIT_SEKUND;
+        this.levelManager.resetArrow();
+        this.timeInSeconds = TIME_LIMIT_SECONDS;
         this.numberOfCoins = 0;
         this.player.getHpBar().resetHP();
         for (Entity entity : this.currentEntities) {
@@ -94,11 +94,11 @@ public class Play {
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.BLACK);
-        this.levelManager.getPozadie1().draw(g);
-        this.levelManager.getPozadie2().draw(g);
-        this.levelManager.getPozadie3().draw(g);
-        this.levelManager.getSipku().draw(g);
-        this.levelManager.getZem().draw(g);
+        this.levelManager.getBackground1().draw(g);
+        this.levelManager.getBackground2().draw(g);
+        this.levelManager.getBackground3().draw(g);
+        this.levelManager.getArrow().draw(g);
+        this.levelManager.getGround().draw(g);
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.drawString("Time", 500, 70);
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);
@@ -120,10 +120,10 @@ public class Play {
      * a pohybuje hráčom.
      */
     public void moveRight() {
-        boolean mozeSkrolovat = this.currentEntities.getLast().isDead();
-        this.levelManager.posunDoprava(mozeSkrolovat);
-        this.player.moveHorizontaly(Direction.RIGHT, mozeSkrolovat);
-        if (this.player.getX() > PRAH_ZASTAVENIA_HRACA && mozeSkrolovat) {
+        boolean canScroll = this.currentEntities.getLast().isDead();
+        this.levelManager.scrollRight(canScroll);
+        this.player.moveHorizontaly(Direction.RIGHT, canScroll);
+        if (this.player.getX() > PLAYER_STOP_THRESHOLD && canScroll) {
             this.player.moveWithoutAnimation();
         }
     }
@@ -183,7 +183,7 @@ public class Play {
      * Pokúsi sa pridať mincu do hráčovej zbierky, ak nebola nedávno pridaná
      * a aktuálny nepriateľ je mŕtvy.
      */
-    private void tryToAddCoin() {
+    private void tryAddCoin() {
         if (!this.coinAdded && this.currentEntities.getLast().isDead()) {
             this.numberOfCoins++;
             this.coinAdded = true;
@@ -194,9 +194,9 @@ public class Play {
      * Aktualizuje herný časovač, dekrementuje čas v sekundách na základe
      * uplynulých milisekúnd.
      */
-    private void outOfTimeControl() {
+    private void updateTime() {
         this.miliSeconds++;
-        if (this.miliSeconds == MILISEKUND_NA_SEKUNDU && !this.outOfTime()) {
+        if (this.miliSeconds == MILLISECONDS_PER_SECOND && !this.outOfTime()) {
             this.miliSeconds = 0;
             this.timeInSeconds--;
         }
@@ -206,9 +206,9 @@ public class Play {
      * Iniciuje sekvenciu prechodu na ďalšiu úroveň, zneviditeľní aktuálneho
      * nepriateľa a zobrazí šípku prechodu na úroveň.
      */
-    private void levelTransition() {
+    private void initiateLevelTransition() {
         this.currentEntities.getLast().setVisible(false);
-        this.levelManager.zobrazSipku();
+        this.levelManager.showArrow();
         this.coinAdded = false;
     }
 
@@ -217,11 +217,11 @@ public class Play {
      * (hráč blízko ľavého okraja, aktuálny nepriateľ mŕtvy a šípka mimo obrazovky).
      * Ak áno, pokúsi sa nájsť ďalšieho živého nepriateľa.
      */
-    private void readyForNextLevelCheck() {
-        if (this.player.getX() < PRAH_DALSIEJ_UROVNE_HRACA && this.currentEntities.getLast().isDead() && this.levelManager.getSipku().getX() < -100) {
+    private void checkReadyForNextLevel() {
+        if (this.player.getX() < PLAYER_NEXT_LEVEL_THRESHOLD && this.currentEntities.getLast().isDead() && this.levelManager.getArrow().getX() < -100) {
             if (this.isAnyAliveEnemy()) {
                 this.findAliveEnemy();
-                this.levelManager.resetSipku();
+                this.levelManager.resetArrow();
             }
         }
     }
@@ -230,10 +230,10 @@ public class Play {
      * Skontroluje, či je hráč v dosahu útoku aktuálneho nepriateľa.
      * @return {@code true}, ak je hráč v oblasti útoku, inak {@code false}.
      */
-    private boolean inAttackArea() {
+    private boolean isInAttackArea() {
         int enemyX = this.currentEntities.getLast().getX();
         int playerX = this.player.getX();
-        return playerX + DOSAH_UTOKU_HRACA_VPRAVO > enemyX && playerX - DOSAH_UTOKU_HRACA_VLAVO < enemyX;
+        return playerX + PLAYER_ATTACK_RANGE_RIGHT > enemyX && playerX - PLAYER_ATTACK_RANGE_LEFT < enemyX;
     }
 
     /**
@@ -241,14 +241,14 @@ public class Play {
      * Kontroluje útočiace entity a aplikuje poškodenie, ak je zásah zaregistrovaný
      * počas príslušného snímku animácie.
      */
-    private void tryFight() {
-        if (this.inAttackArea()) {
+    private void handleCombat() {
+        if (this.isInAttackArea()) {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     Entity target = (entity instanceof Player) ? this.currentEntities.getLast() : this.player;
                     if (target != null && target.isVisible()) {
                         int damage = (entity instanceof Player)
-                                ? (int)Math.ceil(this.player.getKnightType().getAttack() * NASOBIC_POKODENIA_UTOKU)
+                                ? (int)Math.ceil(this.player.getKnightType().getAttack() * ATTACK_DAMAGE_MULTIPLIER)
                                 : entity.getEntityType().getAttack();
                         target.hit(damage);
                         entity.setHitRegistered(true);
@@ -270,12 +270,12 @@ public class Play {
             }
         }
         if (this.currentEntities.getLast().isDead() && this.currentEntities.getLast().isVisible()) {
-            this.levelTransition();
+            this.initiateLevelTransition();
         }
-        this.outOfTimeControl();
-        this.tryToAddCoin();
-        this.readyForNextLevelCheck();
-        this.tryFight();
+        this.updateTime();
+        this.tryAddCoin();
+        this.checkReadyForNextLevel();
+        this.handleCombat();
         if (this.currentEntities.getLast() instanceof Enemy) {
             ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
         }
@@ -288,6 +288,6 @@ public class Play {
      */
     public void setBiom(Biom biom) {
         this.biom = biom;
-        this.levelManager.nastavBiom(this.biom.name());
+        this.levelManager.setBiom(this.biom.name());
     }
 }
