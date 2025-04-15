@@ -109,10 +109,10 @@ public class LevelManager {
      */
     public void scrollRight(boolean canScroll) {
         if (canScroll) {
-            this.scrollElement(this.background2, LevelManager.BACKGROUND_WIDTH, this.background2.getY(), this.background2ScrollSpeed);
-            this.scrollElement(this.background1, LevelManager.BACKGROUND_WIDTH, this.background1.getY(), this.background1ScrollSpeed);
-            this.scrollElement(this.ground, LevelManager.BACKGROUND_WIDTH, this.ground.getY(), this.groundScrollSpeed);
-            this.scrollElement(this.background3, LevelManager.BACKGROUND_WIDTH, this.background2.getY(), this.background3ScrollSpeed);
+            this.scrollElement(this.background2, this.background2.getY(), this.background2ScrollSpeed);
+            this.scrollElement(this.background1, this.background1.getY(), this.background1ScrollSpeed);
+            this.scrollElement(this.ground, this.ground.getY(), this.groundScrollSpeed);
+            this.scrollElement(this.background3, this.background2.getY(), this.background3ScrollSpeed);
             this.arrow.changeCords(this.arrow.getX() - this.arrowScrollSpeed, this.arrow.getY());
         }
     }
@@ -122,11 +122,10 @@ public class LevelManager {
      * Ak sa prvok posunie za určitú hranicu, resetuje sa na začiatok,
      * čím sa vytvorí efekt plynulého skrolovania.
      * @param picture Prvok typu {@code Picture}, ktorý sa má posunúť.
-     * @param width Šírka posúvanej oblasti.
      * @param y Y-ová súradnica obrázka.
      * @param speed Rýchlosť posunu.
      */
-    private void scrollElement(Picture picture, int width, int y, int speed) {
+    private void scrollElement(Picture picture, int y, int speed) {
         if (picture.getX() < BACKGROUND_SCROLL_THRESHOLD) {
             picture.changeCords(0, y);
         }
