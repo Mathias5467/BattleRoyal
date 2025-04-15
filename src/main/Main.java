@@ -4,7 +4,16 @@ import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import java.io.IOException;
 
+/**
+ * Hlavná trieda aplikácie {@code Main}, ktorá spúšťa hru "Battle Royal".
+ * Vytvára okno aplikácie, inicializuje hru a zobrazí ju.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class Main {
+    /**
+     * Hlavná metóda programu, ktorá je spustená pri spustení aplikácie.
+     */
     public static void main(String[] args) throws IOException {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

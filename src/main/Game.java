@@ -16,6 +16,13 @@ import gui.*;
 import input.KeyInput;
 import input.KeyType;
 import backend.Biom;
+
+/**
+ * Hlavná trieda {@code Game}, ktorá rozširuje {@code JPanel} a implementuje {@code Runnable} pre hernú slučku.
+ * Riadi herné stavy, spracováva vstup, aktualizuje hernú logiku a vykresľuje herné prvky.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class Game extends JPanel implements Runnable {
     private static final int WIDTH = 1100;
     private static final int HEIGHT = 700;
@@ -33,6 +40,10 @@ public class Game extends JPanel implements Runnable {
     private KnightType knightType;
     private final Play play;
     private int numberOfCoins;
+
+    /**
+     * Konštruktor triedy {@code Game}. Inicializuje herné komponenty, nastavenia a načíta dáta.
+     */
     public Game() throws FileNotFoundException {
         this.setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
         this.setDoubleBuffered(true);
@@ -57,6 +68,9 @@ public class Game extends JPanel implements Runnable {
 
     }
 
+    /**
+     * Spúšťa hernú slučku a nastavuje počiatočné stavy pre hru a možnosti.
+     */
     public void start() {
         this.running = true;
         this.frameCount = 0;
@@ -66,6 +80,9 @@ public class Game extends JPanel implements Runnable {
         this.mapOption.setNumberOfCoins(this.numberOfCoins);
     }
 
+    /**
+     * Obsahuje hlavnú hernú slučku, ktorá riadi aktualizáciu a vykresľovanie hry.
+     */
     @Override
     public void run() {
         var fps = 60;
@@ -95,6 +112,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Spracováva vstup používateľa v časti menu.
+     * @param pressed Mapa stlačených klávesov.
+     */
     private void handleMenu(Map<KeyType, Boolean> pressed) throws FileNotFoundException {
         if (pressed.get(KeyType.UP)) {
             this.menu.selectOption(-1);
@@ -117,6 +138,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Spracováva vstup používateľa v stave výberu rytierov.
+     * @param pressed Mapa stlačených klávesov.
+     */
     private void handleKnightOptions(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
             this.knightOption.selectOption(-1);
@@ -133,6 +158,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Spracováva vstup používateľa v stave výberu máp.
+     * @param pressed Mapa stlačených klávesov.
+     */
     private void handleMapOptions(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
             this.mapOption.selectOption(-1);
@@ -148,6 +177,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Spracováva vstup používateľa počas samotnej hry.
+     * @param pressed Mapa stlačených klávesov.
+     */
     private void handlePlay(Map<KeyType, Boolean> pressed) {
         if (!this.dialog.isVisible()) {
             if (pressed.get(KeyType.LEFT)) {
@@ -166,6 +199,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Spracováva vstup používateľa počas zobrazeného dialógového okna.
+     * @param pressed Mapa stlačených klávesov.
+     */
     private void handleDialog(Map<KeyType, Boolean> pressed) {
         if (pressed.get(KeyType.LEFT)) {
             this.dialog.selectOption(-1);
@@ -187,6 +224,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Hlavná metóda pre spracovanie vstupu. Porovnáva aktuálne stlačené klávesy s predchádzajúcim stavom
+     * a volá príslušné metódy pre daný herný stav pri stlačení klávesy.
+     */
     public void handleInput() throws FileNotFoundException {
         var alreadyPressed = this.keyInput.getKeys();
         var keyTyped = false;
@@ -214,6 +255,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Prekresľuje herné komponenty na základe aktuálneho herného stavu.
+     * @param g Grafický kontext, na ktorý sa majú herné prvky vykresliť.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -228,6 +273,9 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Aktualizuje hernú logiku na základe aktuálneho herného stavu.
+     */
     private void update() {
         if (this.gameState == GameState.PLAY && !this.dialog.isVisible()) {
             this.play.update();
@@ -241,6 +289,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Určuje, či hra skončila a aký je výsledný stav hry.
+     * @return Enum {@code PlayState} reprezentujúci stav konca hry, alebo {@code null}, ak hra stále prebieha.
+     */
     private PlayState determineEndGameState() {
         if (this.play.outOfTime()) {
             return PlayState.TIME_OUT;

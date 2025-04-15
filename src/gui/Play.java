@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Trieda {@code Play} riadi hernú logiku počas samotnej hry.
+ * Obsahuje inicializáciu prostredia, správu entít (hráča a nepriateľov),
+ * pohyb pozadia, časovač a detekciu konca úrovne a súbojov.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class Play {
     private Picture background1;
     private Picture background2;
@@ -25,6 +32,11 @@ public class Play {
     private boolean coinAdded;
     private int timeInSeconds;
     private int miliSeconds;
+
+    /**
+     * Konštruktor triedy {@code Play}. Inicializuje herné prostredie, načítava pozadia,
+     * vytvára hráča a načítava zoznam nepriateľov zo súboru.
+     */
     public Play() throws FileNotFoundException {
         this.biom = Biom.FOREST;
         this.background1 = new Picture(0, 0, 2200, 700, String.format("res/back/%s/b1.png", this.biom.name()));
@@ -49,6 +61,10 @@ public class Play {
         this.coinAdded = true;
     }
 
+    /**
+     * Resetuje hernú úroveň do počiatočného stavu. Skryje šípku, obnoví čas,
+     * vynuluje počet mincí a premiestni všetky entity na ich štartovacie pozície.
+     */
     public void reset() {
         this.arrow.setVisible(false);
         this.timeInSeconds = 300;
@@ -62,6 +78,10 @@ public class Play {
         }
     }
 
+    /**
+     * Vykresľuje herné prostredie a všetky entity na zadaný grafický kontext.
+     * @param g Grafický kontext, na ktorý sa majú herné prvky vykresliť.
+     */
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.BLACK);
@@ -78,13 +98,18 @@ public class Play {
         }
     }
 
+    /**
+     * Vráti inštanciu hráča.
+     * @return Inštancia triedy {@code Player}.
+     */
     public Player getPlayer() {
         return this.player;
     }
 
-
-
-
+    /**
+     * Posúva pozadie pri prechode medzi levelmi a hráča počas hry doprava.
+     * Rýchlosť posúvania jednotlivých vrstiev pozadia sa líši pre vytvorenie paralaxného efektu.
+     */
     public void moveRight() {
         if (this.currentEntities.getLast().isDead()) {
             if (this.background2.getX() < -1100) {
@@ -114,10 +139,17 @@ public class Play {
 
     }
 
+    /**
+     * Posúva hráča doľava.
+     */
     public void moveLeft() {
         this.player.moveHorizontaly(Direction.LEFT, this.currentEntities.getLast().isDead());
     }
 
+    /**
+     * Nájde a nastaví ďalšieho živého nepriateľa ako aktuálnu bojovú entitu.
+     * Odstráni predchádzajúceho nepriateľa zo zoznamu aktuálnych entít a pridá nového, ak existuje.
+     */
     public void findAliveEnemy() {
         this.currentEntities.removeLast();
         for (Enemy enemy : this.enemies) {
@@ -129,6 +161,10 @@ public class Play {
         }
     }
 
+    /**
+     * Kontroluje, či existuje aspoň jeden živý nepriateľ v zozname.
+     * @return {@code true}, ak existuje aspoň jeden živý nepriateľ, inak {@code false}.
+     */
     public boolean isAnyAliveEnemy() {
         for (Enemy enemy : this.enemies) {
             if (!enemy.isDead()) {
@@ -138,14 +174,26 @@ public class Play {
         return false;
     }
 
+    /**
+     * Kontroluje, či vypršal časový limit pre aktuálnu úroveň.
+     * @return {@code true}, ak je časovač na nule, inak {@code false}.
+     */
     public boolean outOfTime() {
         return this.timeInSeconds == 0;
     }
 
+    /**
+     * Vráti aktuálny počet získaných mincí.
+     * @return Celkový počet mincí.
+     */
     public int getNumberOfCoins() {
         return this.numberOfCoins;
     }
 
+    /**
+     * Pokúsi sa pridať mincu k celkovému počtu, ak bol aktuálny nepriateľ porazený
+     * a minca ešte nebola pridaná za tohto nepriateľa.
+     */
     private void tryToAddCoin() {
         if (!this.coinAdded && this.currentEntities.getLast().isDead()) {
             this.numberOfCoins++;
@@ -153,6 +201,9 @@ public class Play {
         }
     }
 
+    /**
+     * Riadi časovač hry, znižuje počet sekúnd každých 60 milisekúnd.
+     */
     private void outOfTimeControl() {
         this.miliSeconds++;
         if (this.miliSeconds == 60 && !this.outOfTime()) {
@@ -161,12 +212,21 @@ public class Play {
         }
     }
 
+    /**
+     * Spustí prechod na ďalšiu úroveň. Skryje porazeného nepriateľa a zobrazí šípku
+     * indikujúcu smer ďalšieho postupu. Resetuje príznak pridania mince.
+     */
     private void levelTransition() {
         this.currentEntities.getLast().setVisible(false);
         this.arrow.setVisible(true);
         this.coinAdded = false;
     }
 
+    /**
+     * Kontroluje, či je hráč pripravený na prechod na ďalšiu úroveň.
+     * Ak je hráč na začiatku obrazovky, aktuálny nepriateľ je porazený a šípka mimo obrazovky,
+     * nájde ďalšieho živého nepriateľa a resetuje pozíciu šípky.
+     */
     private void readyForNextLevelCheck() {
         if (this.player.getX() < 100 && this.currentEntities.getLast().isDead() && this.arrow.getX() < -100) {
             if (this.isAnyAliveEnemy()) {
@@ -177,12 +237,17 @@ public class Play {
         }
     }
 
+    /**
+     * Kontroluje, či sa entity nachádzajú v oblasti útoku a ak áno, registruje zásah
+     * a aplikuje poškodenie na základe typu útočiacej entity.
+     */
     private void tryFight() {
         if (this.inAttackArea()) {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     if (entity instanceof  Player && this.currentEntities.getLast().isVisible()) {
                         this.currentEntities.getLast().hit((int)Math.ceil(this.player.getKnightType().getAttack() * 0.08));
+
                     } else {
                         this.player.hit(this.currentEntities.getLast().getEntityType().getAttack());
                     }
@@ -192,10 +257,18 @@ public class Play {
         }
     }
 
+    /**
+     * Kontroluje, či sa hráč nachádza v oblasti útoku aktuálneho nepriateľa.
+     * @return {@code true}, ak je hráč v oblasti útoku, inak {@code false}.
+     */
     private boolean inAttackArea() {
         return this.player.getX() + 80 > this.currentEntities.getLast().getX() && this.player.getX() - 150 < this.currentEntities.getLast().getX();
     }
 
+    /**
+     * Aktualizuje stav hry, animácie entít, kontroluje prechod na ďalšiu úroveň,
+     * riadi časovač, pokúša sa pridať mincu a spúšťa umelú inteligenciu nepriateľa.
+     */
     public void update() {
 
         for (Entity entity : this.currentEntities) {
@@ -214,7 +287,10 @@ public class Play {
         ((Enemy)this.currentEntities.getLast()).enemyAI(this.player);
     }
 
-
+    /**
+     * Nastaví aktuálny biom (prostredie) hry a zmení pozadia na zodpovedajúce.
+     * @param biom Enum {@code Biom} reprezentujúci nové prostredie.
+     */
     public void setBiom(Biom biom) {
         this.biom = biom;
         this.background1.changeImage(String.format("res/back/%s/b1.png", this.biom.name()));

@@ -9,6 +9,12 @@ import java.awt.Color;
 import java.awt.BasicStroke;
 import java.awt.Font;
 
+/**
+ * Trieda {@code Dialog} reprezentuje dialógové okno, ktoré sa zobrazuje v hre na potvrdenie akcie,
+ * napríklad ukončenia hry. Môže tiež zobrazovať správy o výsledku hry.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class Dialog extends SelectOption {
     private boolean visible;
     private ConfirmDialog[] options;
@@ -16,6 +22,11 @@ public class Dialog extends SelectOption {
     private ConfirmDialog chosenOption;
     private int counter;
 
+    /**
+     * Konštruktor triedy {@code Dialog}. Inicializuje viditeľnosť dialógu na {@code false},
+     * nastavuje počiatočný výber na "Áno", definuje dostupné možnosti (Áno/Nie)
+     * a počiatočný stav hry na remízu.
+     */
     public Dialog() {
         this.visible = false;
         this.counter = 0;
@@ -24,6 +35,11 @@ public class Dialog extends SelectOption {
         this.playState = PlayState.TIE;
     }
 
+    /**
+     * Posunie výber v dialógovom okne medzi dostupnými možnosťami (Áno/Nie).
+     * Aktualizuje index vybranej možnosti a samotnú vybranú možnosť.
+     * @param direction Smer posunu (-1 pre doľava/predchádzajúca, 1 pre doprava/nasledujúca).
+     */
     @Override
     public void selectOption(int direction) {
         this.counter += direction;
@@ -31,10 +47,20 @@ public class Dialog extends SelectOption {
         this.chosenOption = this.options[this.counter];
     }
 
+    /**
+     * Nastaví stav hry, ktorý sa má zobraziť v dialógovom okne (napr. výhra, prehra, čas vypršal).
+     * @param playState Enum {@code PlayState} reprezentujúci stav hry.
+     */
     public void setPlayState(PlayState playState) {
         this.playState = playState;
     }
 
+    /**
+     * Vykresľuje dialógové okno s otázkou na ukončenie hry a možnosťami Áno/Nie.
+     * Ak je nastavený stav hry (výhra, prehra, čas vypršal), zobrazí príslušnú správu.
+     * Aktuálne vybraná možnosť je vizuálne zvýraznená.
+     * @param g Grafický kontext, na ktorý sa má dialógové okno vykresliť.
+     */
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setStroke(new BasicStroke(8));
@@ -73,17 +99,27 @@ public class Dialog extends SelectOption {
 
     }
 
+    /**
+     * Zisťuje, či je dialógové okno aktuálne viditeľné.
+     * @return {@code true}, ak je dialóg viditeľný, inak {@code false}.
+     */
     public boolean isVisible() {
         return this.visible;
     }
 
+    /**
+     * Nastavuje viditeľnosť dialógového okna.
+     * @param visible {@code true} pre zobrazenie dialógu, {@code false} pre skrytie.
+     */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
+    /**
+     * Vráti aktuálne vybratú možnosť v dialógovom okne (Áno alebo Nie).
+     * @return Enum {@code ConfirmDialog} reprezentujúci zvolenú možnosť.
+     */
     public ConfirmDialog getChosenOption() {
         return this.chosenOption;
     }
-
-
 }

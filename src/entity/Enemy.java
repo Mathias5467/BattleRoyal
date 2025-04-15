@@ -2,10 +2,22 @@ package entity;
 
 import main.Picture;
 
+/**
+ * Trieda {@code Enemy} reprezentuje nepriateľské entity v hre.
+ * Dedií od triedy {@code Entity} a pridáva špecifické správanie pre nepriateľov,
+ * ako je jednoduchá umelá inteligencia (AI) pre pohyb a útok na hráča.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class Enemy extends Entity {
     private int attackCounter;
-    public Enemy(EntityType entityType) {
 
+    /**
+     * Konštruktor triedy {@code Enemy}. Inicializuje nepriateľa so zadaným typom entity.
+     * Nastavuje počiatočné pozície, obrázok, smer, HP bar a rýchlosť pohybu.
+     * @param entityType Typ entity nepriateľa (napr. SKELETON, VIKING).
+     */
+    public Enemy(EntityType entityType) {
         super(
                 800,
                 465,
@@ -19,6 +31,11 @@ public class Enemy extends Entity {
         this.attackCounter = 0;
     }
 
+    /**
+     * Vráti cestu k súboru s obrázkom nepriateľa na základe jeho typu entity,
+     * typu pohybu, smeru a čísla aktuálnej animácie.
+     * @return Cesta k súboru s obrázkom nepriateľa.
+     */
     @Override
     public String getPictureName() {
         return String.format("res/%s/%s%s%s.png",
@@ -28,6 +45,11 @@ public class Enemy extends Entity {
                 this.getNumberOfAnimation());
     }
 
+    /**
+     * Aplikuje poškodenie na nepriateľa a znižuje jeho životy.
+     * Ak životy klesnú na 0, spustí animáciu smrti.
+     * @param damage Hodnota poškodenia, ktoré nepriateľ utrpel.
+     */
     @Override
     public void hit(int damage) {
         this.getHpBar().reduceHP(damage);
@@ -36,6 +58,12 @@ public class Enemy extends Entity {
         }
     }
 
+    /**
+     * Implementuje jednoduchú umelú inteligenciu pre pohyb a útok nepriateľa.
+     * Nepriateľ sa pokúša priblížiť k hráčovi a zaútočiť, ak je v dosahu.
+     * Ak je hráč mŕtvy, nepriateľ zostane stáť.
+     * @param player Inštancia triedy {@code Player} reprezentujúca hráča.
+     */
     public void enemyAI(Player player) {
         this.attackCounter++;
         if (!player.isDead()) {

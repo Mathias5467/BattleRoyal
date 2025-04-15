@@ -6,22 +6,40 @@ import main.Picture;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
+/**
+ * Trieda {@code KnightOptions} rozširuje {@code Options} a poskytuje obrazovku pre výber rytiera v hre.
+ * Zobrazuje dostupné typy rytierov, ich štatistiky a cenu (ak ešte neboli zakúpení).
+ * Umožňuje hráčovi vybrať si rytiera alebo si ho zakúpiť, ak má dostatok mincí.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class KnightOptions extends Options<KnightType> {
     private final Picture knightPicture;
     private final Picture coinPicture;
     private static final int TILE = 3;
 
+    /**
+     * Konštruktor triedy {@code KnightOptions}. Inicializuje obrazovku s možnosťami výberu rytiera,
+     * načítava obrázky rytiera a ikonu mince. Volá konštruktor rodičovskej triedy {@code Options}
+     * s informáciami o zakúpených rytieroch.
+     * @param numberOfCoins Aktuálny počet mincí hráča.
+     */
     public KnightOptions(int numberOfCoins) throws FileNotFoundException {
         super(numberOfCoins, "knightsBought", KnightType.RED);
         this.knightPicture = new Picture(665, 220, 270, 290, String.format("res/knight/%s/stayL.png", this.getOption().getColor()));
         this.coinPicture = new Picture(95, 120, 40, 40, "res/coin.png");
     }
 
+    /**
+     * Posunie výber rytiera v danom smere (doľava alebo doprava). Aktualizuje aktuálne vybratého rytiera
+     * a mení obrázok rytiera na základe toho, či je vybratý rytier zakúpený alebo zamknutý.
+     * @param direction Smer posunu (-1 pre doľava, 1 pre doprava).
+     */
     @Override
     public void selectOption(int direction) {
         super.selectOption(direction);
 
-        // Update the knight picture based on selection
+        // Aktualizácia obrázka rytiera na základe výberu
         if (!this.getOptionsBought().get(this.getOption())) {
             this.knightPicture.changeImage("res/lock.png");
         } else {
@@ -29,6 +47,11 @@ public class KnightOptions extends Options<KnightType> {
         }
     }
 
+    /**
+     * Vykresľuje obrazovku s možnosťami výberu rytiera. Zobrazuje náhľad aktuálne vybratého rytiera,
+     * štatistiky rytierov, cenu nezakúpených rytierov, ikonu mince a informácie o ovládaní.
+     * @param g Grafický kontext, na ktorý sa má obrazovka vykresliť.
+     */
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setStroke(new BasicStroke(5));

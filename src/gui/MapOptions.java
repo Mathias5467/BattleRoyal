@@ -6,6 +6,13 @@ import main.Picture;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
+/**
+ * Trieda {@code MapOptions} rozširuje {@code Options} a poskytuje obrazovku pre výber biomu (mapy) v hre.
+ * Zobrazuje dostupné biomy, ich náhľady a cenu (ak ešte neboli zakúpené).
+ * Umožňuje hráčovi vybrať si biom alebo si ho zakúpiť, ak má dostatok mincí.
+ * @author Matúš Pytel
+ * @version 15.4.2025
+ */
 public class MapOptions extends Options<Biom> {
     private Picture biom1;
     private Picture biom2;
@@ -13,6 +20,12 @@ public class MapOptions extends Options<Biom> {
     private Picture coinPicture;
     private Picture[] bioms;
 
+    /**
+     * Konštruktor triedy {@code MapOptions}. Inicializuje obrazovku s možnosťami výberu biomu,
+     * načítava obrázky biomov a ikonu mince. Volá konštruktor rodičovskej triedy {@code Options}
+     * s informáciami o zakúpených biomoch.
+     * @param numberOfCoins Aktuálny počet mincí hráča.
+     */
     public MapOptions(int numberOfCoins) throws FileNotFoundException {
         super(numberOfCoins, "biomsBought", Biom.FOREST);
         this.coinPicture = new Picture(100, 540, 40, 40, "res/coin.png");
@@ -22,6 +35,11 @@ public class MapOptions extends Options<Biom> {
         this.bioms = new Picture[] {this.biom1, this.biom2, this.biom3};
     }
 
+    /**
+     * Vykresľuje obrazovku s možnosťami výberu biomu. Zobrazuje náhľady biomov,
+     * cenu nezakúpených biomov, ikonu mince a informácie o ovládaní. Aktuálne vybratý biom je orámovaný.
+     * @param g Grafický kontext, na ktorý sa má obrazovka vykresliť.
+     */
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         this.coinPicture.draw(g2);
@@ -35,7 +53,7 @@ public class MapOptions extends Options<Biom> {
                 case 2 -> currentBiom = Biom.MOUNTAIN;
             }
             if (currentBiom != null && !this.getOptionsBought().get(currentBiom)) {
-                g2.setColor(new Color(0, 0, 0, 150)); // Black with 150/255 opacity
+                g2.setColor(new Color(0, 0, 0, 150)); // Čierna s priehľadnosťou
                 g2.fillRoundRect(picture.getX(), picture.getY(), picture.getWidth(), picture.getHeight(), 20, 20);
 
                 String priceText = currentBiom.getPrice() + "$";
@@ -45,7 +63,6 @@ public class MapOptions extends Options<Biom> {
                 int textX = picture.getX() + (picture.getWidth() - metrics.stringWidth(priceText)) / 2;
                 int textY = picture.getY() + (picture.getHeight() - metrics.getHeight()) / 2 + metrics.getAscent();
 
-                // Draw the price text
                 g2.drawString(priceText, textX, textY);
             }
             if (currentBiom != null) {
