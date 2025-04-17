@@ -1,9 +1,13 @@
 package gui;
 
-import entity.KnightType;
-import main.Picture;
-
-import java.awt.*;
+import entity.utilities.KnightType;
+import gui.utilities.Options;
+import components.Picture;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.BasicStroke;
 import java.io.FileNotFoundException;
 
 /**

@@ -1,10 +1,16 @@
 package gui;
 
-import backend.Biom;
-import main.Picture;
+import gui.utilities.Biom;
+import gui.utilities.Options;
+import components.Picture;
 
-import java.awt.*;
 import java.io.FileNotFoundException;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.FontMetrics;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.BasicStroke;
 
 /**
  * Trieda {@code MapOptions} rozširuje {@code Options} a poskytuje obrazovku pre výber biomu (mapy) v hre.
@@ -14,11 +20,8 @@ import java.io.FileNotFoundException;
  * @version 15.4.2025
  */
 public class MapOptions extends Options<Biom> {
-    private Picture biom1;
-    private Picture biom2;
-    private Picture biom3;
-    private Picture coinPicture;
-    private Picture[] bioms;
+    private final Picture coinPicture;
+    private final Picture[] bioms;
 
     /**
      * Konštruktor triedy {@code MapOptions}. Inicializuje obrazovku s možnosťami výberu biomu,
@@ -29,10 +32,10 @@ public class MapOptions extends Options<Biom> {
     public MapOptions(int numberOfCoins) throws FileNotFoundException {
         super(numberOfCoins, "biomsBought", Biom.FOREST);
         this.coinPicture = new Picture(100, 540, 40, 40, "res/coin.png");
-        this.biom1 = new Picture(80, 250, 300, 200, "res/back/show/Forest.png");
-        this.biom2 = new Picture(400, 250, 300, 200, "res/back/show/Dune.png");
-        this.biom3 = new Picture(720, 250, 300, 200, "res/back/show/Mountain.png");
-        this.bioms = new Picture[] {this.biom1, this.biom2, this.biom3};
+        Picture biom1 = new Picture(80, 250, 300, 200, "res/back/show/Forest.png");
+        Picture biom2 = new Picture(400, 250, 300, 200, "res/back/show/Dune.png");
+        Picture biom3 = new Picture(720, 250, 300, 200, "res/back/show/Mountain.png");
+        this.bioms = new Picture[] {biom1, biom2, biom3};
     }
 
     /**

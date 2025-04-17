@@ -1,4 +1,4 @@
-package backend;
+package gui.utilities;
 
 /**
  * Enum `Biom` reprezentuje rôzne typy biomov s ich menami a cenami.

@@ -1,4 +1,4 @@
-package backend;
+package gui.utilities;
 
 /**
  * Rozhranie `NamedOption` definuje kontrakt pre objekty, ktoré majú meno, cenu a umožňujú vyhľadávanie podľa mena.

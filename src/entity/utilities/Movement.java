@@ -1,4 +1,4 @@
-package entity;
+package entity.utilities;
 
 /**
  * Enum {@code Movement} definuje rôzne typy pohybov a akcií, ktoré môžu entity v hre vykonávať.
@@ -17,7 +17,7 @@ public enum Movement {
     DYING("dying");
 
 
-    private String symbol;
+    private final String symbol;
 
     /**
      * Konštruktor pre enum {@code Movement}.

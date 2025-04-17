@@ -1,30 +1,26 @@
-package gui;
+package gui.utilities;
 
-import main.Picture;
+import components.Picture;
 
 /**
  * Trieda {@code LevelManager} spravuje vizuálne prvky hernej úrovne,
  * ako sú posúvajúce sa pozadia, zem a prechodová šípka.
  */
 public class LevelManager {
-    private Picture background1;
-    private Picture background2;
-    private Picture background3;
-    private Picture ground;
-    private Picture arrow;
-    private int background1ScrollSpeed = 1;
-    private int background2ScrollSpeed = 2;
-    private int background3ScrollSpeed = 3;
-    private int groundScrollSpeed = 4;
-    private int arrowScrollSpeed = 4;
+    private final Picture background1;
+    private final Picture background2;
+    private final Picture background3;
+    private final Picture ground;
+    private final Picture arrow;
+    private final int background1ScrollSpeed;
+    private final int background2ScrollSpeed;
+    private final int background3ScrollSpeed;
+    private final int groundScrollSpeed;
+    private final int arrowScrollSpeed;
     private static final int BACKGROUND_WIDTH = 2200;
     private static final int BACKGROUND_HEIGHT = 700;
-    private final int groundYCoordinate = 650;
-    private final int groundHeight = 58;
     private final int initialArrowXCoordinate = 800;
     private final int initialArrowYCoordinate = 535;
-    private final int arrowWidth = 100;
-    private final int arrowHeight = 155;
     private static final String GROUND_IMAGE_PATH = "res/back/ground.png";
     private static final String ARROW_IMAGE_PATH = "res/arrow.png";
     private static final String BACKGROUND1_IMAGE_FORMAT = "res/back/%s/b1.png";
@@ -38,11 +34,20 @@ public class LevelManager {
      * @param biomName Názov aktuálneho biomu hry.
      */
     public LevelManager(String biomName) {
+        this.background1ScrollSpeed = 1;
+        this.background2ScrollSpeed = 2;
+        this.background3ScrollSpeed = 3;
+        this.groundScrollSpeed = 4;
+        this.arrowScrollSpeed = 4;
+        int groundYCoordinate = 650;
         this.background1 = new Picture(0, 0, LevelManager.BACKGROUND_WIDTH, LevelManager.BACKGROUND_HEIGHT, String.format(BACKGROUND1_IMAGE_FORMAT, biomName));
         this.background2 = new Picture(0, 0, LevelManager.BACKGROUND_WIDTH, LevelManager.BACKGROUND_HEIGHT, String.format(BACKGROUND2_IMAGE_FORMAT, biomName));
         this.background3 = new Picture(0, 0, LevelManager.BACKGROUND_WIDTH, LevelManager.BACKGROUND_HEIGHT, String.format(BACKGROUND3_IMAGE_FORMAT, biomName));
-        this.ground = new Picture(0, this.groundYCoordinate, LevelManager.BACKGROUND_WIDTH, this.groundHeight, GROUND_IMAGE_PATH);
-        this.arrow = new Picture(this.initialArrowXCoordinate, this.initialArrowYCoordinate, this.arrowWidth, this.arrowHeight, ARROW_IMAGE_PATH);
+        int groundHeight = 58;
+        this.ground = new Picture(0, groundYCoordinate, LevelManager.BACKGROUND_WIDTH, groundHeight, GROUND_IMAGE_PATH);
+        int arrowWidth = 100;
+        int arrowHeight = 155;
+        this.arrow = new Picture(this.initialArrowXCoordinate, this.initialArrowYCoordinate, arrowWidth, arrowHeight, ARROW_IMAGE_PATH);
         this.arrow.setVisible(false);
     }
 

@@ -1,7 +1,12 @@
 package entity;
-import main.Picture;
+import entity.components.HPBar;
+import entity.utilities.Direction;
+import entity.utilities.EntityType;
+import entity.utilities.Movement;
+import components.Picture;
 
-import java.awt.*;
+import java.awt.Graphics;
+
 
 /**
  * Abstraktná trieda {@code Entity} je základom pre všetky hrateľné a nehrateľné postavy v hre.

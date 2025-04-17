@@ -1,4 +1,4 @@
-package entity;
+package entity.utilities;
 
 /**
  * Enum {@code EntityType} definuje rôzne typy entít, ktoré sa môžu v hre vyskytovať,

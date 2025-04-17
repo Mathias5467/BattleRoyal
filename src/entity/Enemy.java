@@ -1,6 +1,10 @@
 package entity;
 
-import main.Picture;
+import entity.components.HPBar;
+import entity.utilities.Direction;
+import entity.utilities.EntityType;
+import entity.utilities.Movement;
+import components.Picture;
 
 /**
  * Trieda {@code Enemy} reprezentuje nepriateľské entity v hre.

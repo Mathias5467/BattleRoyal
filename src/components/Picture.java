@@ -1,4 +1,4 @@
-package main;
+package components;
 
 import javax.swing.ImageIcon;
 import java.awt.Graphics;
@@ -15,8 +15,8 @@ public class Picture {
     private String picturePath;
     private int x;
     private int y;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private boolean isVisible;
 
     /**

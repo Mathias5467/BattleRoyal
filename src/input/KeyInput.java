@@ -14,7 +14,7 @@ import java.util.Map;
  * @version 15.4.2025
  */
 public class KeyInput implements KeyListener {
-    private EnumMap<KeyType, Boolean> keys;
+    private final EnumMap<KeyType, Boolean> keys;
 
     /**
      * Konštruktor triedy {@code KeyInput}. Inicializuje mapu pre sledovanie stavu kláves.

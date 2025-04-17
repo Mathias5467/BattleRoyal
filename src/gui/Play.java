@@ -1,8 +1,18 @@
 package gui;
 
-import backend.Biom;
-import entity.*;
-import java.awt.*;
+import gui.utilities.Biom;
+import entity.utilities.Direction;
+import entity.Enemy;
+import entity.Entity;
+import entity.utilities.EntityType;
+import entity.utilities.KnightType;
+import entity.Player;
+import gui.utilities.LevelManager;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Font;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,10 +24,10 @@ import java.util.Scanner;
  * správu entít, aktualizáciu hernej logiky a vykresľovanie počas hry.
  */
 public class Play {
-    private LevelManager levelManager;
-    private Player player;
-    private List<Enemy> enemies;
-    private List<Entity> currentEntities;
+    private final LevelManager levelManager;
+    private final Player player;
+    private final List<Enemy> enemies;
+    private final List<Entity> currentEntities;
     private Biom biom;
     private int numberOfCoins;
     private boolean coinAdded;

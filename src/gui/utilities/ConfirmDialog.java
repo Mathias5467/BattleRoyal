@@ -1,4 +1,4 @@
-package gui;
+package gui.utilities;
 
 /**
  * Enum {@code ConfirmDialog} definuje možnosti pre potvrdzovacie dialógové okná,
@@ -10,7 +10,7 @@ public enum ConfirmDialog {
     YES("Yes"),
     NO("No");
 
-    private String name;
+    private final String name;
 
     /**
      * Konštruktor pre enum {@code ConfirmDialog}.

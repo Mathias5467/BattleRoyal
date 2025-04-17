@@ -1,9 +1,9 @@
 package gui;
 
 
-import backend.SelectOption;
-import main.GameState;
-import main.Picture;
+import gui.utilities.SelectOption;
+import state.GameState;
+import components.Picture;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -18,9 +18,9 @@ import java.awt.Font;
  * @version 15.4.2025
  */
 public class Menu extends SelectOption {
-    private Picture background;
-    private GameState[] options;
-    private int[] rectangleChosenCords;
+    private final Picture background;
+    private final GameState[] options;
+    private final int[] rectangleChosenCords;
     private int chosenOptionNumber;
 
     /**

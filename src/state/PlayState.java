@@ -1,4 +1,4 @@
-package main;
+package state;
 
 /**
  * Enum {@code PlayState} reprezentuje rôzne stavy hry.

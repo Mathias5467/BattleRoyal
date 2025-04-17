@@ -4,18 +4,25 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
-import entity.KnightType;
-import entity.Movement;
-import gui.*;
-
+import entity.utilities.KnightType;
+import entity.utilities.Movement;
+import gui.utilities.ConfirmDialog;
+import gui.Dialog;
+import gui.KnightOptions;
+import gui.MapOptions;
+import gui.Menu;
+import gui.Play;
 import input.KeyInput;
 import input.KeyType;
-import backend.Biom;
+import gui.utilities.Biom;
+import state.GameState;
+import state.PlayState;
 
 /**
  * Hlavná trieda {@code Game}, ktorá rozširuje {@code JPanel} a implementuje {@code Runnable} pre hernú slučku.
@@ -65,7 +72,6 @@ public class Game extends JPanel implements Runnable {
         this.keysPressedReaction = new HashMap<>(this.keyInput.getKeys());
         this.knightType = this.knightOption.getOption();
         this.dialog = new Dialog();
-
     }
 
     /**

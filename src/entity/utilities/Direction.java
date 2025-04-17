@@ -1,4 +1,4 @@
-package entity;
+package entity.utilities;
 
 /**
  * Enum {@code Direction} definuje dva základné smery pohybu alebo orientácie entity v hre:
@@ -10,7 +10,7 @@ public enum Direction {
     RIGHT("R"),
     LEFT("L");
 
-    private String name;
+    private final String name;
 
     /**
      * Konštruktor pre enum {@code Direction}.

@@ -1,4 +1,4 @@
-package main;
+package state;
 
 /**
  * Enum {@code GameState} definuje rôzne stavy, v ktorých sa hra môže nachádzať.
@@ -12,7 +12,7 @@ public enum GameState {
     KNIGHTS("Knights"),
     MAPS("Map");
 
-    private String name;
+    private final String name;
 
     /**
      * Konštruktor pre enum {@code GameState}.

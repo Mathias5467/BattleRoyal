@@ -1,6 +1,6 @@
-package entity;
+package entity.utilities;
 
-import backend.NamedOption;
+import gui.utilities.NamedOption;
 
 /**
  * Enum {@code KnightType} definuje rôzne typy rytierov, ktoré môže hráč v hre zvoliť.
@@ -14,12 +14,12 @@ public enum KnightType implements NamedOption<KnightType> {
     GREEN("green", "Alaric", 100, 90, 70, 50),
     BLUE("blue", "Aragon", 100, 75, 85, 30);
 
-    private String color;
-    private String name;
-    private int hp;
-    private int attack;
-    private int defend;
-    private int price;
+    private final String color;
+    private final String name;
+    private final int hp;
+    private final int attack;
+    private final int defend;
+    private final int price;
 
     /**
      * Konštruktor pre enum {@code KnightType}.

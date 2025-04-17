@@ -1,7 +1,4 @@
-package gui;
-
-import backend.NamedOption;
-import backend.SelectOption;
+package gui.utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;

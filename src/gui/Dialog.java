@@ -1,7 +1,8 @@
 package gui;
 
-import backend.SelectOption;
-import main.PlayState;
+import gui.utilities.SelectOption;
+import gui.utilities.ConfirmDialog;
+import state.PlayState;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,7 +18,7 @@ import java.awt.Font;
  */
 public class Dialog extends SelectOption {
     private boolean visible;
-    private ConfirmDialog[] options;
+    private final ConfirmDialog[] options;
     private PlayState playState;
     private ConfirmDialog chosenOption;
     private int counter;

@@ -1,4 +1,4 @@
-package backend;
+package gui.utilities;
 
 /**
  * Abstraktná trieda `SelectOption` definuje základnú štruktúru pre výberové možnosti.

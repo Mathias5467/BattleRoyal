@@ -1,6 +1,11 @@
 package entity;
 
-import main.Picture;
+import entity.components.HPBar;
+import entity.utilities.Direction;
+import entity.utilities.EntityType;
+import entity.utilities.KnightType;
+import entity.utilities.Movement;
+import components.Picture;
 
 /**
  * Trieda {@code Player} reprezentuje hrateľnú postavu rytiera v hre.
