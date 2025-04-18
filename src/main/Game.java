@@ -25,16 +25,16 @@ import state.GameState;
 import state.PlayState;
 
 /**
- * Hlavná trieda {@code Game}, ktorá rozširuje {@code JPanel} a implementuje {@code Runnable} pre hernú slučku.
+ * Hlavná trieda {@code Game}, ktorá implementuje {@code Runnable} pre hernú slučku.
  * Riadi herné stavy, spracováva vstup, aktualizuje hernú logiku a vykresľuje herné prvky.
  * @author Matúš Pytel
  * @version 15.4.2025
  */
-public class Game extends JPanel implements Runnable {
+public class Game implements Runnable {
     private static final int WIDTH = 1100;
     private static final int HEIGHT = 700;
+    private final JPanel panel;
     private GameState gameState;
-    private Thread gameThread;
     private final KeyInput keyInput;
     private boolean running;
     private Map<KeyType, Boolean> keysPressedReaction;
@@ -52,16 +52,27 @@ public class Game extends JPanel implements Runnable {
      * Konštruktor triedy {@code Game}. Inicializuje herné komponenty, nastavenia a načíta dáta.
      */
     public Game() throws FileNotFoundException {
-        this.setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-        this.setBackground(new Color(43, 43, 43));
+        // Vytvorenie vnoreného panelu s prepisaním metódy paintComponent
+        this.panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Game.this.paintGame(g);
+            }
+        };
+
+        this.panel.setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
+        this.panel.setDoubleBuffered(true);
+        this.panel.setFocusable(true);
+        this.panel.setBackground(new Color(43, 43, 43));
+
         this.keyInput = new KeyInput();
-        this.addKeyListener(this.keyInput);
+        this.panel.addKeyListener(this.keyInput);
+
         File coinsFile = new File("res/data/coins.txt");
-        Scanner input = new Scanner(coinsFile);
-        this.numberOfCoins = input.nextInt();
-        input.close();
+        try (Scanner input = new Scanner(coinsFile)) {
+            this.numberOfCoins = input.nextInt();
+        }
         this.menu = new Menu();
         this.knightOption = new KnightOptions(this.numberOfCoins);
         this.mapOption = new MapOptions(this.numberOfCoins);
@@ -75,13 +86,21 @@ public class Game extends JPanel implements Runnable {
     }
 
     /**
+     * Metóda na získanie JPanel komponentu pre vloženie do okna.
+     * @return JPanel komponenta hry.
+     */
+    public JPanel getPanel() {
+        return this.panel;
+    }
+
+    /**
      * Spúšťa hernú slučku a nastavuje počiatočné stavy pre hru a možnosti.
      */
     public void start() {
         this.running = true;
         this.frameCount = 0;
-        this.gameThread = new Thread(this);
-        this.gameThread.start();
+        Thread gameThread = new Thread(this);
+        gameThread.start();
         this.knightOption.setNumberOfCoins(this.numberOfCoins);
         this.mapOption.setNumberOfCoins(this.numberOfCoins);
     }
@@ -135,9 +154,9 @@ public class Game extends JPanel implements Runnable {
                 this.dialog.setPlayState(PlayState.TIE);
             } else if (this.gameState == GameState.EXIT) {
                 File coinFile = new File("res/data/coins.txt");
-                PrintWriter input = new PrintWriter(coinFile);
-                input.println(this.numberOfCoins);
-                input.close();
+                try (PrintWriter input = new PrintWriter(coinFile)) {
+                    input.println(this.numberOfCoins);
+                }
                 this.knightOption.writeIntoFile();
                 this.mapOption.writeIntoFile();
             }
@@ -265,9 +284,7 @@ public class Game extends JPanel implements Runnable {
      * Prekresľuje herné komponenty na základe aktuálneho herného stavu.
      * @param g Grafický kontext, na ktorý sa majú herné prvky vykresliť.
      */
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paintGame(Graphics g) {
         switch (this.gameState) {
             case PLAY -> this.play.draw(g);
             case KNIGHTS -> this.knightOption.draw(g);
@@ -276,6 +293,15 @@ public class Game extends JPanel implements Runnable {
         }
         if (this.dialog.isVisible()) {
             this.dialog.draw(g);
+        }
+    }
+
+    /**
+     * Vyvolá prekresľovanie panelu.
+     */
+    public void repaint() {
+        if (this.panel != null) {
+            this.panel.repaint();
         }
     }
 
@@ -309,6 +335,4 @@ public class Game extends JPanel implements Runnable {
         }
         return null;
     }
-
-
 }

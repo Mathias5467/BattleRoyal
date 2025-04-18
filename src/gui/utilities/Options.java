@@ -39,16 +39,16 @@ public abstract class Options<T extends NamedOption<T>> extends SelectOption {
         this.optionsBought = new HashMap<>();
 
         File file = new File(String.format("res/data/%s.txt", this.dataPath));
-        Scanner input = new Scanner(file);
-        while (input.hasNextLine()) {
-            String[] data = input.nextLine().split(" ");
-            if (Integer.parseInt(data[1]) == 1) {
-                this.optionsBought.put(this.option.getByName(data[0]), true);
-            } else {
-                this.optionsBought.put(this.option.getByName(data[0]), false);
+        try (Scanner input = new Scanner(file)) {
+            while (input.hasNextLine()) {
+                String[] data = input.nextLine().split(" ");
+                if (Integer.parseInt(data[1]) == 1) {
+                    this.optionsBought.put(this.option.getByName(data[0]), true);
+                } else {
+                    this.optionsBought.put(this.option.getByName(data[0]), false);
+                }
             }
         }
-        input.close();
     }
 
     /**
@@ -56,15 +56,15 @@ public abstract class Options<T extends NamedOption<T>> extends SelectOption {
      */
     public void writeIntoFile() throws FileNotFoundException {
         File file = new File(String.format("res/data/%s.txt", this.dataPath));
-        PrintWriter input = new PrintWriter(file);
-        for (T optionInStore : this.optionsBought.keySet()) {
-            if (this.optionsBought.get(optionInStore)) {
-                input.println(String.format("%s 1", optionInStore.getName()));
-            } else {
-                input.println(String.format("%s 0", optionInStore.getName()));
+        try (PrintWriter input = new PrintWriter(file)) {
+            for (T optionInStore : this.optionsBought.keySet()) {
+                if (this.optionsBought.get(optionInStore)) {
+                    input.println(String.format("%s 1", optionInStore.getName()));
+                } else {
+                    input.println(String.format("%s 0", optionInStore.getName()));
+                }
             }
         }
-        input.close();
     }
 
     /**

@@ -21,7 +21,7 @@ public class Main {
         window.setIconImage(new ImageIcon("res/logo.png").getImage());
         window.setResizable(false);
         Game game = new Game();
-        window.add(game);
+        window.add(game.getPanel());
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
