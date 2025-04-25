@@ -16,9 +16,9 @@ public class HPBar {
     private final int x;
     private final int y;
     private int actualHP;
-    private int maximalHP;
+    private final int maximalHP;
     private int width;
-    private int maxWidth;
+    private final int maxWidth;
     private final int height;
     private final int tileSize;
     private String name;
@@ -82,16 +82,6 @@ public class HPBar {
     }
 
     /**
-     * Nastaví maximálnu hodnotu životov a prepočíta maximálnu šírku HP baru.
-     * @param hp Nová maximálna hodnota životov.
-     */
-    public void setHP(int hp) {
-        this.maximalHP = hp;
-        this.resetWidth();
-        this.maxWidth = this.maximalHP * this.tileSize;
-    }
-
-    /**
      * Zníži aktuálnu hodnotu životov o zadanú hodnotu. Ak by výsledné HP bolo záporné, nastaví sa na 0.
      * Následne prepočíta šírku HP baru.
      * @param downHP Hodnota, o ktorú sa majú životy znížiť.
@@ -108,7 +98,7 @@ public class HPBar {
     /**
      * Prepočíta aktuálnu šírku farebného ukazovateľa na základe aktuálnej hodnoty HP.
      */
-    public void resetWidth() {
+    private void resetWidth() {
         this.width = this.actualHP * this.tileSize;
     }
 

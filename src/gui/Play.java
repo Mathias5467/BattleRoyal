@@ -104,11 +104,7 @@ public class Play {
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.BLACK);
-        this.levelManager.getBackground1().draw(g);
-        this.levelManager.getBackground2().draw(g);
-        this.levelManager.getBackground3().draw(g);
-        this.levelManager.getArrow().draw(g);
-        this.levelManager.getGround().draw(g);
+        this.levelManager.draw(g);
         g2.setFont(new Font("Old English Text MT", Font.BOLD, 40));
         g2.drawString("Time", 500, 70);
         g2.drawString(String.format("%02d:%02d", this.timeInSeconds / 60, this.timeInSeconds % 60), 500, 110);

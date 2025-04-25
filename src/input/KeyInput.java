@@ -2,7 +2,7 @@ package input;
 
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.KeyAdapter;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Matúš Pytel
  * @version 15.4.2025
  */
-public class KeyInput implements KeyListener {
+public class KeyInput extends KeyAdapter {
     private final EnumMap<KeyType, Boolean> keys;
 
     /**
@@ -70,14 +70,7 @@ public class KeyInput implements KeyListener {
         }
     }
 
-    /**
-     * Táto metóda sa v tejto implementácii nevyužíva.
-     * @param e Objekt {@code KeyEvent} obsahujúci informácie o zadanej klávese.
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // Táto metóda sa v tejto implementácii nevyužíva.
-    }
+
 
     /**
      * Vráti nemodifikovateľnú mapu aktuálneho stavu stlačených kláves.

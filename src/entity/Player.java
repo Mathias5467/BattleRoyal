@@ -46,13 +46,12 @@ public class Player extends Entity {
     }
 
     /**
-     * Nastaví typ rytiera hráča. Aktualizuje typ rytiera, názov a maximálne HP v HP bare.
+     * Nastaví typ rytiera hráča a nastaví mu meno.
      * @param knightType Nový typ rytiera pre hráča.
      */
     public void setKnight(KnightType knightType) {
         this.knightType = knightType;
         this.getHpBar().setName(this.knightType.getName());
-        this.getHpBar().setHP(this.knightType.getHp());
     }
 
     /**
@@ -76,7 +75,7 @@ public class Player extends Entity {
      * @return {@code true}, ak môže hráč zastaviť, inak {@code false}.
      */
     public boolean mayStop() {
-        return !this.isDead() && !this.isAttacking() && !this.isDying();
+        return !this.isDead() && !this.isAttacking() && this.getMovementType() != Movement.DYING;
     }
 
     /**
@@ -84,7 +83,7 @@ public class Player extends Entity {
      * Nastaví typ pohybu na DEFEND, resetuje číslo animácie a zmení obrázok.
      */
     public void defend() {
-        if (!this.isAttacking() && !this.isDead() && !this.isDying()) {
+        if (!this.isAttacking() && !this.isDead() && this.getMovementType() != Movement.DYING) {
             this.setMovementType(Movement.DEFEND);
             this.resetNumberOfAnimation();
             this.changePicture();

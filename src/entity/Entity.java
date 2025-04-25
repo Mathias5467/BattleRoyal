@@ -121,7 +121,7 @@ public abstract class Entity {
      * Kontroluje, či entita práve umiera.
      * @return {@code true}, ak je typ pohybu entity DYING, inak {@code false}.
      */
-    protected boolean isDying() {
+    private boolean isDying() {
         return this.movementType == Movement.DYING;
     }
 

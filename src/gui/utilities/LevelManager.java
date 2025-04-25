@@ -1,6 +1,8 @@
 package gui.utilities;
 
 import components.Picture;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * Trieda {@code LevelManager} spravuje vizuálne prvky hernej úrovne,
@@ -67,43 +69,26 @@ public class LevelManager {
     }
 
     /**
-     * Vráti prvý obrázok pozadia.
-     * @return Prvý obrázok pozadia typu {@code Picture}.
-     */
-    public Picture getBackground1() {
-        return this.background1;
-    }
-
-    /**
-     * Vráti druhý obrázok pozadia.
-     * @return Druhý obrázok pozadia typu {@code Picture}.
-     */
-    public Picture getBackground2() {
-        return this.background2;
-    }
-
-    /**
-     * Vráti tretí obrázok pozadia.
-     * @return Tretí obrázok pozadia typu {@code Picture}.
-     */
-    public Picture getBackground3() {
-        return this.background3;
-    }
-
-    /**
-     * Vráti obrázok zeme.
-     * @return Obrázok zeme typu {@code Picture}.
-     */
-    public Picture getGround() {
-        return this.ground;
-    }
-
-    /**
      * Vráti obrázok prechodovej šípky.
      * @return Obrázok šípky typu {@code Picture}.
      */
     public Picture getArrow() {
         return this.arrow;
+    }
+
+    /**
+     Vykreslí aktuálny stav hry na poskytnutý grafický kontext {@code Graphics}.
+     * Zahŕňa pozadie, zem, šípku.
+     * @param g Grafický kontext, na ktorý sa má kresliť.
+     */
+    public void draw(Graphics g) {
+        Graphics2D g2 = (Graphics2D)g;
+        this.background1.draw(g2);
+        this.background2.draw(g2);
+        this.background3.draw(g2);
+        this.arrow.draw(g2);
+        this.ground.draw(g2);
+
     }
 
     /**
