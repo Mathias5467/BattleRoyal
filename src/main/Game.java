@@ -152,6 +152,10 @@ public class Game implements Runnable {
                 this.play.reset();
                 this.play.setBiom(this.biom);
                 this.dialog.setPlayState(PlayState.TIE);
+            } else if (this.gameState == GameState.KNIGHTS) {
+                this.knightOption.setNumberOfCoins(this.numberOfCoins);
+            } else if (this.gameState == GameState.MAPS) {
+                this.mapOption.setNumberOfCoins(this.numberOfCoins);
             } else if (this.gameState == GameState.EXIT) {
                 File coinFile = new File("res/data/coins.txt");
                 try (PrintWriter input = new PrintWriter(coinFile)) {
@@ -241,6 +245,10 @@ public class Game implements Runnable {
                     this.numberOfCoins += this.play.getNumberOfCoins();
                     this.knightOption.setNumberOfCoins(this.numberOfCoins);
                     this.mapOption.setNumberOfCoins(this.numberOfCoins);
+                } else if (this.gameState == GameState.KNIGHTS) {
+                    this.numberOfCoins = this.knightOption.getNumberOfCoins();
+                } else if (this.gameState == GameState.MAPS) {
+                    this.numberOfCoins = this.mapOption.getNumberOfCoins();
                 }
                 this.gameState = GameState.MENU;
                 this.dialog.setPlayState(PlayState.TIE);
@@ -316,6 +324,8 @@ public class Game implements Runnable {
                 this.dialog.setPlayState(endGameState);
                 this.dialog.setVisible(true);
             }
+        } else if (this.gameState == GameState.KNIGHTS) {
+            this.knightOption.update();
         } else if (this.gameState == GameState.EXIT) {
             System.exit(0);
         }

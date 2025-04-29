@@ -56,16 +56,14 @@ public class MapOptions extends Options<Biom> {
                 case 2 -> currentBiom = Biom.MOUNTAIN;
             }
             if (currentBiom != null && !this.getOptionsBought().get(currentBiom)) {
-                g2.setColor(new Color(0, 0, 0, 150)); // Čierna s priehľadnosťou
+                g2.setColor(new Color(0, 0, 0, 150));
                 g2.fillRoundRect(picture.getX(), picture.getY(), picture.getWidth(), picture.getHeight(), 20, 20);
-
                 String priceText = currentBiom.getPrice() + "$";
                 g2.setColor(Color.WHITE);
                 g2.setFont(new Font("Arial", Font.BOLD, 30));
                 FontMetrics metrics = g2.getFontMetrics();
                 int textX = picture.getX() + (picture.getWidth() - metrics.stringWidth(priceText)) / 2;
                 int textY = picture.getY() + (picture.getHeight() - metrics.getHeight()) / 2 + metrics.getAscent();
-
                 g2.drawString(priceText, textX, textY);
             }
             if (currentBiom != null) {
@@ -76,11 +74,9 @@ public class MapOptions extends Options<Biom> {
                     g2.setStroke(new BasicStroke(5));
                     g2.setColor(Color.WHITE);
                 }
-
                 g2.drawRoundRect(picture.getX(), picture.getY(), picture.getWidth(), picture.getHeight(), 20, 20);
             }
         }
-
         g2.setColor(new Color(255, 255, 255, 90));
         g2.setFont(new Font("Courier New", Font.BOLD, 20));
         g2.drawString("Press ENTER to save changes", 385, 550);

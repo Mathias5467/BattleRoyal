@@ -42,13 +42,6 @@ public class KnightOptions extends Options<KnightType> {
     @Override
     public void selectOption(int direction) {
         super.selectOption(direction);
-
-        // Aktualizácia obrázka rytiera na základe výberu
-        if (!this.getOptionsBought().get(this.getOption())) {
-            this.knightPicture.changeImage("res/lock.png");
-        } else {
-            this.knightPicture.changeImage(String.format("res/knight/%s/stayL.png", this.getOption().getColor()));
-        }
     }
 
     /**
@@ -95,6 +88,17 @@ public class KnightOptions extends Options<KnightType> {
             g2.setFont(new Font("Courier New", Font.BOLD, 40));
             g2.setColor(new Color(255, 255, 255, 150));
             g2.drawString(String.format("%d$", this.getOption().getPrice()), 765, 435);
+        }
+    }
+
+    /**
+     * Aktualizuje obrázok na základe toho či je daný rytier zakúpený.
+     */
+    public void update() {
+        if (!this.getOptionsBought().get(this.getOption())) {
+            this.knightPicture.changeImage("res/lock.png");
+        } else {
+            this.knightPicture.changeImage(String.format("res/knight/%s/stayL.png", this.getOption().getColor()));
         }
     }
 
