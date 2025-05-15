@@ -34,15 +34,6 @@ public class KnightOptions extends Options<KnightType> {
         this.coinPicture = new Picture(95, 120, 40, 40, "res/coin.png");
     }
 
-    /**
-     * Posunie výber rytiera v danom smere (doľava alebo doprava). Aktualizuje aktuálne vybratého rytiera
-     * a mení obrázok rytiera na základe toho, či je vybratý rytier zakúpený alebo zamknutý.
-     * @param direction Smer posunu (-1 pre doľava, 1 pre doprava).
-     */
-    @Override
-    public void selectOption(int direction) {
-        super.selectOption(direction);
-    }
 
     /**
      * Vykresľuje obrazovku s možnosťami výberu rytiera. Zobrazuje náhľad aktuálne vybratého rytiera,

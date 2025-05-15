@@ -1,11 +1,11 @@
-package main;
+package base;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import java.io.IOException;
 
 /**
- * Hlavná trieda aplikácie {@code Main}, ktorá spúšťa hru "Battle Royal".
+ * Hlavná trieda aplikácie {@code base.Main}, ktorá spúšťa hru "Battle Royal".
  * Vytvára okno aplikácie, inicializuje hru a zobrazí ju.
  * @author Matúš Pytel
  * @version 15.4.2025

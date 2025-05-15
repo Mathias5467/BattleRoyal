@@ -330,7 +330,7 @@ public abstract class Entity {
      * Nastaví typ pohybu entity.
      * @param type Nový typ pohybu (inštancia enumu {@code Movement}).
      */
-    public void setMovementType(Movement type) {
+    protected void setMovementType(Movement type) {
         this.movementType = type;
     }
 

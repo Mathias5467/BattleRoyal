@@ -49,7 +49,7 @@ public enum EntityType {
      * @param name Názov hľadaného typu entity.
      * @return Inštancia {@code EntityType} s daným názvom, alebo {@code null} ak sa nenájde.
      */
-    public EntityType getByName(String name) {
+    public static EntityType getByName(String name) {
         return switch (name.toLowerCase()) {
             case "skeleton" -> EntityType.SKELETON;
             case "viking" -> EntityType.VIKING;

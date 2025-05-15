@@ -1,4 +1,4 @@
-package main;
+package base;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -25,7 +25,7 @@ import state.GameState;
 import state.PlayState;
 
 /**
- * Hlavná trieda {@code Game}, ktorá implementuje {@code Runnable} pre hernú slučku.
+ * Hlavná trieda {@code base.Game}, ktorá implementuje {@code Runnable} pre hernú slučku.
  * Riadi herné stavy, spracováva vstup, aktualizuje hernú logiku a vykresľuje herné prvky.
  * @author Matúš Pytel
  * @version 15.4.2025
@@ -49,10 +49,9 @@ public class Game implements Runnable {
     private int numberOfCoins;
 
     /**
-     * Konštruktor triedy {@code Game}. Inicializuje herné komponenty, nastavenia a načíta dáta.
+     * Konštruktor triedy {@code base.Game}. Inicializuje herné komponenty, nastavenia a načíta dáta.
      */
     public Game() throws FileNotFoundException {
-        // Vytvorenie vnoreného panelu s prepisaním metódy paintComponent
         this.panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -60,15 +59,12 @@ public class Game implements Runnable {
                 Game.this.paintGame(g);
             }
         };
-
         this.panel.setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
         this.panel.setDoubleBuffered(true);
         this.panel.setFocusable(true);
         this.panel.setBackground(new Color(43, 43, 43));
-
         this.keyInput = new KeyInput();
         this.panel.addKeyListener(this.keyInput);
-
         File coinsFile = new File("res/data/coins.txt");
         try (Scanner input = new Scanner(coinsFile)) {
             this.numberOfCoins = input.nextInt();
@@ -283,7 +279,7 @@ public class Game implements Runnable {
                 break;
             }
         }
-        if (!keyTyped && this.play.getPlayer().mayStop()) {
+        if (!keyTyped && this.gameState == GameState.PLAY && this.play.getPlayer().mayStop()) {
             this.play.getPlayer().stop();
         }
     }

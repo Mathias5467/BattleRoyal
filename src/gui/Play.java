@@ -71,7 +71,7 @@ public class Play {
         File enemyFile = new File(ENEMIES_DATA_FILE);
         try (Scanner input = new Scanner(enemyFile)) {
             while (input.hasNextLine()) {
-                EntityType enemyType = EntityType.MONSTER.getByName(input.nextLine());
+                EntityType enemyType = EntityType.getByName(input.nextLine());
                 if (enemyType != null) {
                     this.enemies.add(new Enemy(enemyType));
                 }
@@ -248,13 +248,14 @@ public class Play {
      * počas príslušného snímku animácie.
      */
     private void handleCombat() {
+        var knightType = this.player.getKnightType();
         if (this.isInAttackArea()) {
             for (Entity entity : this.currentEntities) {
                 if (entity.isAttacking() && !entity.isHitRegistered() && entity.getActAnimNumber() == 5) {
                     Entity target = (entity instanceof Player) ? this.currentEntities.getLast() : this.player;
                     if (target != null && target.isVisible()) {
                         int damage = (entity instanceof Player)
-                                ? (int)Math.ceil(this.player.getKnightType().getAttack() * ATTACK_DAMAGE_MULTIPLIER)
+                                ? (int)Math.ceil(knightType.getAttack() * ATTACK_DAMAGE_MULTIPLIER)
                                 : entity.getEntityType().getAttack();
                         target.hit(damage);
                         entity.setHitRegistered(true);
