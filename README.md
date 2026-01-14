@@ -17,4 +17,5 @@ Nepriateľ útočí späť, takže hráč musí využívať obranu a útok strat
 
 # 🏆 Výhra a prehra
 Výhra – hráč porazí všetkých nepriateľov do 5 minút.
+<br>
 Prehra – hráčovi klesne HP na 0 alebo prekročí časový limit
