@@ -19,3 +19,33 @@ Nepriateľ útočí späť, takže hráč musí využívať obranu a útok strat
 Výhra – hráč porazí všetkých nepriateľov do 5 minút.
 <br>
 Prehra – hráčovi klesne HP na 0 alebo prekročí časový limit
+
+# 🧭 Menu hry
+
+Po spustení hry sa zobrazí hlavné menu. Pohyb v menu je možný pomocou šípok hore/dole, výber sa potvrdzuje klávesom ENTER.
+
+Možnosti menu:
+1. Play
+- Spustí samotnú hru
+- Ovládanie:
+-- pohyb – šípky
+-- obrana – šípka dole
+-- útok – klávesy A, S, D
+-- ESC – zobrazí dialógové okno (pokračovať / návrat do menu)
+
+2. Knights
+-- Výber rytiera
+-- Pohyb medzi rytiermi – šípky vľavo/vpravo
+-- Ak je rytier uzamknutý, zobrazí sa cena
+-- ENTER – kúpa alebo výber rytiera
+-- ESC – návrat do menu
+
+3. Maps
+-- Výber mapy
+-- Pohyb medzi mapami – šípky vľavo/vpravo
+-- Niektoré mapy je potrebné zakúpiť
+-- ENTER – kúpa alebo výber mapy
+-- ESC – návrat do menu
+
+4. Exit
+-- Ukončenie hry a zatvorenie aplikácie
