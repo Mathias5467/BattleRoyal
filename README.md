@@ -28,6 +28,7 @@ Nepriateľ útočí späť, takže hráč musí využívať obranu a útok strat
 ---
 
 ## 🧭 Menu hry
+![Main menu](readme_data/menu.png)
 Po spustení hry sa zobrazí hlavné menu.  
 Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje klávesom **ENTER**.
 
