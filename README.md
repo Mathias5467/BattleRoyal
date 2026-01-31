@@ -44,8 +44,8 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
 
 #### 2️⃣ Knights
 <p>
-  <img src="readme_data/knight_bought.png" width="350" style="margin-right:10px;" />
-  <img src="readme_data/knight_locked.png" width="350" />
+  <img src="readme_data/knight_bought.png" width="50%" style="margin-right:10px;" />
+  <img src="readme_data/knight_locked.png" width="50%" />
 </p>
 - Výber rytiera
 - Pohyb medzi rytiermi – šípky **vľavo / vpravo**
