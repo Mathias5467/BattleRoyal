@@ -30,6 +30,7 @@ Nepriateľ útočí späť, takže hráč musí využívať obranu a útok strat
 ## 🧭 Menu hry
 Po spustení hry sa zobrazí hlavné menu.  
 Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje klávesom **ENTER**.
+<br/>
 <img src="readme_data/menu.png" width="60%" />
 
 ### Možnosti menu
@@ -41,6 +42,10 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
   - obrana – šípka dole
   - útok – klávesy **A, S, D**
   - **ESC** – zobrazí dialógové okno (pokračovať / návrat do menu)
+<p>
+  <img src="readme_data/playing.png" width="50%" style="margin-right:0px;"/>
+  <img src="readme_data/game_over.png" width="50%" />
+</p>
 
 #### 2️⃣ Knights
 - Výber rytiera
@@ -49,8 +54,8 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
 - **ENTER** – kúpa alebo výber rytiera
 - **ESC** – návrat do menu
 <p>
-  <img src="readme_data/knight_bought.png" width="48%" style="margin-right:10px;"/>
-  <img src="readme_data/knight_locked.png" width="48%" />
+  <img src="readme_data/knight_bought.png" width="50%" style="margin-right:0px;"/>
+  <img src="readme_data/knight_locked.png" width="50%" />
 </p>
 
 #### 3️⃣ Maps
@@ -59,6 +64,7 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
 - Niektoré mapy je potrebné zakúpiť
 - **ENTER** – kúpa alebo výber mapy
 - **ESC** – návrat do menu
-
+<img src="readme_data/maps.png" width="60%"/>
+  
 #### 4️⃣ Exit
 - Ukončenie hry a zatvorenie aplikácie
