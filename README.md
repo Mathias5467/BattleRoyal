@@ -28,9 +28,9 @@ Nepriateľ útočí späť, takže hráč musí využívať obranu a útok strat
 ---
 
 ## 🧭 Menu hry
-<img src="readme_data/menu.png" width="60%" />
 Po spustení hry sa zobrazí hlavné menu.  
 Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje klávesom **ENTER**.
+<img src="readme_data/menu.png" width="60%" />
 
 ### Možnosti menu
 
@@ -43,15 +43,15 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
   - **ESC** – zobrazí dialógové okno (pokračovať / návrat do menu)
 
 #### 2️⃣ Knights
-<p>
-  <img src="readme_data/knight_bought.png" width="48%" style="margin-right:10px;"/>
-  <img src="readme_data/knight_locked.png" width="48%" />
-</p>
 - Výber rytiera
 - Pohyb medzi rytiermi – šípky **vľavo / vpravo**
 - Ak je rytier uzamknutý, zobrazí sa cena
 - **ENTER** – kúpa alebo výber rytiera
 - **ESC** – návrat do menu
+<p>
+  <img src="readme_data/knight_bought.png" width="48%" style="margin-right:10px;"/>
+  <img src="readme_data/knight_locked.png" width="48%" />
+</p>
 
 #### 3️⃣ Maps
 - Výber mapy
