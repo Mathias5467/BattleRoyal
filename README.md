@@ -43,7 +43,7 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
   - útok – klávesy **A, S, D**
   - **ESC** – zobrazí dialógové okno (pokračovať / návrat do menu)
 <p>
-  <img src="readme_data/playing.png" width="50%" style="margin-right:0px;"/>
+  <img src="readme_data/playing.png" width="50%" style="float: right;"/>
   <img src="readme_data/game_over.png" width="50%" />
 </p>
 
