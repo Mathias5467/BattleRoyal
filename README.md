@@ -28,7 +28,7 @@ Nepriateľ útočí späť, takže hráč musí využívať obranu a útok strat
 ---
 
 ## 🧭 Menu hry
-![Main menu](readme_data/menu.png)
+<img src="readme_data/menu.png" width="60%" />
 Po spustení hry sa zobrazí hlavné menu.  
 Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje klávesom **ENTER**.
 
@@ -44,8 +44,8 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
 
 #### 2️⃣ Knights
 <p>
-  <img src="readme_data/knight_bought.png" width="45%" style="margin-right:10px;"/>
-  <img src="readme_data/knight_locked.png" width="45%" />
+  <img src="readme_data/knight_bought.png" width="48%" style="margin-right:10px;"/>
+  <img src="readme_data/knight_locked.png" width="48%" />
 </p>
 - Výber rytiera
 - Pohyb medzi rytiermi – šípky **vľavo / vpravo**
