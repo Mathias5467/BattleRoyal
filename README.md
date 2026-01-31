@@ -42,10 +42,10 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
   - obrana – šípka dole
   - útok – klávesy **A, S, D**
   - **ESC** – zobrazí dialógové okno (pokračovať / návrat do menu)
-<div style="width:100%; display: grid; grid-template-columns: 50% 50%; gap: 5%;">
-  <img src="readme_data/playing.png"/>
-  <img src="readme_data/game_over.png"/>
-</div>
+<p align="center">
+  <img src="readme_data/playing.png" width="49%" />
+  <img src="readme_data/game_over.png" width="49%" />
+</p>
 
 #### 2️⃣ Knights
 - Výber rytiera
@@ -53,10 +53,10 @@ Pohyb v menu je možný pomocou šípok **hore / dole**, výber sa potvrdzuje kl
 - Ak je rytier uzamknutý, zobrazí sa cena
 - **ENTER** – kúpa alebo výber rytiera
 - **ESC** – návrat do menu
-<div>
-  <img src="readme_data/knight_bought.png" width="50%" style="margin-right:0px;"/>
-  <img src="readme_data/knight_locked.png" width="50%" />
-</div>
+<p>
+  <img src="readme_data/knight_bought.png" width="49%" />
+  <img src="readme_data/knight_locked.png" width="49%" />
+</p>
 
 #### 3️⃣ Maps
 - Výber mapy
